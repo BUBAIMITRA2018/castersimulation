@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c4a05609-8a2f-4eae-b308-de36712efac6" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="smssimulation" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1Xxykb4m525KB5YxSUQKbdaCRhN" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="ReadonlyStatusHandler">
+    <option name="SHOW_DIALOG" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\Desktop\smssimulation" />
+      <recent name="C:\Users\admin\Desktop\smssimulation\venv" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.execution">
+    <configuration name="Encoder_Operation_V1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="smssimulation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Encoder_Operation_V1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="clientcomm_v1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="smssimulation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/clientcomm_v1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="execution" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="smssimulation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/execution.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="fn_Siemens_drive_V3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="smssimulation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fn_Siemens_drive_V3.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ui_v9" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="smssimulation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ui_v9.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.execution" />
+        <item itemvalue="Python.ui_v9" />
+        <item itemvalue="Python.Encoder_Operation_V1" />
+        <item itemvalue="Python.fn_Siemens_drive_V3" />
+        <item itemvalue="Python.clientcomm_v1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c4a05609-8a2f-4eae-b308-de36712efac6" name="Default Changelist" comment="" />
+      <created>1582002183774</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582002183774</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="690" y="271" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1560634370489">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="271" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1560634370489" />
+    <state x="686" y="222" key="#execution" timestamp="1582542013616">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="686" y="222" key="#execution/0.0.1920.1160@0.0.1920.1160" timestamp="1582542013616" />
+    <state x="592" y="219" key="FileChooserDialogImpl" timestamp="1559919851998">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="592" y="219" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1559919851998" />
+    <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1558969038399" />
+    <state x="740" y="308" key="FileChooserDialogImpl/0.0.1920.1160@0.0.1920.1160" timestamp="1582610379994" />
+    <state width="1515" height="100" key="GridCell.Tab.0.bottom" timestamp="1561395168311">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="100" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1561395168311" />
+    <state width="1899" height="210" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1582030106881" />
+    <state width="1515" height="260" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1561218426378" />
+    <state width="1899" height="375" key="GridCell.Tab.0.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1583994921689" />
+    <state width="1515" height="100" key="GridCell.Tab.0.center" timestamp="1561395168311">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="100" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1561395168311" />
+    <state width="1899" height="210" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1582030106881" />
+    <state width="1515" height="260" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1561218426378" />
+    <state width="1899" height="375" key="GridCell.Tab.0.center/0.0.1920.1160@0.0.1920.1160" timestamp="1583994921689" />
+    <state width="1515" height="100" key="GridCell.Tab.0.left" timestamp="1561395168311">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="100" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1561395168311" />
+    <state width="1899" height="210" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1582030106880" />
+    <state width="1515" height="260" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1561218426378" />
+    <state width="1899" height="375" key="GridCell.Tab.0.left/0.0.1920.1160@0.0.1920.1160" timestamp="1583994921689" />
+    <state width="1515" height="100" key="GridCell.Tab.0.right" timestamp="1561395168311">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1515" height="100" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1561395168311" />
+    <state width="1899" height="210" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1582030106881" />
+    <state width="1515" height="260" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1561218426378" />
+    <state width="1899" height="375" key="GridCell.Tab.0.right/0.0.1920.1160@0.0.1920.1160" timestamp="1583994921689" />
+    <state width="1515" height="260" key="GridCell.Tab.1.bottom" timestamp="1561218426378">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1515" height="260" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1560698312161" />
+    <state width="1515" height="260" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1561218426378" />
+    <state width="949" height="396" key="GridCell.Tab.1.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1582636279269" />
+    <state width="1515" height="260" key="GridCell.Tab.1.center" timestamp="1561218426378">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1515" height="260" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1560698312161" />
+    <state width="1515" height="260" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1561218426378" />
+    <state width="949" height="396" key="GridCell.Tab.1.center/0.0.1920.1160@0.0.1920.1160" timestamp="1582636279269" />
+    <state width="1515" height="260" key="GridCell.Tab.1.left" timestamp="1561218426378">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1515" height="260" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1560698312161" />
+    <state width="1515" height="260" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1561218426378" />
+    <state width="949" height="396" key="GridCell.Tab.1.left/0.0.1920.1160@0.0.1920.1160" timestamp="1582636279269" />
+    <state width="1515" height="260" key="GridCell.Tab.1.right" timestamp="1561218426378">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1515" height="260" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1560698312161" />
+    <state width="1515" height="260" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1561218426378" />
+    <state width="949" height="396" key="GridCell.Tab.1.right/0.0.1920.1160@0.0.1920.1160" timestamp="1582636279269" />
+    <state x="773" y="142" key="SettingsEditor" timestamp="1558969044741">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="277" y="56" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1582002218712" />
+    <state x="773" y="142" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1558969044741" />
+    <state x="773" y="158" key="SettingsEditor/0.0.1920.1160@0.0.1920.1160" timestamp="1582873624349" />
+    <state x="524" y="273" key="com.intellij.ide.util.TipDialog" timestamp="1560518366144">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="524" y="273" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1560518366144" />
+    <state x="655" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1560468818268" />
+    <state x="655" y="384" key="com.intellij.ide.util.TipDialog/0.0.1920.1160@0.0.1920.1160" timestamp="1583213284280" />
+    <state x="418" y="188" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1584435969829">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="334" y="149" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1536.824@0.0.1536.824" timestamp="1582093165812" />
+    <state x="418" y="188" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1920.1040@0.0.1920.1040" timestamp="1584435969829" />
+    <state x="601" y="246" width="700" height="530" key="recent.locations.popup" timestamp="1559428097123">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="601" y="246" width="700" height="530" key="recent.locations.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1559428097123" />
+    <state x="426" y="181" width="672" height="482" key="search.everywhere.popup" timestamp="1560449154821">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="426" y="181" width="672" height="482" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1560449154821" />
+    <state x="533" y="228" width="672" height="608" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1584436338190" />
+    <state x="533" y="254" width="672" height="678" key="search.everywhere.popup/0.0.1920.1160@0.0.1920.1160" timestamp="1583233741173" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/allsiemensdriveprocessing.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui_v9.py</url>
+          <line>215</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/fn_analogTx_V3.py</url>
+          <line>84</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
