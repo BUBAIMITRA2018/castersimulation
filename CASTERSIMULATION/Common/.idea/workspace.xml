@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c4a05609-8a2f-4eae-b308-de36712efac6" name="Default Changelist" comment="" />
+    <list default="true" id="c4a05609-8a2f-4eae-b308-de36712efac6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../RH2/RH2/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SPECIALFUNCTION/dummybarsmssimulation17-04-2020/build/exe.win-amd64-3.7/dummybar.log" beforeDir="false" afterPath="$PROJECT_DIR$/../SPECIALFUNCTION/dummybarsmssimulation17-04-2020/build/exe.win-amd64-3.7/dummybar.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../RH2/RH2/.idea/RH2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../RH2/RH2/.idea/RH2.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../RH2/RH2/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../RH2/RH2/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../RH2/RH2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../RH2/RH2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../RH2/RH2/alldevices_V3.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../RH2/RH2/alldevices_V3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../RH2/RH2/fn_sov1S_V3.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../RH2/RH2/fn_sov1S_V3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../RH2/RH2/ui_v9.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../RH2/RH2/ui_v9.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,7 +28,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="ProjectId" id="1Xxykb4m525KB5YxSUQKbdaCRhN" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -55,7 +64,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.pymodbus">
+  <component name="RunManager" selected="Python.execution">
     <configuration name="Encoder_Operation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="smssimulation" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -163,8 +172,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.pymodbus" />
         <item itemvalue="Python.execution" />
+        <item itemvalue="Python.pymodbus" />
         <item itemvalue="Python.test432" />
         <item itemvalue="Python.oscillation" />
         <item itemvalue="Python.Encoder_Operation" />
@@ -189,7 +198,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

@@ -8,39 +8,6 @@ from  writegeneral_v2 import *
 
 
 
-# class LampoperationPanelUi:
-#
-#     def __init__(self, frame):
-#         self.frame = frame
-#         self.canvas = Canvas(frame, width=450, height=300, bg="white")
-#         self.canvas.grid(row=1, column=0, padx=10, pady=2)
-#         self.canvas.columnconfigure(0, weight=1)
-#         self.canvas.rowconfigure(0, weight=1)
-#         self.canvas.pack()
-#         # self.canvas.create_oval(20, 20, 80, 80, width=0, fill='green')
-#         xval = 20
-#         yval = 20
-#
-#         self.oval_red = self.canvas.create_oval(10, 10, 55, 55, fill="green")
-#         self.oval_yellow = self.canvas.create_oval(110, 10,  140, 55, fill="green")
-#         # self.oval_yellow = self.canvas.create_oval(140, 10, 240, 110, fill="green")
-#         # self.oval_green = self.canvas.create_oval(290, 10, 390, 110, fill="green")
-#
-#
-#         # self.startindication = self.canvas.create_oval(xval, yval, xval + 60, yval + 60, fill="green",
-#         #                                                outline="#00bfff", width=5)
-#         # self.stopindication = self.canvas.create_oval(xval+150,yval, xval + 60, yval + 60, fill="green",
-#         #                                                outline="#00bfff", width=5)
-#
-#         self.canvas.create_text(35, 65, text="START")
-#         self.canvas.create_text(85, 63, text="STOP")
-#         # self.canvas.create_text(350, 63, text="RELEASE")
-#
-#         self.canvas.update()
-#
-
-
-
 
 
 
@@ -268,24 +235,19 @@ class Fn_ControlPanel:
         self.win.geometry('500x250')
         self.win.columnconfigure(0, weight=1)
         self.win.rowconfigure(0, weight=1)
-        # Add vertical panel
         vertical_pane = ttk.PanedWindow(self.win, orient=VERTICAL)
         vertical_pane.grid(row=0, column=0, sticky="nsew")
         horizontal_pane = ttk.PanedWindow(vertical_pane, orient=HORIZONTAL)
         vertical_pane.add(horizontal_pane)
-        # Add controlpanel to horizontal_pane
+
         controlpanel_frame = ttk.Labelframe(horizontal_pane, text="Control Panel")
         controlpanel_frame.columnconfigure(1, weight=1)
         horizontal_pane.add(controlpanel_frame, weight=1)
-        # Add operation_pane to controlpanel_frame
-        # lampoperation_frame = ttk.Labelframe(horizontal_pane, text="LAMP")
-        # lampoperation_frame.columnconfigure(0, weight=1)
-        # lampoperation_frame.rowconfigure(0, weight=1)
-        # horizontal_pane.add(lampoperation_frame, weight=1)
+
 
         # Initialize all frames
         self.controlpanelui = ControlPanelUi(controlpanel_frame,self.filename)
-        # self.LampoperationPanelUi = LampoperationPanelUi(lampoperation_frame)
+
 
 
 

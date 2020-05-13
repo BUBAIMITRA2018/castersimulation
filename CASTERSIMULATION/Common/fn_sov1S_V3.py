@@ -1,4 +1,4 @@
-from logger import *
+
 from event_V2 import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
@@ -6,8 +6,6 @@ from  writegeneral_v2 import *
 import logging
 import threading
 
-
-setup_logging_to_file("sov1S.log")
 logger = logging.getLogger("main.log")
 
 __all__ = ['Fn_Sov1S']
@@ -60,16 +58,13 @@ class Fn_Sov1S(Eventmanager):
 
 
     def initilizedigitalinput(self):
+
         client = Communication()
         sta_con_plc = client.opc_client_connect(self.filename)
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
 
-        if len(self.closeFBtag) > 3:
-            writegeneral.writesymbolvalue(self.closeFBtag, 0,'S7WLBit')
-
-        if len(self.openFBtag) > 3:
-            writegeneral.writesymbolvalue(self.openFBtag, 0,'S7WLBit')
+        writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
 
         sta_con_plc.disconnect()
 
@@ -123,16 +118,13 @@ class Fn_Sov1S(Eventmanager):
 
     @OpenCmd.setter
     def OpenCmd(self,value):
-        print("value is:", 1)
-        print("opencmd value",self._opencmdvalue)
         if value != self._opencmdvalue:
-            print("SOV VALVE IS FIRE")
             super().fire()
             self._opencmdvalue = value
 
 
     def readalltags(self):
-        n = 3
+        n = 3 
         row, col = self.df.shape
         print(col)
         while n < col:

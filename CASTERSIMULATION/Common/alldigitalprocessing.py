@@ -3,7 +3,6 @@ from logger import *
 from observable import *
 import logging
 
-setup_logging_to_file("alldigitalprocessing.log")
 logger = logging.getLogger("main.log")
 
 class AreaObserver:

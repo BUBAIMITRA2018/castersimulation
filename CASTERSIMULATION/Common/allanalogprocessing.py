@@ -1,18 +1,6 @@
-import pandas as pd
-from logger import *
 from observal import *
-import calallanalog_V3
-import logging
-import general
 from clientcomm_v1 import *
 from readgeneral_v2 import *
-
-# setup_logging_to_file("allanalogprocessing.log")
-# logger = logging.getLogger("main.log")
-# dfANA = pd.read_excel(r'C:\OPCUA\working_VF1_5.xls',sheet_name='AnalogTx')
-# commobject = general.General('C:\OPCUA\working_VF1_5.xls')
-# alanalogdevices = calallanalog_V3.Cal_AllAnalogInputs(dfANA,commobject)
-
 
 class AreaObserver:
     def __init__(self, observable):
@@ -38,21 +26,6 @@ class analogprocess:
 
         for item in range(len(self.alldevices.allanalogsignalobjects.listofanalogobjects)):
             self.alldevices.allanalogsignalobjects.listofanalogobjects[item].analogprocess()
-
-        # for area, devices in readkeyandvalues(self.alldevices):
-        #    try:
-        #     areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
-        #     if areavalue == 1:
-        #         self.observer.notify(devices, self.readgeneral)
-
-
-
-           # except Exception as e:
-           #      log_exception(e)
-           #      level = logging.ERROR
-           #      messege = "allanalogprocessing" + " Error messege(process)" + str(e.args)
-           #      # logger.log(level, messege)
-           #      log_exception(e)
 
 
 def readkeyandvalues(alldevice):

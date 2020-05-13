@@ -1,8 +1,6 @@
 from logger import *
 from observal import *
 import logging
-
-setup_logging_to_file("allencoderprocessing.log")
 logger = logging.getLogger("main.log")
 
 class AreaObserver:

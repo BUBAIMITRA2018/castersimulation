@@ -3,9 +3,6 @@ from fn_controlvalve_V3 import *
 import logging
 import threading
 
-# logger = logging.getLogger("main.log")
-# setup_logging_to_file("allanalog.log")
-
 
 class Cal_AllControlValves:
 
@@ -28,7 +25,7 @@ class Cal_AllControlValves:
             n= 0
             self.listofcontrolvalvesobjects.clear()
             while n< len(self.df.index):
-                print('i m here in conrol valve')
+
                 self.df.iloc[n, 0] = Fn_ControlValves(self.com, self.df, n,self.filename)
                 self.listofcontrolvalvesobjects.append(self.df.iloc[n,0])
                 n = n + 1
@@ -49,12 +46,11 @@ class Cal_AllControlValves:
 
                 # Declear empty list
                 self.dictionary = dict(zip(keys, values))
-                print('control valve dic',self.dictionary)
+
 
 
 
         except Exception as e:
-            print("call controlvalves",e.args)
             level = logging.ERROR
             messege = 'Event:' + "callallcontrolvalves" + str(e.args)
             # logger.log(level, messege)

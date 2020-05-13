@@ -1,16 +1,8 @@
 
-from logger import *
 from observable import *
-import logging
-import time
 from clientcomm_v1 import *
 from readgeneral_v2 import *
-from  writegeneral_v2 import *
 
-
-
-
-# setup_logging_to_file("allmotor1dprocessing.log")
 logger = logging.getLogger("main.log")
 
 class AreaObserver:
@@ -47,23 +39,6 @@ class motor1dprocess:
 
             if areavalue == 1:
                 self.observer.notify(devices, self.readgeneral)
-
-
-
-
-
-
-
-
-
-        # except Exception as e:
-        #     log_exception(e)
-        #     level = logging.ERROR
-        #     messege = "allmotor1dprocessing" + " Error messege(process)" + str(e.args)
-        #     # logger.log(level, messege)
-        #     log_exception(e)
-
-
 
 def readkeyandvalues(alldevice):
 

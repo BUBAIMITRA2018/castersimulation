@@ -1,10 +1,9 @@
-from logger import *
+
 from event_V2 import *
-from time import sleep
-import logging
+from clientcomm_v1 import *
+from readgeneral_v2 import *
+from  writegeneral_v2 import *
 
-
-setup_logging_to_file("sov2S.log")
 logger = logging.getLogger("main.log")
 
 __all__ = ['Fn_Sov2S']
@@ -14,7 +13,8 @@ __all__ = ['Fn_Sov2S']
 
 class Fn_Sov2S(Eventmanager):
 
-    def __init__(self,com,df,idxNo):
+    def __init__(self,com,df,idxNo,filename):
+        self.filename = filename
         self._idxNo =idxNo
         self.gen = com
         self.df = df
@@ -77,9 +77,11 @@ class Fn_Sov2S(Eventmanager):
 
 
     def initilizedigitalinput(self):
+        print('the control valve was here')
 
         try:
             pass
+
 
         except Exception as e:
             level = logging.ERROR
@@ -90,18 +92,22 @@ class Fn_Sov2S(Eventmanager):
     def sov2sprocess(self):
 
         try:
-            print("Hello I am fire")
-            self.opncmdvalue = self.gen.readgeneral.readtagvalue(self.opencmdtag)
-            self.clscmdvalue = self.gen.readgeneral.readtagvalue(self.closecmdtag)
+            print('control valve is running')
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
+            self.opncmdvalue = readgeneral.readsymbolvalue(self.opencmdtag,'S7WLBit','PA')
+            self.clscmdvalue = readgeneral.readsymbolvalue(self.closecmdtag,'S7WLBit','PA')
 
             if self.opncmdvalue == True and self.clscmdvalue == False:
-                self.gen.writegeneral.writenodevalue(self.closeFBtag, 0)
+                writegeneral.writesymbolvalue(self.closeFBtag, 0,'S7WLBit')
                 if len(self.torquecloseFBtag) > 3:
-                    self.gen.writegeneral.writenodevalue(self.torquecloseFBtag, 0)
-                sleep(self.delaytimetag)
-                self.gen.writegeneral.writenodevalue(self.openFBtag, 1)
+                    writegeneral.writesymbolvalue(self.torquecloseFBtag, 0,'S7WLBit')
+                # sleep(self.delaytimetag)
+                writegeneral.writesymbolvalue(self.openFBtag, 1,'S7WLBit')
                 if len(self.torqueOpenFBtag) > 3:
-                    self.gen.writegeneral.writenodevalue(self.torqueOpenFBtag, 1)
+                    writegeneral.writesymbolvalue(self.torqueOpenFBtag, 1,'S7WLBit')
 
                 self.opnFB = True
                 self.clsFB = False
@@ -116,13 +122,13 @@ class Fn_Sov2S(Eventmanager):
                 logger.log(level, messege)
 
             if self.opncmdvalue == False and self.clscmdvalue == True:
-                self.gen.writegeneral.writenodevalue(self.openFBtag, 0)
+                writegeneral.writesymbolvalue(self.openFBtag, 0,'S7WLBit')
                 if len(self.torqueOpenFBtag) > 3:
-                    self.gen.writegeneral.writenodevalue(self.torqueOpenFBtag, 0)
-                sleep(self.delaytimetag)
-                self.gen.writegeneral.writenodevalue(self.closeFBtag, 1)
+                    writegeneral.writesymbolvalue(self.torqueOpenFBtag, 0,'S7WLBit')
+                # sleep(self.delaytimetag)
+                writegeneral.writesymbolvalue(self.closeFBtag, 1,'S7WLBit')
                 if len(self.torquecloseFBtag) > 3:
-                    self.gen.writegeneral.writenodevalue(self.torquecloseFBtag, 1)
+                    writegeneral.writesymbolvalue(self.torquecloseFBtag, 1,'S7WLBit')
                 level = logging.WARNING
                 messege = self.devicename + ":" + self.torquecloseFBtag + " is trigger by 1" \
                           + self.closeFBtag + " is trigger by 1" + self.openFBtag + " is trigger by 0 " \
@@ -134,6 +140,7 @@ class Fn_Sov2S(Eventmanager):
                 self.torqueclsFB = True
                 self.torqueopnFB = False
 
+            sta_con_plc.disconnect()
 
 
 

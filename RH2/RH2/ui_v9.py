@@ -1,16 +1,14 @@
 import datetime
 import queue
-import logging
 import signal
 import multiprocessing
 import PIL.Image
 import PIL.ImageTk
 import AutocompleteCombox
 import allvalve1sprocessing
-from readgeneral_v2 import *
-from  writegeneral_v2 import *
-
-
+import allmotor1dprocessing_V1
+import  allvalve2sprocessing
+import  allmotor2dprocessing
 import general
 import Encoder_Operation_V1
 import time
@@ -27,7 +25,7 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import ttk, VERTICAL, HORIZONTAL, N, S, E, W, DISABLED, NORMAL
 
 logger = logging.getLogger("main.log")
-print(logger)
+
 
 
 class Clock(threading.Thread):
@@ -44,8 +42,6 @@ class Clock(threading.Thread):
         logger.debug('Simulation started')
         while not self._stop_event.is_set():
             now = datetime.datetime.now()
-            # level = logging.INFO
-            # logger.log(level, now)
             time.sleep(1)
 
     def stop(self):
@@ -195,7 +191,6 @@ class FormUi:
         self.excelpath.grid(column=2, row=1)
         self.button1 = ttk.Button(self.connect, text='sumit', command=self.connectwithplc(), state=NORMAL)
         self.button1.grid(column=1, row=2, sticky=W, padx=5, pady=5)
-
         excelpath = str(self.excelpath.get())
         return excelpath
 
@@ -207,7 +202,6 @@ class FormUi:
         try:
 
             self.import_file_path = filedialog.askopenfilename()
-
             self.comm_object = general.General(self.import_file_path)
             print('hello mayank')
             self._elementlist = []
@@ -232,10 +226,6 @@ class FormUi:
                 messege =  'Event:' + "PLC Simulation Successfully Connected"
                 logger.log(level, messege)
 
-            # else:
-            #     level = logging.ERROR
-            #     messege = 'Event:' + "Wrong Excel Confriguation"
-            #     logger.log(level, messege)
 
 
 
@@ -258,12 +248,10 @@ class FormUi:
             self.frame.update_idletasks()
             time.sleep(1)
 
-            self.sov1sprocesspbject = allvalve1sprocessing.sov1sprocess(self.alldevices, self.import_file_path)
-
-
-
-
-
+            self.sov1sprocessobject = allvalve1sprocessing.sov1sprocess(self.alldevices, self.import_file_path)
+            self.motor1dprocessobject = allmotor1dprocessing_V1.motor1dprocess(self.alldevices,self.import_file_path)
+            self.sov2sprocessobject = allvalve2sprocessing.sov2sprocess(self.alldevices,self.import_file_path)
+            self.motor2dprocessobject = allmotor2dprocessing.motor2dprocess(self.alldevices,self.import_file_path)
 
             # Multithreading section
 
@@ -292,50 +280,74 @@ class FormUi:
 
 
 
-    def callallsov1s(self,com,devices):
-        self.sov1sreadgeneral = ReadGeneral(com.sta_con_plc)
+    def callallsov1s(self):
         while TRUE:
-            self.sov1sprocesspbject.process()
+            self.sov1sprocessobject.process()
 
-            # time.sleep(5)
+
+    def callallmotor1d(self):
+        while TRUE:
+            self.motor1dprocessobject.process()
+
+
+    def callallsov2s(self):
+        while TRUE:
+            self.sov2sprocessobject.process()
+
+    def callallmotor2d(self):
+        while TRUE:
+            self.motor2dprocessobject.process()
+
 
 
     #
     def sov1start(self):
-        self.sov1stread = threading.Thread(target=self.callallsov1s, args=(self.comm_object, self.alldevices))
+        self.sov1stread = threading.Thread(target=self.callallsov1s)
         self.listofthread.append(self.sov1stread)
         self.sov1stread.start()
     #
 
+    #
+    def motor1dstart(self):
+        self.motor1dtread = threading.Thread(target=self.callallmotor1d)
+        self.listofthread.append(self.motor1dtread)
+        self.motor1dtread.start()
+
+    #
+
+    #
+    def motor2dstart(self):
+        self.motor2dtread = threading.Thread(target=self.callallmotor2d)
+        self.listofthread.append(self.motor2dtread)
+        self.motor2dtread.start()
+
+    #
 
 
+    #
+    def sov2sstart(self):
+        self.sov2stread = threading.Thread(target=self.callallsov2s)
+        self.listofthread.append(self.sov2stread)
+        self.sov2stread.start()
 
-
-
-
-
-
+    #
 
     def startprocess(self):
 
         self.win = tk.Toplevel(self.frame)
         self.win.geometry("250x200")
 
+        self.sov1startbutton = ttk.Button(self.win, text='Sov1_Start', command=self.sov1start)
+        self.sov1startbutton.grid(column=0, row=0)
 
+        self.motor1dstartbutton = ttk.Button(self.win, text='Motor1d_Start', command=self.motor1dstart)
+        self.motor1dstartbutton.grid(column=0, row=1)
 
-        self.sov1startbutton = ttk.Button(self.win, text='sov1start', command=self.sov1start)
-        self.sov1startbutton.grid(column=0, row=2)
+        self.sov2sstartbutton = ttk.Button(self.win, text='Sov2s_Start', command=self.sov2sstart)
+        self.sov2sstartbutton.grid(column=0, row=2)
 
-
-
-
-
-
-
-
-
-
-
+        self.motor2dstartbutton = ttk.Button(self.win, text='Sov2s_Start', command=self.motor2dstart)
+        self.motor2dstartbutton.grid(column=0, row=2)
 
 
 

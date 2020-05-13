@@ -5,7 +5,6 @@ import logging
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
-setup_logging_to_file("controlvalve.log")
 
 __all__ = ['Fn_ControlValves']
 
@@ -39,7 +38,7 @@ class Fn_ControlValves(Eventmanager):
 
 
         except Exception as e:
-            print("exception raise", e.args)
+
             log_exception(e)
 
     def initilizedigitalinput(self):
@@ -54,7 +53,7 @@ class Fn_ControlValves(Eventmanager):
         try:
             if len(self.sp) > 0 :
 
-                print("control valve process 1")
+
                 
                 self.currentvalue = readgeneral.readsymbolvalue(self.pv,'S7WLWord','PE')
                 self.spvalue = readgeneral.readsymbolvalue(self.sp, 'S7WLWord', 'PA')
@@ -64,7 +63,7 @@ class Fn_ControlValves(Eventmanager):
                     diff = rawspvalue - self.currentvalue
                     count= .01*diff
                     self.currentvalue = self.currentvalue + count
-                    print("control valve process 2")
+
                 if rawspvalue < self.currentvalue:
                     diff = self.currentvalue-rawspvalue
                     count1=.01*diff
@@ -90,12 +89,14 @@ class Fn_ControlValves(Eventmanager):
 
 
     def scalingconvtoraw(self, val, highlimit, lowlimit):
-        rawvalue = int((val * 27648) / (highlimit - lowlimit))
+        rawvalue = int((val * 1) / (highlimit - lowlimit))
+        # print(rawvalue)
         return rawvalue
 
     @property
     def processval(self):
         pv = float((self.currentvalue/27648)*(self.highpvvalue - self.lowpvvalue))
+        print(pv)
         return  pv
 
 
@@ -106,10 +107,7 @@ class Fn_ControlValves(Eventmanager):
 
     @setpoint.setter
     def setpoint(self, value):
-
         if value != self._sp:
-            print("setpointvalue is", value)
-            print("current value is", self._sp)
             super().fire()
             self._sp = value
 

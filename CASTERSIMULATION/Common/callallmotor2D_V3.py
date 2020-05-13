@@ -3,7 +3,7 @@ from fn_motor2D_V3 import *
 import logging
 import threading
 
-setup_logging_to_file("allmotor2D.log")
+
 logger = logging.getLogger("main.log")
 
 class Cal_AllMotor2D:

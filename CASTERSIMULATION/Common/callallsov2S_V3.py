@@ -3,12 +3,12 @@ from fn_sov2S_V3 import *
 import logging
 import threading
 
-setup_logging_to_file("allsov2S.log")
 logger = logging.getLogger("main.log")
 
 
 class Cal_AllSov2S:
-    def __init__(self, df, com):
+    def __init__(self, df, com,filename):
+        self.filename = filename
         self.df = df
         self.com = com
         self.listofsov2s = []
@@ -27,7 +27,7 @@ class Cal_AllSov2S:
             n = 0
             self.listofsov2s.clear()
             while n < len(self.df.index):
-                self.df.iloc[n, 0] = Fn_Sov2S(self.com, self.df, n)
+                self.df.iloc[n, 0] = Fn_Sov2S(self.com, self.df, n,self.filename)
                 self.listofsov2s.append(self.df.iloc[n, 0])
                 n = n + 1
 
@@ -37,7 +37,7 @@ class Cal_AllSov2S:
                 list1 = []
                 for item in self.listofsov2s:
 
-                    if item.areaname == area:
+                    if str(item.areaname) == str(area):
                         list1.append(item)
                 self.devicelistperarea.append(list1)
 
@@ -46,7 +46,7 @@ class Cal_AllSov2S:
 
             # Declear empty list
             self.dictionary = dict(zip(keys, values))
-            print(self.dictionary)
+
 
 
 

@@ -5,7 +5,7 @@ import logging
 import time
 
 
-setup_logging_to_file("alldigital.log")
+
 logger = logging.getLogger("main.log")
 
 

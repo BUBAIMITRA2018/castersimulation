@@ -4,9 +4,6 @@ from observal import *
 import calallABPdrives_V3
 import logging
 import general
-
-setup_logging_to_file("alldriveprocessing.log")
-# logger = logging.getLogger("main.log")
 dfANA = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='AnalogTx')
 commobject = general.General()
 

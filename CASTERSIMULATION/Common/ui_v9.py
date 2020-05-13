@@ -14,7 +14,7 @@ import allencoderprocessing
 import allsiemensdriveprocessing
 import allcontrolvalvesprocessing
 import allanalogprocessing
-import alldummybarprocessing
+
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 
@@ -220,7 +220,6 @@ class FormUi:
             self.import_file_path = filedialog.askopenfilename()
 
             self.comm_object = general.General(self.import_file_path)
-            print('hello mayank')
             self._elementlist = []
             self.tagvalueitemlist = []
             self.plc_cmd_list = []
@@ -271,22 +270,15 @@ class FormUi:
 
 
             self.allmotor1dprocessobject = allmotor1dprocessing_V1.motor1dprocess(self.alldevices,self.import_file_path)
-            self.motor2dprocesspbject = allmotor2dprocessing.motor2dprocess(self.alldevices,self.import_file_path)
-            self.sov1sprocesspbject = allvalve1sprocessing.sov1sprocess(self.alldevices, self.import_file_path)
+            self.motor2dprocessobject = allmotor2dprocessing.motor2dprocess(self.alldevices,self.import_file_path)
+            self.sov1sprocessobject = allvalve1sprocessing.sov1sprocess(self.alldevices, self.import_file_path)
+            self.sov2sprocessobject = allvalve2sprocessing.sov2sprocess(self.alldevices, self.import_file_path)
             self.controlvalveprocessobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
             self.siemensdriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldevices,self.import_file_path)
             self.analogobject = allanalogprocessing.analogprocess(self.alldevices,self.import_file_path)
-            self.dummybarprocessobject = alldummybarprocessing.dummybardprocess(self.alldevices, self.import_file_path)
 
 
 
-            # con1,con2 = multiprocessing.Pipe()
-
-            # con1.send(self.alldevice)
-            # con2.send(self.comm_object)
-
-
-            # Multithreading section
 
 
             self.button2.config(text="Initialized")
@@ -312,96 +304,107 @@ class FormUi:
 
     def callallmotor1d(self,com,devices):
 
-        while TRUE:
+        while not self.DEAD:
             self.allmotor1dprocessobject.process()
 
 
     def callallmotor2d(self,com,devices):
 
-        while TRUE:
-            self.motor2dprocesspbject.process()
+        while not self.DEAD:
+            self.motor2dprocessobject.process()
             # allmotor2dprocessing.process(com, devices,self.import_file_path)
 
 
     def callallsov1s(self,com,devices):
-        self.sov1sreadgeneral = ReadGeneral(com.sta_con_plc)
+        # self.sov1sreadgeneral = ReadGeneral(com.sta_con_plc)
 
-        while TRUE:
-            self.sov1sprocesspbject.process()
+        while not self.DEAD:
+            self.sov1sprocessobject.process()
 
             # time.sleep(5)
 
     def callallsov2s(self, com, devices):
-        while TRUE:
-            allvalve2sprocessing.process(com, devices)
+        while not self.DEAD:
+            self.sov2sprocessobject.process()
             # time.sleep(2)
     #
     def callallanalogs(self,com, devices):
-        while TRUE:
+        while not self.DEAD:
             self.analogobject.process()
             # time.sleep(2)
 
     def callendocers(self,com,devices):
-        while TRUE:
+        while not self.DEAD:
             allencoderprocessing.process(com, devices)
             # time.sleep(2)
 
     def callsiemensDrives(self,com,devices):
-        while TRUE:
+        while not self.DEAD:
             self.siemensdriveobject.process()
             # time.sleep(2)a
 
     def callcontrolvalves(self,com,devices):
-        while TRUE:
+        while not self.DEAD:
             self.controlvalveprocessobject.process()
             # time.sleep(2)
 
-    def calldummybars(self,com,devices):
-        while TRUE:
-            self.dummybarprocessobject.process()
+
 
     def motor1dstart(self):
+        self.DEAD = False
 
         self.motor1dtread = threading.Thread(target=self.callallmotor1d, args=(self.comm_object, self.alldevices))
         self.listofthread.append(self.motor1dtread)
         self.motor1dtread.start()
+        self.motor1dstartbutton.configure(text="motor1dstarted")
 
     def motor2dstart(self):
+        self.DEAD = False
         self.motor2dtread = threading.Thread(target=self.callallmotor2d, args=(self.comm_object, self.alldevices))
 
         self.motor2dtread.start()
+        self.motor2dstartbutton.configure(text="motor2dstarted")
 
     def sov1start(self):
+        self.DEAD = False
         self.sov1stread = threading.Thread(target=self.callallsov1s, args=(self.comm_object, self.alldevices))
         self.listofthread.append(self.sov1stread)
         self.sov1stread.start()
+        self.sov1startbutton.configure(text="sov1started")
 
     def sov2start(self):
+        self.DEAD = False
         self.sov2stread = threading.Thread(target=self.callallsov2s, args=(self.comm_object, self.alldevices))
         self.listofthread.append(self.sov2stread)
         self.sov2stread.start()
+        self.sov2startbutton.configure(text="sov2started")
 
     def encoderstart(self):
+        self.DEAD = False
         self.encodertread = threading.Thread(target=self.callendocers, args=(self.comm_object, self.alldevices))
         self.listofthread.append(self.encodertread)
         self.encodertread.start()
+        self.motor1dstartbutton.configure(text="motor1dstarted")
 
     def analogstart(self):
+        self.DEAD = False
         self.analogtread = threading.Thread(target=self.callallanalogs, args=(self.comm_object, self.alldevices))
         self.listofthread.append(self.analogtread)
         self.analogtread.start()
+        self.analogstartbutton.configure(text="analogstarted")
 
     def seimensdrivestart(self):
+        self.DEAD = False
         self.siemnenstread = threading.Thread(target=self.callsiemensDrives, args=(self.comm_object, self.alldevices))
         self.siemnenstread.start()
+        self.seimensdrivestartbutton.configure(text="drivestarted")
 
     def controlvalvestart(self):
+        self.DEAD = False
         self.controlvalvetread = threading.Thread(target=self.callcontrolvalves,args=(self.comm_object, self.alldevices))
         self.controlvalvetread.start()
+        self.controlvalvestartbutton.configure(text="controlvalvestarted")
 
-    def dummybarstart(self):
-        self.dummybartread = threading.Thread(target=self.calldummybars,args=(self.comm_object, self.alldevices))
-        self.dummybartread.start()
 
 
 
@@ -440,136 +443,28 @@ class FormUi:
         self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
         self.controlvalvestartbutton.grid(column=1, row=3)
 
-        self.dummybarstartbutton = ttk.Button(self.win, text='dummybarstart', command=self.dummybarstart)
-        self.dummybarstartbutton.grid(column=1, row=4)
-
-
-
-
-    # class Fn_StartControlPanel:
-    #         def __init__(self, frame, com):
-    #             self.gen = com
-    #             self.frame = frame
-    #             self.win = tk.Toplevel(self.frame)
-    #             self.win.geometry('500x250')
-    #             self.win.columnconfigure(0, weight=1)
-    #             self.win.rowconfigure(0, weight=1)
-    #             # Add vertical panel
-    #             vertical_pane = ttk.PanedWindow(self.win, orient=VERTICAL)
-    #             vertical_pane.grid(row=0, column=0, sticky="nsew")
-    #             horizontal_pane = ttk.PanedWindow(vertical_pane, orient=HORIZONTAL)
-    #             vertical_pane.add(horizontal_pane)
-    #             # Add controlpanel to horizontal_pane
-    #             startcontrolpanel_frame = ttk.Labelframe(horizontal_pane, text="Start Control Panel")
-    #             startcontrolpanel_frame.columnconfigure(1, weight=1)
-    #             horizontal_pane.add(startcontrolpanel_frame, weight=1)
-    #             self.startcontrolpanelui = StartControlPanelUi(startcontrolpanel_frame, self.gen)
-
-        # def __init__(self, frame, com):
-        #     self.gen = com
-        #     self.frame = frame
-        #     self.win = tk.Toplevel(self.frame)
-        #     self.win.geometry('500x250')
-        #     self.win.columnconfigure(0, weight=1)
-        #     self.win.rowconfigure(0, weight=1)
-        #     # Add vertical panel
-        #     vertical_pane = ttk.PanedWindow(self.win, orient=VERTICAL)
-        #     vertical_pane.grid(row=0, column=0, sticky="nsew")
-        #     horizontal_pane = ttk.PanedWindow(vertical_pane, orient=HORIZONTAL)
-        #     vertical_pane.add(horizontal_pane)
-        #     # Add controlpanel to horizontal_pane
-        #     startcontrolpanel_frame = ttk.Labelframe(horizontal_pane, text="Start Control Panel")
-        #     startcontrolpanel_frame.columnconfigure(1, weight=1)
-        #     horizontal_pane.add(startcontrolpanel_frame, weight=1)
-        #     self.startcontrolpanelui = StartControlPanelUi(startcontrolpanel_frame, self.gen)
-        # import startcontrolpanal
-        # startcontrolpanal.Fn_StartControlPanel(self.frame, self.comm_object)
-
-        # self.motor1dtread = threading.Thread(target=self.callallmotor1d, args=(self.comm_object, self.alldevices))
-        # self.listofthread.append(self.motor1dtread)
-        # self.motor1dtread.start()
-        #
-        # self.motor2dtread = threading.Thread(target=self.callallmotor1d, args=(self.comm_object, self.alldevices))
-        # self.listofthread.append(self.motor1dtread)
-        # self.motor2dtread.start()
-
-
-        # self.sov1stread = threading.Thread(target=self.callallsov1s, args=(self.comm_object, self.alldevices))
-        # self.listofthread.append(self.sov1stread)
-        # self.sov1stread.start()
-        #
-        #
-        # self.sov2stread = threading.Thread(target=self.callallsov2s, args=(self.comm_object, self.alldevices))
-        # self.listofthread.append(self.sov2stread)
-        # self.sov2stread.start()
-        #
-        # self.analogtread = threading.Thread(target=self.callallanalogs, args=(self.comm_object, self.alldevices))
-        # self.listofthread.append(self.analogtread)
-        # self.analogtread.start()
-        #
-        # self.encodertread = threading.Thread(target=self.callendocers, args=(self.comm_object, self.alldevices))
-        # self.listofthread.append(self.encodertread)
-        # self.encodertread.start()
-        #
-        # self.siemnenstread = threading.Thread(target=self.callsiemensDrives, args=(self.comm_object, self.alldevices))
-        # self.listofthread.append(self.siemnenstread)
-        # self.siemnenstread.start()
-        #
-        # self.controlvalvetread = threading.Thread(target=self.callcontrolvalves,
-        #                                           args=(self.comm_object, self.alldevices))
-        # self.listofthread.append(self.controlvalvetread)
-        # self.controlvalvetread.start()
-
-        # self.motor1dtread.start()
-        # self.motor2dtread.start()
-        # self.sov1stread.start()
-        # self.sov2stread.start()
-        # self.encodertread.start()
-        # self.siemnenstread.start()
-        # self.controlvalvetread.start()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # for item in self.listofthread:
-        #     item.start()
-
-        # for item in self.listofprocess:
-        #     item.start()
-
-
-        # self.button3.config(text="started")
-
-
-
-
-
-
 
     def stopprocess(self):
-        pass
 
-        # for item in self.listofthread:
-        #     item.kill()
-        #
+        self.DEAD = True
+        self.motor1dstartbutton.configure(text = 'motor1dstart')
+        self.motor2dstartbutton.configure(text = 'motor2dstart')
+        self.sov1startbutton.configure(text = 'sov1start')
+        self.sov2startbutton.configure(text = 'sov2start')
+        self.encoderstartbutton.configure(text = 'encoderstart')
+        self.controlvalvestartbutton.configure(text = 'controlvalstart')
+        self.analogstartbutton.configure(text = 'analogstart')
+        self.seimensdrivestartbutton.configure(text = 'drivestart')
+
+
+
+
+
         # for item in self.listofprocess:
         #     item.kill()
 
 
     def writetag(self):
-
         tagname = self.tagname_entered.get()
         datatype = self.datatype_entered.get()
         tagvalue = int(self.tagvalue.get())
@@ -616,10 +511,6 @@ class FormUi:
         ttk.Label(self.win, text='Action').grid(column=2, row=3)
         self.button1 = ttk.Button(self.win, text="Submit", command=self.writetag,state=NORMAL)
         self.button1.grid(column=3, row=3)
-        # action.grid(column=3, row=3)
-        # win.bind('<Control-Q>', lambda event=None: win.destroy())
-        #  win.bind('<Control-q>', lambda event=None: win.destroy())
-        # (self.tagname_entered, tagvalue)
         self.win.mainloop()
 
     def collectwritetaglist(self):
@@ -698,17 +589,6 @@ class App:
     def signal_handler(sig, frame):
         print("System exited")
         sys.exit(0)
-
-
-# def callallanalog():
-#     import allanalogprocessing
-#     allanalogprocessing.process()
-#
-# def callallcontrolvalves():
-#     import allcontrolvalvesprocessing
-#     allcontrolvalvesprocessing.process()
-
-
 
 def main():
     logging.basicConfig(level=logging.DEBUG)

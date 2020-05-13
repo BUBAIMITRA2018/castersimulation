@@ -1,12 +1,6 @@
-from logger import *
-from event_V2 import *
-from time import sleep
-import logging
+
 from clientcomm_v1 import *
-from readgeneral_v2 import *
 from  writegeneral_v2 import *
-import threading
-setup_logging_to_file("outsignal.log")
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_outsignal']
 

@@ -4,8 +4,6 @@ from  fn_motor1D_V4 import *
 import logging
 import threading
 
-
-setup_logging_to_file("allmotor1D.log")
 logger = logging.getLogger("main.log")
 
 
@@ -67,15 +65,7 @@ class Cal_AllMotor1D:
             messege = 'Event:' + "callallmotor1D" + str(e.args)
             logger.log(level, messege)
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
 
-    def __setstate__(self, state):
-        # Restore instance attributes.
-        self.__dict__.update(state)
 
 
     @property

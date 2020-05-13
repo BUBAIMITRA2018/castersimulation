@@ -2,8 +2,6 @@ from logger import *
 from fn_Encoder_V3 import *
 import logging
 import threading
-
-setup_logging_to_file("allencoder.log")
 logger = logging.getLogger("main.log")
 
 

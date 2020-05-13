@@ -6,8 +6,6 @@ from event_V3 import *
 from time import sleep
 import logging
 import threading
-
-setup_logging_to_file("SIEMENS_DRIVE.log")
 logger = logging.getLogger("main.log")
 
 __all__ = ['Fn_Siemens_Drive']

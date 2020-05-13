@@ -6,7 +6,7 @@ from time import sleep
 import logging
 import threading
 
-setup_logging_to_file("ABP_DRIVE.log")
+
 logger = logging.getLogger("main.log")
 
 __all__ = ['Fn_ABP_Drive']

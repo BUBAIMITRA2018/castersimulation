@@ -1,12 +1,10 @@
 
-from logger import *
+
 from observable import *
 import logging
 from clientcomm_v1 import *
 from readgeneral_v2 import *
-from  writegeneral_v2 import *
 
-setup_logging_to_file("allsiemensprocessing.log")
 logger = logging.getLogger("main.log")
 
 class AreaObserver:
@@ -44,21 +42,6 @@ class siemensdriveprocessing :
             if areavalue == 1:
                 self.observer.notify(devices, self.readgeneral)
 
-
-# def process(comobject,alldevices):
-#     for area, devices in readkeyandvalues(alldevices):
-#         try:
-#             areavalue = comobject.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
-#             print(area,areavalue)
-#             if areavalue == 1:
-#                 observer.notify(devices,comobject)
-#
-#         except Exception as e:
-#             log_exception(e)
-#             level = logging.ERROR
-#             messege = "allmotor1dprocessing" + " Error messege(process)" + str(e.args)
-#             logger.log(level, messege)
-#             log_exception(e)
 
 
 def readkeyandvalues(alldevice):

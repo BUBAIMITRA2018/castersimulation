@@ -7,7 +7,6 @@ from  writegeneral_v2 import *
 import logging
 import  general
 
-setup_logging_to_file("motor2D.log")
 logger = logging.getLogger("main.log")
 
 __all__ = ['Fn_Motor2D']
@@ -112,10 +111,6 @@ class Fn_Motor2D(Eventmanager):
             self._revoncmdvalue = readgeneral.readsymbolvalue(self.revcmdtag,'S7WLBit','PA')
             self._fwdrunFBvalue = readgeneral.readsymbolvalue(self.fwdrunFBtag,'S7WLBit','PA')
             self._revrunFBvalue = readgeneral.readsymbolvalue(self.revrunFBtag,'S7WLBit','PA')
-            # if ( len(self.openLStag) > 3):
-            #     self._openLSvalue = self.readgeneral.readsymbolvalue(self.openLStag,'S7WLBit','PE')
-            # if (len(self.closeLStag) > 3):
-            #     self._closeLSvalue = self.readgeneral.readsymbolvalue(self.closeLStag,'S7WLBit','PA')
 
             if len(self.remFBtag) > 3:
                 writegeneral.writesymbolvalue(self.remFBtag, 1,'S7WLBit')
@@ -186,14 +181,9 @@ class Fn_Motor2D(Eventmanager):
             # print('i m executing motor 2 d')
             self.fwdcmdvalue = readgeneral.readsymbolvalue(self.fwdcmdtag,'S7WLBit','PA')
             self.revcmdvalue =  readgeneral.readsymbolvalue(self.revcmdtag,'S7WLBit','PA')
-            # self.openLSvalue = self.readgeneral.readsymbolvalue(self.openLStag,'S7WLBit','PE')
-            # self.closeLSvalue = self.readgeneral.readsymbolvalue(self.closeLStag,'S7WLBit','PE')
-            #
-            if self.fwdcmdvalue == True and self.revcmdvalue == False:
-                # sleep(self.delaytimetag)
 
-                # self.writegeneral.writesymbolvalue(self.openLStag, 0, 'S7WLBit')
-                # self.writegeneral.writesymbolvalue(self.closeLStag, 0, 'S7WLBit')
+            if self.fwdcmdvalue == True and self.revcmdvalue == False:
+
                 writegeneral.writesymbolvalue(self.fwdrunFBtag, 1,'S7WLBit')
                 writegeneral.writesymbolvalue(self.revrunFBtag, 0,'S7WLBit')
 
@@ -207,9 +197,7 @@ class Fn_Motor2D(Eventmanager):
                 logger.log(level, messege)
 
             if self.fwdcmdvalue == False and self.revcmdvalue == True:
-                # sleep(self.delaytimetag)
-                # self.writegeneral.writesymbolvalue(self.openLStag, 0, 'S7WLBit')
-                # self.writegeneral.writesymbolvalue(self.closeLStag, 0, 'S7WLBit')
+
                 writegeneral.writesymbolvalue(self.fwdrunFBtag, 0,'S7WLBit')
                 writegeneral.writesymbolvalue(self.revrunFBtag, 1,'S7WLBit')
 
@@ -236,14 +224,6 @@ class Fn_Motor2D(Eventmanager):
                 self.RevRunFB = False
                 self.FwdRunFB = False
                 level = logging.WARNING
-
-            # if self.openLSvalue :
-            #     if len(self.FwdPlcRlstag) > 3:
-            #         self.writegeneral.writesymbolvalue(self.BwdPlcRlstag, 1,'S7WLBit')
-            #
-            # if self.closeLSvalue:
-            #     if len(self.BwdPlcRlstag) > 3:
-            #         self.writegeneral.writesymbolvalue(self.FwdPlcRlstag, 1,'S7WLBit')
 
             sta_con_plc.disconnect()
 

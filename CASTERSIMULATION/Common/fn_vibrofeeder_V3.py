@@ -2,8 +2,6 @@ from logger import *
 from event_V2 import *
 from time import sleep
 import logging
-
-setup_logging_to_file("Vibrofeeder.log")
 logger = logging.getLogger("main.log")
 
 __all__ = ['Fn_VibroFeeder']

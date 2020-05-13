@@ -3,8 +3,6 @@ from fn_digitalsignal_V3 import *
 import logging
 import threading
 
-
-setup_logging_to_file("alldigital.log")
 logger = logging.getLogger("main.log")
 
 

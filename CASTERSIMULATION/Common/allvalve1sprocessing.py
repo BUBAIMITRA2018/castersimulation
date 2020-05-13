@@ -1,12 +1,9 @@
-import logging
-from logger import *
+
 from observal import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
-from  writegeneral_v2 import *
 
 
-setup_logging_to_file("allvalve1sprocessing.log")
 logger = logging.getLogger("main.log")
 
 

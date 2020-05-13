@@ -3,8 +3,6 @@ from fn_conveyor1D_V3 import *
 import logging
 import threading
 
-
-setup_logging_to_file("allconveyor.log")
 logger = logging.getLogger("main.log")
 
 

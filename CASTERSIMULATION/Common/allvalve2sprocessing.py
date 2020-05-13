@@ -1,8 +1,8 @@
-import logging
-from logger import *
-from observal import *
 
-setup_logging_to_file("allvalve2sprocessing.log")
+from observal import *
+from clientcomm_v1 import *
+from readgeneral_v2 import *
+
 logger = logging.getLogger("main.log")
 
 
@@ -12,27 +12,28 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.opncomd = args[1].readgeneral.readtagvalue(item.opencmdtag)
-            item.clscomd = args[1].readgeneral.readtagvalue(item.closecmdtag)
+            item.opncomd = args[1].readsymbolvalue(item.opencmdtag,'S7WLBit','PA')
+            item.clscomd = args[1].readsymbolvalue(item.closecmdtag,'S7WLBit','PA')
 
-
-subject = Observable()
-observer = AreaObserver(subject)
-
-def process(comobject,alldevices):
-    for area, devices in readkeyandvalues(alldevices):
-        try:
-            areavalue = comobject.readgeneral.readtagvalue(area)
+class sov2sprocess:
+    def __init__(self,alldevices,filename):
+        self.subject = Observable()
+        self.alldevices = alldevices
+        self.filename = filename
+        self.subject = Observable()
+        self.observer = AreaObserver(self.subject)
+        self.client = Communication()
+        self.sta_con_plc = self.client.opc_client_connect(filename)
+        self.observer = AreaObserver(self.subject)
+        self.readgeneral = ReadGeneral(self.sta_con_plc)
+        
+        
+    def process(self):
+     for area, devices in readkeyandvalues(self.alldevices):
+            areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
             if areavalue == 1:
-                observer.notify(devices,comobject)
-
-        except Exception as e:
-            log_exception(e)
-            level = logging.ERROR
-            messege = "allsov2sprocessing" + " Error messege(process)" + str(e.args)
-            logger.log(level, messege)
-            log_exception(e)
-
+                self.observer.notify(devices, self.readgeneral)
+                
 
 def readkeyandvalues(alldevice):
 

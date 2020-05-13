@@ -4,7 +4,6 @@ import logging
 import threading
 
 logger = logging.getLogger("main.log")
-setup_logging_to_file("allanalog.log")
 
 
 class Cal_AllAnalogInputs:

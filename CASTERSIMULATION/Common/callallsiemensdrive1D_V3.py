@@ -1,11 +1,10 @@
 from logger import *
-# from fn_motor1D_V3 import *
 from  fn_Siemens_drive_V3 import *
 import logging
 import threading
 
 
-setup_logging_to_file("allsiemensdrive1D.log")
+
 logger = logging.getLogger("main.log")
 
 

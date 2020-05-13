@@ -3,8 +3,6 @@ from fn_vibrofeeder_V3 import *
 import logging
 import threading
 
-
-setup_logging_to_file("allvibrofeeder.log")
 logger = logging.getLogger("main.log")
 
 

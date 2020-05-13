@@ -2,7 +2,7 @@ clifrom logger import *
 from fn_analogTx import *
 
 
-setup_logging_to_file("allanalog.log")
+
 
 
 class Cal_AllAnalogInputs:

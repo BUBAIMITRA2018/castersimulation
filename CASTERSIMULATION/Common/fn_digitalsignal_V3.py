@@ -4,7 +4,6 @@ from time import sleep
 import logging
 import threading
 from event_V2 import *
-setup_logging_to_file("digitalsignal.log")
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_digitalsignal']
 

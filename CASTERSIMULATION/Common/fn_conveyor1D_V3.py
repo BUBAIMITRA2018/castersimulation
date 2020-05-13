@@ -3,9 +3,6 @@ from event_V2 import *
 from time import sleep
 import logging
 import threading
-
-
-setup_logging_to_file("conveyor.log")
 logger = logging.getLogger("main.log")
 
 __all__ = ['Fn_Conveyor1D']

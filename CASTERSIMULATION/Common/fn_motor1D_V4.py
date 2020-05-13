@@ -7,7 +7,6 @@ from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import  general
-setup_logging_to_file("motor1D.log")
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_Motor1D']
 
@@ -32,8 +31,6 @@ class Fn_Motor1D(Eventmanager):
 
         try:
 
-            # self.readgeneral = ReadGeneral(self.gen.sta_con_plc)
-            # self.writegeneral = WriteGeneral(self.gen.sta_con_plc)
 
             for tag, col in self.readalltags():
 
@@ -162,9 +159,6 @@ class Fn_Motor1D(Eventmanager):
             oncommandvalue = readgeneral.readsymbolvalue(self.oncmdtag,'S7WLBit','PA')
             runfbvalue = readgeneral.readsymbolvalue(self.runingFBtag,'S7WLBit','PE')
             if oncommandvalue == True and runfbvalue == False:
-                print("1")
-                # sleep(self.delaytimetag)
-                # print('run')
 
                 writegeneral.writesymbolvalue(self.runingFBtag, 1,'S7WLBit')
                 self.runFB = 1
@@ -202,10 +196,6 @@ class Fn_Motor1D(Eventmanager):
         # Remove the unpicklable entries.
         del state['mylock']
         return state
-
-    # def __setstate__(self, state):
-    #     # Restore instance attributes.
-    #     self.__dict__.update(state)
 
     @property
     def OnCmd(self):

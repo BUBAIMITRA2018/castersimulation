@@ -3,7 +3,7 @@ from fn_ABP_drive_V3 import *
 import logging
 
 logger = logging.getLogger("main.log")
-setup_logging_to_file("alldrives.log")
+
 
 
 class Cal_ABBDrives:

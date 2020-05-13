@@ -1,9 +1,8 @@
-import logging
-from logger import *
+
 from observal import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
-from  writegeneral_v2 import *
+
 
 logger = logging.getLogger("main.log")
 
@@ -35,37 +34,6 @@ class motor2dprocess:
             areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
             if areavalue == 1:
                 self.observer.notify(devices, self.readgeneral)
-
-
-
-
-
-
-
-
-
-# def process(comobject,alldevices,filename):
-#     readgeneral = ReadGeneral(comobject.sta_con_plc)
-#
-#     for area, devices in readkeyandvalues(alldevices):
-#         areavalue = readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
-#         if areavalue == 1:
-#             observer.notify(devices, readgeneral)
-        # try:
-        #
-        #     areavalue = comobject.readgeneral.readsymbolvalue(area,'S7WLBit','PA')
-        #     print("areavalue for Motor2D",areavalue)
-        #
-        #     if areavalue == 1:
-        #         observer.notify(devices,comobject)
-        #
-        # except Exception as e:
-        #     log_exception(e)
-        #     level = logging.ERROR
-        #     messege = "allmotor2dprocessing" + " Error messege(process)" + str(e.args)
-        #     # logger.log(level, messege)
-        #     # log_exception(e)
-
 
 def readkeyandvalues(alldevice):
          motordictionary = alldevice.allmotor2d.dictionary

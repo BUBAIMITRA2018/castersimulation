@@ -1,8 +1,7 @@
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
-import  threading
-from tkinter import filedialog
+
 
 __all__ = ['General']
 

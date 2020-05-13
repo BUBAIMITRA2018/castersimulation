@@ -11,7 +11,7 @@ import callalloutsignals_V3
 import  callallsiemensdrive1D_V3
 import  callalldigital_V3
 import calallcontrolvalves_V3
-import calalldummybar_V3
+
 import pandas as pd
 
 import calallanalog_V3
@@ -36,22 +36,28 @@ class AllDevices:
         self.dfsiemensdrive = pd.read_excel(import_file_path, sheet_name='SiemensDrive')
         self.dfdigitalsignal = pd.read_excel(import_file_path, sheet_name='DigitalTx')
         self.dfcontrolvalve = pd.read_excel(import_file_path, sheet_name='ControlValves')
-        self.dfdummybar = pd.read_excel(import_file_path, sheet_name='DummyBar')
+
 
         self.allmotor1dobjects = callallmotor1D_V3.Cal_AllMotor1D(self.dfM1D, comobject,import_file_path)
         self.allmotor2dobjects = callallmotor2D_V3.Cal_AllMotor2D(self.dfM2D, comobject,import_file_path)
         self.allsov1sobjects = callallsov1S_V3.Cal_AllSov1S(self.dfS1S,comobject,import_file_path)
-        # self.allsov2sobjects =  callallsov2S_V3.Cal_AllSov2S(self.dfS2S,comobject)
+        self.allsov2sobjects =  callallsov2S_V3.Cal_AllSov2S(self.dfS2S,comobject,import_file_path)
         # self.allvfobjects =   callallvibrofeeder_V3.Cal_AllVibroFeeder(self.dfVF,comobject)
         # self.allconveyorobjects = callallconveyor_V3.Cal_AllConveyor1D(self.dfCONV,comobject)
         # self.alldriveobjects = calallABPdrives_V3.Cal_ABBDrives(self.dfdrive,comobject)
         # # self.allencoderobjects = callallEncoder_V3.Cal_AllEncoder(self.dfencoder,comobject)
         self.alloutsignalobjects = callalloutsignals_V3. Cal_AllOutsingnal(self.dfoutsignal, comobject,import_file_path)
-        # self.allanalogsignalobjects = calallanalog_V3.Cal_AllAnalogInputs(self.dfanalog,comobject,import_file_path)
+        self.allanalogsignalobjects = calallanalog_V3.Cal_AllAnalogInputs(self.dfanalog,comobject,import_file_path)
         self.allsiemensdrivesobjects = callallsiemensdrive1D_V3.Cal_AllSiemensDrive1D(self.dfsiemensdrive,comobject,import_file_path)
         # self.alldigitalsignalobjects = callalldigital_V3.Cal_AllDigital(self.dfdigitalsignal,comobject)
         self.allcontrolvalveobjects = calallcontrolvalves_V3.Cal_AllControlValves(self.dfcontrolvalve,comobject,import_file_path)
-        self.alldummybarobjects = calalldummybar_V3.Cal_AllDummyBar(self.dfdummybar, comobject,import_file_path)    #
+
+
+
+
+
+
+    #
     #
     # def __deepcopy__(self, memo):
     #     newself = self.__class__.__new__(self.__class__)
@@ -73,13 +79,10 @@ class AllDevices:
     def allsov1s(self):
         return self.allsov1sobjects
 
-    @property
-    def alldummybar(self):
-        return self.alldummybarobjects
 
-    # @property
-    # def allsov2s(self):
-    #     return self.allsov2sobjects
+    @property
+    def allsov2s(self):
+        return self.allsov2sobjects
     #
     # @property
     # def allvibrofeeders(self):
@@ -92,9 +95,9 @@ class AllDevices:
     # @property
     # def alldrives(self):
     #     return self.alldriveobjects
-    # @property
-    # def allanalogs(self):
-    #     return self.allanalogsignalobjects
+    @property
+    def allanalogs(self):
+        return self.allanalogsignalobjects
 
     # # @property
     # # def allencoders(self):

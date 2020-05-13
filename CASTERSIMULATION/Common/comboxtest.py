@@ -1,4 +1,4 @@
-# Import
+
 import tkinter as Tkinter
 import tkinter.ttk as ttk
 

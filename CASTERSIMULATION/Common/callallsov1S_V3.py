@@ -2,10 +2,10 @@ from logger import *
 import threading
 from fn_sov1S_V3 import *
 import logging
-import time
 
 
-setup_logging_to_file("allsov1S.log")
+
+
 logger = logging.getLogger("main.log")
 
 
@@ -28,16 +28,21 @@ class Cal_AllSov1S:
 
             # Make a lis of area
             self.listofsov1sarea = list(set(self.df['Sub-Area']))
+            print( self.listofsov1sarea)
+
+
+
 
             # Make a lis of devices
             n= 0
             self.listofsov1s.clear()
-            while n< len(self.df.index):
 
+
+            while n< len(self.df.index):
                 self.df.iloc[n, 0] = Fn_Sov1S(self.com, self.df, n,self.filename)
+
                 self.listofsov1s.append(self.df.iloc[n,0])
                 n = n + 1
-
 
 
             for area in self.listofsov1sarea:
@@ -52,9 +57,11 @@ class Cal_AllSov1S:
             # Declear empty list
             self.dictionary = dict(zip(keys,values))
 
+
+
         except Exception as e :
             log_exception(e)
-            log_exception(e)
+
             level = logging.ERROR
             messege = 'Event:' + "callallsov1s" + str(e.args)
             logger.log(level, messege)

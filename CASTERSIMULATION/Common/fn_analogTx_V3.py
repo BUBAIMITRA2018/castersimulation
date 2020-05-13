@@ -1,13 +1,11 @@
-from logger import *
+
 from event_V2 import *
-from time import sleep
-import logging
+
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import threading
 import random
-setup_logging_to_file("analog.log")
 logger = logging.getLogger("main.log")
 
 __all__ = ['Fn_AnalogTx']
@@ -25,7 +23,7 @@ class Fn_AnalogTx(Eventmanager):
         self.setup()
         self.analoginitialization()
         super().__init__(lambda: self.analogprocess())
-        print("initilization complete")
+
 
 
     def setup(self):
@@ -104,16 +102,6 @@ class Fn_AnalogTx(Eventmanager):
 
             writegeneral.writesymbolvalue(self.outputtag, 0 , 'S7WLWord')
 
-
-            # if (self.cmdtag1value and self.cmdtag2value and self.cmdtag3value and self.cmdtag4value):
-            #     if self.val > self.lowerlimit and self.val < self.highlimit and self.val != 0:
-            #         print('analog process value')
-            #         a = abs(self.val - 0.005)
-            #         b = abs(self.val + 0.005)
-            #         self.targetvalue = random.uniform(a, b)
-            #         self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
-            #         writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue, 'S7WLWord')
-
             sta_con_plc.disconnect()
 
 
@@ -158,7 +146,7 @@ class Fn_AnalogTx(Eventmanager):
 
                             sta_con_plc.disconnect()
 
-                            print('the value of analog is ',self.outrawvalue)
+
 
 
                             level1 = logging.WARNING
