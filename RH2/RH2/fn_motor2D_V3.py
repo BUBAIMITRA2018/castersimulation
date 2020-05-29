@@ -161,7 +161,7 @@ class Fn_Motor2D(Eventmanager):
                 messege = self.devicename + ":" + self.faultFBtag + " is trigger by 1"
                 logger.log(level, messege)
 
-            sta_con_plc.disconnect()
+            sta_con_plc.close()
 
 
 
@@ -239,11 +239,7 @@ class Fn_Motor2D(Eventmanager):
             print("Motor 2d error:",e.args)
 
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
+
 
     @property
     def FwdOnCmd(self):

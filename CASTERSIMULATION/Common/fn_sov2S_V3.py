@@ -25,6 +25,8 @@ class Fn_Sov2S(Eventmanager):
         self._clsFBvalue = False
         self._opntorqueFBvalue = False
         self._clstorqueFBvalue = False
+        # self._openLSFBvalue = False
+        # self._closeLSFBvalue = False
         self.setup()
         self.initilizedigitalinput()
         super().__init__(lambda: self.sov2sprocess())
@@ -69,6 +71,14 @@ class Fn_Sov2S(Eventmanager):
                 if col == 11:
                     self.torquedelaytimetag = tag
 
+                # if col == 14:
+                #     self.openLS = str(tag)
+                #
+                # if col == 15:
+                #     self.closeLS = str(tag)
+
+
+
         except Exception as e:
             level = logging.ERROR
             messege = "FN_SOV2S" + self.devicename + " Error messege(setup)" + str(e.args)
@@ -104,41 +114,64 @@ class Fn_Sov2S(Eventmanager):
                 writegeneral.writesymbolvalue(self.closeFBtag, 0,'S7WLBit')
                 if len(self.torquecloseFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torquecloseFBtag, 0,'S7WLBit')
+                # if len(self.closeLS)>3:
+                #     writegeneral.writesymbolvalue(self.closeLS, 0, 'S7WLBit')
                 # sleep(self.delaytimetag)
                 writegeneral.writesymbolvalue(self.openFBtag, 1,'S7WLBit')
                 if len(self.torqueOpenFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torqueOpenFBtag, 1,'S7WLBit')
+                # if len(self.openLS)> 3:
+                #     writegeneral.writesymbolvalue(self.openLS, 1, 'S7WLBit')
 
                 self.opnFB = True
                 self.clsFB = False
                 self.torqueclsFB = False
                 self.torqueopnFB = True
+                self._closeLSFBvalue = False
+                self._openLSFBvalue =  True
 
 
                 level = logging.WARNING
                 messege = self.devicename + ":" + self.torquecloseFBtag + " is trigger by 0" \
-                + self.closeFBtag + " is trigger by 0" + self.openFBtag + " is trigger by 1 " \
-                + self.torqueOpenFBtag + "is trigger by 1"
+                         + self.closeFBtag + " is trigger by 0" + self.openFBtag + " is trigger by 1 " \
+                         + self.torqueOpenFBtag + "is trigger by 1"
+
                 logger.log(level, messege)
 
             if self.opncmdvalue == False and self.clscmdvalue == True:
                 writegeneral.writesymbolvalue(self.openFBtag, 0,'S7WLBit')
                 if len(self.torqueOpenFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torqueOpenFBtag, 0,'S7WLBit')
+                # if len(self.openLS)> 3:
+                #     writegeneral.writesymbolvalue(self.openLS, 0, 'S7WLBit')
+
                 # sleep(self.delaytimetag)
                 writegeneral.writesymbolvalue(self.closeFBtag, 1,'S7WLBit')
                 if len(self.torquecloseFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torquecloseFBtag, 1,'S7WLBit')
+                # if len(self.closeLS)>3:
+                #     writegeneral.writesymbolvalue(self.closeLS, 1, 'S7WLBit')
                 level = logging.WARNING
                 messege = self.devicename + ":" + self.torquecloseFBtag + " is trigger by 1" \
                           + self.closeFBtag + " is trigger by 1" + self.openFBtag + " is trigger by 0 " \
                           + self.torqueOpenFBtag + "is trigger by 0"
+
                 logger.log(level, messege)
+
+            if self.opncmdvalue == False and self.clscmdvalue == False:
+                writegeneral.writesymbolvalue(self.openFBtag, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
+                if len(self.torqueOpenFBtag) > 3:
+                    writegeneral.writesymbolvalue(self.torqueOpenFBtag, 0,'S7WLBit')
+                if len(self.torquecloseFBtag) > 3:
+                    writegeneral.writesymbolvalue(self.torquecloseFBtag, 0,'S7WLBit')
 
                 self.opnFB = False
                 self.clsFB = True
                 self.torqueclsFB = True
                 self.torqueopnFB = False
+                # self._closeLSFBvalue = True
+                # self._openLSFBvalue  = False
 
             sta_con_plc.disconnect()
 
@@ -203,6 +236,24 @@ class Fn_Sov2S(Eventmanager):
     @torqueopnFB.setter
     def torqueopnFB(self, value):
         self._opntorqueFBvalue = value
+
+    # @property
+    # def closeLSFB(self):
+    #     return self._closeLSFBvalue
+    #
+    # @closeLSFB.setter
+    # def closeLSFB(self, value):
+    #     self._closeLSFBvalue = value
+    #
+    # @property
+    # def openLSFB(self):
+    #     return self._openLSFBvalue
+    #
+    # @openLSFB.setter
+    # def openLSFB(self, value):
+    #     self._openLSFBvalue = value
+
+
 
     @property
     def areaname(self):

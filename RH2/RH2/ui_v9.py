@@ -9,6 +9,13 @@ import allvalve1sprocessing
 import allmotor1dprocessing_V1
 import  allvalve2sprocessing
 import  allmotor2dprocessing
+import  allvibrofeedersprocessing
+import  allconveyorprocessing
+import alldigitalprocessing
+import allanalogprocessing
+import allcontrolvalvesprocessing
+import  allsiemensdriveprocessing
+import  allconveyor2dprocessing
 import general
 import Encoder_Operation_V1
 import time
@@ -18,6 +25,7 @@ import alldevices_V3
 from clientcomm_v1 import *
 import threading
 from tkinter import filedialog
+
 
 
 
@@ -203,7 +211,7 @@ class FormUi:
 
             self.import_file_path = filedialog.askopenfilename()
             self.comm_object = general.General(self.import_file_path)
-            print('hello mayank')
+
             self._elementlist = []
             self.tagvalueitemlist = []
             self.plc_cmd_list = []
@@ -252,6 +260,15 @@ class FormUi:
             self.motor1dprocessobject = allmotor1dprocessing_V1.motor1dprocess(self.alldevices,self.import_file_path)
             self.sov2sprocessobject = allvalve2sprocessing.sov2sprocess(self.alldevices,self.import_file_path)
             self.motor2dprocessobject = allmotor2dprocessing.motor2dprocess(self.alldevices,self.import_file_path)
+            self.allvibrofeederobject = allvibrofeedersprocessing.vibrofeederprocess(self.alldevices,self.import_file_path)
+            self.allconveyorobject = allconveyorprocessing.allconveyorprocess(self.alldevices, self.import_file_path)
+            self.allanalogobject = allanalogprocessing.analogprocess(self.alldevices, self.import_file_path)
+            self.allcontrolvalveobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
+            self.alldigitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
+            self.allsiemendriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldigitalobject,self.import_file_path)
+            self.allconveyorobject = allconveyor2dprocessing.conveyor2dprocess(self.alldevices,self.import_file_path)
+
+
 
             # Multithreading section
 
@@ -298,39 +315,140 @@ class FormUi:
         while TRUE:
             self.motor2dprocessobject.process()
 
+    def callallvibrofeeder(self):
+        while TRUE:
+            self.allvibrofeederobject.process()
+
+    def callallconveyor(self):
+        while TRUE:
+            self.allconveyorobject.process()
+
+    def callallanalog(self):
+        while TRUE:
+            self.allanalogobject.process()
+
+    def callallcontrolvalve(self):
+        while TRUE:
+            self.allcontrolvalveobject.process()
+
+    def callalldigital(self):
+        while TRUE:
+            self.alldigitalobject.process()
+
+    def callallsiemensdrive(self):
+        while TRUE:
+            self.allsiemendriveobject.process()
+
+    def callallconveyor2d(self):
+        while TRUE:
+            self.allconveyorobject.process()
+
 
 
     #
     def sov1start(self):
+        self.DEAD = False
         self.sov1stread = threading.Thread(target=self.callallsov1s)
         self.listofthread.append(self.sov1stread)
         self.sov1stread.start()
+        self.sov1startbutton.configure(text="Sov1sstarted")
     #
 
     #
     def motor1dstart(self):
+        self.DEAD = False
         self.motor1dtread = threading.Thread(target=self.callallmotor1d)
         self.listofthread.append(self.motor1dtread)
         self.motor1dtread.start()
+        self.motor1dstartbutton.configure(text="Motor1dstarted")
 
     #
 
     #
     def motor2dstart(self):
+        self.DEAD = False
         self.motor2dtread = threading.Thread(target=self.callallmotor2d)
         self.listofthread.append(self.motor2dtread)
         self.motor2dtread.start()
-
-    #
+        self.motor2dstartbutton.configure(text="Motor2dstarted")
+        #
 
 
     #
     def sov2sstart(self):
+        self.DEAD = False
         self.sov2stread = threading.Thread(target=self.callallsov2s)
         self.listofthread.append(self.sov2stread)
         self.sov2stread.start()
+        self.sov2sstartbutton.configure(text="Sov2sstarted")
 
     #
+
+    #
+    def vibrofeedersstart(self):
+        self.DEAD = False
+        self.vibrofeedertread = threading.Thread(target=self.callallvibrofeeder)
+        self.listofthread.append(self.vibrofeedertread)
+        self.vibrofeedertread.start()
+        self.vibrofeederstartbutton.configure(text="VibrofeederStarted")
+
+    #
+
+    #
+    def conveyorstart(self):
+        self.DEAD = False
+        self.conveyortread = threading.Thread(target=self.callallconveyor)
+        self.listofthread.append(self.conveyortread)
+        self.conveyortread.start()
+        self.conveyorstartbutton.configure(text="Conveyor1dStarted")
+
+    def analogstart(self):
+        self.DEAD = False
+        self.analogtread = threading.Thread(target=self.callallanalog)
+        self.listofthread.append(self.analogtread)
+        self.analogtread.start()
+        self.analogstartbutton.config(text = 'AnalogStarted')
+
+
+    def contolvalvestart(self):
+        self.DEAD = False
+        self.controlvalvetread = threading.Thread(target=self.callallcontrolvalve)
+        self.listofthread.append(self.controlvalvetread)
+        self.controlvalvetread.start()
+        self.controlvalvestartbutton.configure(text="ControlValve1dStarted")
+
+    #
+
+    def digitalstart(self):
+        self.DEAD = False
+        self.digitalinputtread = threading.Thread(target=self.callalldigital())
+        self.listofthread.append(self.digitalinputtread)
+        self.digitalinputtread.start()
+        self.digitalstartbutton.config(text = 'DigitalStarted')
+
+    #
+
+    def siemendrivestart(self):
+        self.DEAD = False
+        self.siemensdrivetread = threading.Thread(target=self.callallsiemensdrive())
+        self.listofthread.append(self.siemensdrivetread)
+        self.siemensdrivetread.start()
+        self.siemensdrivestartbutton.config(text='SiemenDriveStarted')
+    #
+
+    def conveyor2dstart(self):
+        self.DEAD = False
+        self.conveyor2dtread = threading.Thread(target=self.callallconveyor2d())
+        self.listofthread.append(self.conveyor2dtread)
+        self.conveyor2dtread.start()
+        self.conveyor2dstartbutton.config(text='SiemenDriveStarted')
+
+    #
+
+
+
+
+
 
     def startprocess(self):
 
@@ -346,8 +464,30 @@ class FormUi:
         self.sov2sstartbutton = ttk.Button(self.win, text='Sov2s_Start', command=self.sov2sstart)
         self.sov2sstartbutton.grid(column=0, row=2)
 
-        self.motor2dstartbutton = ttk.Button(self.win, text='Sov2s_Start', command=self.motor2dstart)
-        self.motor2dstartbutton.grid(column=0, row=2)
+        self.motor2dstartbutton = ttk.Button(self.win, text='Motor2d_Start', command=self.motor2dstart)
+        self.motor2dstartbutton.grid(column=0, row=3)
+
+        self.vibrofeederstartbutton = ttk.Button(self.win, text='VF_Start', command=self.vibrofeedersstart)
+        self.vibrofeederstartbutton.grid(column=1, row=0)
+
+        self.conveyorstartbutton = ttk.Button(self.win, text='Conveyor1d_Start', command=self.conveyorstart)
+        self.conveyorstartbutton.grid(column=1, row=1)
+
+        self.analogstartbutton = ttk.Button(self.win, text='Analog_Start', command=self.analogstart)
+        self.analogstartbutton.grid(column=1, row=2)
+
+        self.controlvalvestartbutton = ttk.Button(self.win, text='Controlvalve_Start', command=self.contolvalvestart)
+        self.controlvalvestartbutton.grid(column=1, row=3)
+
+        self.digitalstartbutton = ttk.Button(self.win, text='Digitalinput_Start', command=self.digitalstart)
+        self.digitalstartbutton.grid(column=0, row=4)
+
+        self.siemensdrivestartbutton = ttk.Button(self.win, text='SiemensDrive_Start', command=self.siemendrivestart)
+        self.siemensdrivestartbutton.grid(column=1, row=4)
+
+        self.conveyor2dstartbutton = ttk.Button(self.win, text='Conveyor_Start', command=self.conveyor2dstart)
+        self.conveyor2dstartbutton.grid(column=1, row=4)
+
 
 
 
@@ -358,7 +498,19 @@ class FormUi:
 
 
     def stopprocess(self):
-        pass
+        self.DEAD = True
+        self.motor1dstartbutton.configure(text='Motor1dStart')
+        self.motor2dstartbutton.configure(text='Motor2dStart')
+        self.sov1startbutton.configure(text='Sov1Start')
+        self.sov2sstartbutton.configure(text='Sov2Start')
+        self.controlvalvestartbutton.configure(text='ControlvalStart')
+        self.analogstartbutton.configure(text='AnalogStart')
+        self.siemensdrivestartbutton.configure(text='SiemendriveStart')
+        self.digitalstartbutton.configure(text='DigitalStart')
+        self.conveyorstartbutton.config(text = 'Conveyor1dStart')
+        self.vibrofeederstartbutton.config(text = 'VibrofeederStart')
+        self.conveyor2dstartbutton.config(text = 'Conveyor2dStrat')
+
 
 
 
@@ -372,9 +524,8 @@ class FormUi:
 
 
             if len(tagname) > 3:
-                print("length is",len(str(tagname)))
-                self.comm_object.writegeneral.writesymbolvalue(tagname, tagvalue,datatype)
 
+                self.comm_object.writegeneral.writesymbolvalue(tagname,datatype, tagvalue)
                 level = logging.DEBUG
                 messege = tagname + " Force Value is " + str(tagvalue)
                 logger.log(level, messege)
@@ -398,7 +549,7 @@ class FormUi:
         self.datatype_entered.grid(column=1, row=2)
 
         self.tagname_entered.set_completion_list(self.listofwritetags)
-        self.datatype_entered.set_completion_list(['S7WLBit','S7WLWord'])
+        self.datatype_entered.set_completion_list(['digital','analog'])
         self.tagname_entered.focus_set()
         self.datatype_entered.focus_set()
 
@@ -410,15 +561,12 @@ class FormUi:
         ttk.Label(self.win, text='Action').grid(column=2, row=3)
         self.button1 = ttk.Button(self.win, text="Submit", command=self.writetag,state=NORMAL)
         self.button1.grid(column=3, row=3)
-        # action.grid(column=3, row=3)
-        # win.bind('<Control-Q>', lambda event=None: win.destroy())
-        #  win.bind('<Control-q>', lambda event=None: win.destroy())
-        # (self.tagname_entered, tagvalue)
+
         self.win.mainloop()
 
     def collectwritetaglist(self):
         list1 = []
-        df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='WriteGeneral')
+        df = pd.read_excel(self.import_file_path, sheet_name='WriteGeneral')
         n = 0
         while n < len(df.index):
             list1.append(str(df.iloc[n,0]))
@@ -428,9 +576,6 @@ class FormUi:
 
 
 
-    # def creatcontrolpanel(self):
-    #     import fn_controlpanel
-    #     fn_controlpanel.Fn_ControlPanel(self.frame,self.import_file_path)
 
 
 class ThirdUi:
@@ -452,7 +597,7 @@ class ThirdUi:
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('SMS SIMULATION')
+        root.title('SMS RH SIMULATION')
 
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)

@@ -120,6 +120,8 @@ class Fn_VibroFeeder(Eventmanager):
                 messege = self.devicename + ":" + self.thyinoprtag + " is trigger by 1"
                 logger.log(level, messege)
 
+            sta_con_plc.close()
+
 
 
         except Exception as e:
@@ -148,9 +150,10 @@ class Fn_VibroFeeder(Eventmanager):
                 messege = self.devicename + ":" + self.speedprocessvaluetag + " value is" + str(setvalue)
                 logger.log(level, messege)
                 self.speedPV = setvalue
-
             else:
-                writegeneral.writesymbolvalue(self.speedprocessvaluetag, 0)
+                writegeneral.writesymbolvalue(self.speedprocessvaluetag,"analog", 0)
+
+            sta_con_plc.close()
 
         except Exception as e:
             level = logging.ERROR

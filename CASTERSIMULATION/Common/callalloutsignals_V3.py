@@ -45,15 +45,7 @@ class Cal_AllOutsingnal:
 
 
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
 
-    def __setstate__(self, state):
-        # Restore instance attributes.
-        self.__dict__.update(state)
 
     @property
     def listofalldigitalsignal(self):

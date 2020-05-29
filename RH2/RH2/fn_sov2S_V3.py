@@ -1,8 +1,9 @@
 from logger import *
 from event_V2 import *
 from time import sleep
-import logging
-
+from clientcomm_v1 import *
+from readgeneral_v2 import *
+from  writegeneral_v2 import *
 
 
 logger = logging.getLogger("main.log")
@@ -80,11 +81,18 @@ class Fn_Sov2S(Eventmanager):
     def initilizedigitalinput(self):
 
         try:
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
+
             if len(self.closeFBtag) > 3:
-                self.gen.writegeneral.writesymbolvalue(self.closeFBtag, 'digital', 1)
+                writegeneral.writesymbolvalue(self.closeFBtag, 'digital', 1)
                 level1 = logging.INFO
                 messege1 = self.devicename + ":" + self.closeFBtag + " is trigger by 1"
                 logger.log(level1, messege1)
+
+            sta_con_plc.close()
 
 
         except Exception as e:
@@ -97,19 +105,24 @@ class Fn_Sov2S(Eventmanager):
 
         try:
 
-            self.opncmdvalue =  self.gen.readgeneral.readsymbolvalue(self.opencmdtag, "digital")
-            self.clscmdvalue =  self.gen.readgeneral.readsymbolvalue(self.closecmdtag, "digital")
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
+
+            self.opncmdvalue =  readgeneral.readsymbolvalue(self.opencmdtag, "digital")
+            self.clscmdvalue =  readgeneral.readsymbolvalue(self.closecmdtag, "digital")
 
 
 
             if self.opncmdvalue == True and self.clscmdvalue == False:
-                self.gen.writegeneral.writenodevalue(self.closeFBtag, 'digital', 1)
+                writegeneral.writesymbolvalue(self.closeFBtag, 'digital', 1)
                 if len(self.torquecloseFBtag) > 3:
-                    self.gen.writegeneral.writenodevalue(self.torquecloseFBtag,"digital", 0)
+                    writegeneral.writesymbolvalue(self.torquecloseFBtag,"digital", 0)
                 sleep(self.delaytimetag)
-                self.gen.writegeneral.writenodevalue(self.openFBtag, 'digital', 1)
+                writegeneral.writesymbolvalue(self.openFBtag, 'digital', 1)
                 if len(self.torqueOpenFBtag) > 3:
-                    self.gen.writegeneral.writenodevalue(self.torqueOpenFBtag, "digital", 0)
+                    writegeneral.writesymbolvalue(self.torqueOpenFBtag, "digital", 0)
 
                 self.opnFB = True
                 self.clsFB = False
@@ -124,13 +137,13 @@ class Fn_Sov2S(Eventmanager):
                 logger.log(level, messege)
 
             if self.opncmdvalue == False and self.clscmdvalue == True:
-                self.gen.writegeneral.writenodevalue(self.openFBtag,"digital", 0)
+                writegeneral.writesymbolvalue(self.openFBtag,"digital", 0)
                 if len(self.torqueOpenFBtag) > 3:
-                    self.gen.writegeneral.writenodevalue(self.torqueOpenFBtag,"digital", 0)
+                    writegeneral.writesymbolvalue(self.torqueOpenFBtag,"digital", 0)
                 sleep(self.delaytimetag)
-                self.gen.writegeneral.writenodevalue(self.closeFBtag, "digital",1)
+                writegeneral.writesymbolvalue(self.closeFBtag, "digital",1)
                 if len(self.torquecloseFBtag) > 3:
-                    self.gen.writegeneral.writenodevalue(self.torquecloseFBtag,"digital", 1)
+                    writegeneral.writesymbolvalue(self.torquecloseFBtag,"digital", 1)
                 level = logging.WARNING
                 messege = self.devicename + ":" + self.torquecloseFBtag + " is trigger by 1" \
                           + self.closeFBtag + " is trigger by 1" + self.openFBtag + " is trigger by 0 " \
@@ -141,6 +154,8 @@ class Fn_Sov2S(Eventmanager):
                 self.clsFB = True
                 self.torqueclsFB = True
                 self.torqueopnFB = False
+
+                sta_con_plc.close()
 
 
 

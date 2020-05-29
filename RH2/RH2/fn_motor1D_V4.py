@@ -1,6 +1,8 @@
 from logger import *
 from event_V2 import *
 from clientcomm_v1 import *
+from readgeneral_v2 import *
+from  writegeneral_v2 import *
 
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_Motor1D']
@@ -72,14 +74,18 @@ class Fn_Motor1D(Eventmanager):
 
     def initilizedigitalinput(self):
         try:
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
 
 
             self._oncmdvalue = False
 
-            self._runFBvalue = self.gen.readgeneral.readsymbolvalue(self.runingFBtag,"digital")
+            self._runFBvalue = readgeneral.readsymbolvalue(self.runingFBtag,"digital")
 
             if len(self.healthyFBtag) > 3:
-                self.gen.writegeneral.writesymbolvalue(self.healthyFBtag, 'digital', 1)
+                writegeneral.writesymbolvalue(self.healthyFBtag, 'digital', 1)
                 level = logging.INFO
                 messege = self.devicename + ":" + self.healthyFBtag + " is trigger by 1"
                 logger.log(level, messege)
@@ -88,7 +94,7 @@ class Fn_Motor1D(Eventmanager):
                 pass
 
             if len(self.readyFBtag) > 3:
-                self.gen.writegeneral.writesymbolvalue(self.readyFBtag,'digital', 1)
+                writegeneral.writesymbolvalue(self.readyFBtag,'digital', 1)
                 level = logging.INFO
                 messege = self.devicename + ":" + self.readyFBtag + " is trigger by 1"
                 logger.log(level, messege)
@@ -96,7 +102,7 @@ class Fn_Motor1D(Eventmanager):
                 pass
 
             if len(self.mccbonFeedBacktag) > 3:
-                self.gen.writegeneral.writesymbolvalue(self.mccbonFeedBacktag, 1,'S7WLBit')
+                writegeneral.writesymbolvalue(self.mccbonFeedBacktag, 1,'S7WLBit')
                 level = logging.INFO
                 messege = self.devicename + ":" + self.mccbonFeedBacktag + " is trigger by 1"
                 logger.log(level, messege)
@@ -104,7 +110,7 @@ class Fn_Motor1D(Eventmanager):
                 pass
 
             if len(self.overloadFeedBacktag) > 3:
-                self.gen.writegeneral.writesymbolvalue(self.overloadFeedBacktag, 'digital', 0)
+                writegeneral.writesymbolvalue(self.overloadFeedBacktag, 'digital', 0)
                 level = logging.INFO
                 messege = self.devicename + ":" + self.overloadFeedBacktag + " is trigger by 0"
                 logger.log(level, messege)
@@ -112,7 +118,7 @@ class Fn_Motor1D(Eventmanager):
                 pass
 
             if len(self.faultFBtag) > 3:
-                self.gen.writegeneral.writesymbolvalue(self.faultFBtag, 1,'S7WLBit')
+                writegeneral.writesymbolvalue(self.faultFBtag, 'digital', 1)
                 level = logging.INFO
                 messege = self.devicename + ":" + self.faultFBtag + " is trigger by 1"
                 logger.log(level, messege)
@@ -120,12 +126,14 @@ class Fn_Motor1D(Eventmanager):
                 pass
 
             if len(self.plcreleasetag) > 3:
-                self.gen.writegeneral.writesymbolvalue(self.plcreleasetag, 'digital', 0)
+                writegeneral.writesymbolvalue(self.plcreleasetag, 'digital', 0)
                 level = logging.INFO
                 messege = self.devicename + ":" + self.plcreleasetag + " is trigger by 0"
                 logger.log(level, messege)
             else:
                 pass
+
+            sta_con_plc.close()
 
 
 
@@ -138,16 +146,21 @@ class Fn_Motor1D(Eventmanager):
 
         try:
 
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
+
 
             if len(self.offcmdtag) > 3:
-                self.offcmdvalue =  self.gen.readgeneral.readsymbolvalue(self.offcmdtag,"digital")
+                self.offcmdvalue =  readgeneral.readsymbolvalue(self.offcmdtag,"digital")
 
-            oncommandvalue = self.gen.readgeneral.readsymbolvalue(self.oncmdtag,"digital")
-            runfbvalue = self.gen.readgeneral.readsymbolvalue(self.runingFBtag,"digital")
+            oncommandvalue = readgeneral.readsymbolvalue(self.oncmdtag,"digital")
+            runfbvalue = readgeneral.readsymbolvalue(self.runingFBtag,"digital")
 
             if oncommandvalue == True and runfbvalue == False:
 
-                self.gen.writegeneral.writesymbolvalue(self.runingFBtag,'digital', 1)
+                writegeneral.writesymbolvalue(self.runingFBtag,'digital', 1)
                 self.runFB = 1
 
                 level2 = logging.WARNING
@@ -160,16 +173,15 @@ class Fn_Motor1D(Eventmanager):
 
             if runfbvalue == True and oncommandvalue == False:
 
-                self.gen.writegeneral.writesymbolvalue(self.runingFBtag, 'digital', 0)
+                writegeneral.writesymbolvalue(self.runingFBtag, 'digital', 0)
                 self.runFB = 0
 
             if len(self.offcmdtag) > 3:
                 if runfbvalue == True and self.offcmdvalue == True and len(self.offcmdtag) > 3:
-                    self.gen.writegeneral.writesymbolvalue(self.runingFBtag, 'digital', 0)
+                    writegeneral.writesymbolvalue(self.runingFBtag, 'digital', 0)
                     self.runFB = 0
 
-
-
+            sta_con_plc.close()
 
 
         except Exception as e:
