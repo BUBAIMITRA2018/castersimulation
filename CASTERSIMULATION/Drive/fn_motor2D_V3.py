@@ -178,7 +178,7 @@ class Fn_Motor2D(Eventmanager):
             sta_con_plc = client.opc_client_connect(self.filename)
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
-            # print('i m executing motor 2 d')
+
             self.fwdcmdvalue = readgeneral.readsymbolvalue(self.fwdcmdtag,'S7WLBit','PA')
             self.revcmdvalue =  readgeneral.readsymbolvalue(self.revcmdtag,'S7WLBit','PA')
 
@@ -206,7 +206,7 @@ class Fn_Motor2D(Eventmanager):
                 self.RevRunFB = True
                 self.FwdRunFB = False
                 level = logging.WARNING
-                messege = self.devicename + ":" + self.fwdrunFBtag + self.revrunFBtag + " is trigger by 1" + self.closeLStag + "is triggered by 1"
+                messege = self.devicename + ":" +self.revrunFBtag + " is trigger by 1" + self.closeLStag + "is triggered by 1"
                 logger.log(level, messege)
 
             if self.fwdcmdvalue == False and self.revcmdvalue == False:

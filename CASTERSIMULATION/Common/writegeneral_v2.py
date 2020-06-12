@@ -34,11 +34,11 @@ class WriteGeneral():
             set_dword(self.result, 0, tagvalue)
         self.client.write_area(areas['PE'], 0, self.byte, self.result)
 
-    def writeDBvalue(self, address, tagvalue, datatype, dataarea):
-        addressconverted = float(address)
-        self.byte = int(addressconverted)
-        self.bit = round((addressconverted - self.byte) * 10)
-        self.dataarea = int(dataarea)
+    def writeDBvalue(self, address, tagvalue, datatype):
+        addressconverted = str(address)
+        self.byte = int(addressconverted[9:11])
+        self.bit = int(addressconverted[12:13])
+        self.dataarea = int(addressconverted[2:5])
 
         if datatype == 'S7WLBit':
             self.result = self.client.read_area(areas['DB'], self.dataarea, self.byte, S7WLBit)

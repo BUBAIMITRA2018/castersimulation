@@ -16,6 +16,7 @@ class AreaObserver:
     def notify(self,  *args, **kwargs):
         for item in args[0]:
             item.OnCmd = args[1].readgeneral.readtagvalue(item.cmdtag,'digital')
+            item.SpeedSetpoint = args[1].readgeneral.readtagvalue(item.SpeedSetpoint, 'analog')
 
 class vibrofeederprocess:
     def __init__(self,alldevices,filename):
@@ -43,7 +44,7 @@ class vibrofeederprocess:
 
 def readkeyandvalues(alldevice):
 
-         vfdictionary = alldevice.allvibrofeeders.dictionary
+         vfdictionary = alldevice.allvibrofeeder.dictionary
 
          areas = list(vfdictionary.keys())
          n = 0

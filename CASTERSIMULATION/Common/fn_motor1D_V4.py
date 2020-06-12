@@ -122,17 +122,17 @@ class Fn_Motor1D(Eventmanager):
                 pass
 
             if len(self.faultFBtag) > 3:
-                writegeneral.writesymbolvalue(self.faultFBtag, 1,'S7WLBit')
+                writegeneral.writesymbolvalue(self.faultFBtag, 0,'S7WLBit')
                 level = logging.INFO
-                messege = self.devicename + ":" + self.faultFBtag + " is trigger by 1"
+                messege = self.devicename + ":" + self.faultFBtag + " is trigger by 0"
                 logger.log(level, messege)
             else:
                 pass
 
             if len(self.plcreleasetag) > 3:
-                writegeneral.writesymbolvalue(self.plcreleasetag, 0,'S7WLBit')
+                writegeneral.writesymbolvalue(self.plcreleasetag, 1,'S7WLBit')
                 level = logging.INFO
-                messege = self.devicename + ":" + self.plcreleasetag + " is trigger by 0"
+                messege = self.devicename + ":" + self.plcreleasetag + " is trigger by 1"
                 logger.log(level, messege)
             else:
                 pass

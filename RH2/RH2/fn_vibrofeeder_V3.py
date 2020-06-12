@@ -19,6 +19,8 @@ class Fn_VibroFeeder(Eventmanager):
         self.filename = filename
         self.gen = com
         self._speedpv = 0.0
+        self._speedsp = 0.0
+
         self.df = df
         self.devicename = df.iloc[self._idxNo, 0]
         self.setup()
@@ -48,25 +50,27 @@ class Fn_VibroFeeder(Eventmanager):
                 if col == 7:
                     self.emergencyFBtag = str(tag)
 
-
                 if col == 8:
-                    self.remoteFBtag = str(tag)
+                    self.localFBtag = str(tag)
 
 
                 if col == 9:
-                    self.modulefaulttag = str(tag)
+                    self.remoteFBtag = str(tag)
 
 
                 if col == 10:
-                    self.feedertriptag = str(tag)
+                    self.modulefaulttag = str(tag)
 
 
                 if col == 11:
-                    self.pshealthytag =str(tag)
-
+                    self.feedertriptag = str(tag)
 
 
                 if col == 12:
+                    self.pshealthytag =str(tag)
+
+
+                if col == 13:
                     self.thyinoprtag =str(tag)
 
 
@@ -85,6 +89,12 @@ class Fn_VibroFeeder(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
             self._oncmdvalue = readgeneral.readsymbolvalue(self.cmdtag,"digital")
+
+            if len(self.localFBtag) > 3:
+                writegeneral.writesymbolvalue(self.localFBtag, 'digital', 0)
+                level = logging.INFO
+                messege = self.devicename + ":" + self.localFBtag + " is trigger by 0"
+                logger.log(level, messege)
 
             if len(self.remoteFBtag) > 3:
                 writegeneral.writesymbolvalue(self.remoteFBtag, 'digital', 1)
@@ -115,9 +125,9 @@ class Fn_VibroFeeder(Eventmanager):
 
 
             if len(self.thyinoprtag) > 3:
-                writegeneral.writesymbolvalue(self.thyinoprtag, 'digital', 1)
+                writegeneral.writesymbolvalue(self.thyinoprtag, 'digital', 0)
                 level = logging.INFO
-                messege = self.devicename + ":" + self.thyinoprtag + " is trigger by 1"
+                messege = self.devicename + ":" + self.thyinoprtag + " is trigger by 0"
                 logger.log(level, messege)
 
             sta_con_plc.close()
@@ -144,14 +154,23 @@ class Fn_VibroFeeder(Eventmanager):
             self.tagvalue = readgeneral.readsymbolvalue(self.cmdtag,'digital')
 
             if self.tagvalue == True:
+
+                writegeneral.writesymbolvalue(self.thyinoprtag, 'digital', 1)
+
                 setvalue = readgeneral.readsymbolvalue(self.speedsetpointtag,"analog")
                 writegeneral.writesymbolvalue(self.speedprocessvaluetag, "analog", setvalue)
                 level = logging.WARNING
                 messege = self.devicename + ":" + self.speedprocessvaluetag + " value is" + str(setvalue)
                 logger.log(level, messege)
                 self.speedPV = setvalue
+                level = logging.INFO
+                messege2 = self.devicename + ":" + self.thyinoprtag + " is trigger by 1"
+                logger.log(level, messege2)
+
+
             else:
                 writegeneral.writesymbolvalue(self.speedprocessvaluetag,"analog", 0)
+                writegeneral.writesymbolvalue(self.thyinoprtag, 'digital', 0)
 
             sta_con_plc.close()
 
@@ -170,6 +189,16 @@ class Fn_VibroFeeder(Eventmanager):
         if value != self._oncmdvalue:
             super().fire()
             self._oncmdvalue = value
+
+    @property
+    def SpeedSetpoint(self):
+        return self._speedsp
+
+    @SpeedSetpoint.setter
+    def SpeedSetpoint(self, value):
+        if value != self._speedsp:
+            super().fire()
+            self._speedsp = value
 
     @property
     def speedPV(self):

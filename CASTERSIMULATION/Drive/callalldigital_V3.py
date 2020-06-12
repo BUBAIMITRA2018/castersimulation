@@ -38,7 +38,6 @@ class Cal_AllDigital:
             for area in self.listofdigitalarea:
                 list1 = []
                 for item in self.listofdigital:
-                    print(item.areaname)
 
                     if str(item.areaname) == str(area):
                         list1.append(item)

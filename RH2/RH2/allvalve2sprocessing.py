@@ -14,12 +14,11 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.opncomd = args[1].readsymbolvalue(item.opencmdtag)
-            item.clscomd = args[1].readsymbolvalue(item.closecmdtag)
+            item.opncomd = args[1].readsymbolvalue(item.opencmdtag,'digital')
+            item.clscomd = args[1].readsymbolvalue(item.closecmdtag,'digital')
 
 
-subject = Observable()
-observer = AreaObserver(subject)
+
 
 
 
@@ -39,6 +38,8 @@ class sov2sprocess:
 
         for area, devices in readkeyandvalues(self.alldevices):
             areavalue = self.readgeneral.readsymbolvalue(area, "digital")
+
+            print("hello")
 
             if areavalue == 1:
                 self.observer.notify(devices, self.readgeneral)

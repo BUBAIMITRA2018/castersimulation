@@ -38,7 +38,7 @@ class Cal_AllSov2S:
                 list1 = []
                 for item in self.listofsov2s:
 
-                    if item.areaname == area:
+                    if str(item.areaname) == str(area):
                         list1.append(item)
                 self.devicelistperarea.append(list1)
 
@@ -47,7 +47,7 @@ class Cal_AllSov2S:
 
             # Declear empty list
             self.dictionary = dict(zip(keys, values))
-            print(self.dictionary)
+
 
 
 

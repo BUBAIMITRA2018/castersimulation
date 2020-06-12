@@ -95,17 +95,25 @@ class Fn_Sov1S(Eventmanager):
             if self.cmdtagvalue:
                 writegeneral.writesymbolvalue(self.closeFBtag, 'digital', 0)
                 writegeneral.writesymbolvalue(self.openFBtag,'digital',1)
+                level1 = logging.INFO
+                level2 = logging.WARNING
+                messege2 = self.devicename + ":" + self.cmdtag + " value is 1"
+                messege1 = self.devicename + ":" + self.openFBtag + " is trigger by 1"
+                logger.log(level2, messege2)
+                logger.log(level1, messege1)
+
 
             if not self.cmdtagvalue:
                 writegeneral.writesymbolvalue(self.closeFBtag, 'digital', 1)
                 writegeneral.writesymbolvalue(self.openFBtag, 'digital', 0)
+                level1 = logging.INFO
+                level2 = logging.WARNING
+                messege2 = self.devicename + ":" + self.cmdtag + " value is 1"
+                messege1 = self.devicename + ":" + self.closeFBtag + " is trigger by 1"
+                logger.log(level2, messege2)
+                logger.log(level1, messege1)
 
-            level1 = logging.INFO
-            level2 = logging.WARNING
-            messege2 = self.devicename + ":" + self.cmdtag + " value is 1"
-            messege1 = self.devicename + ":" + self.openFBtag + " is trigger by 1"
-            logger.log(level2, messege2)
-            logger.log(level1, messege1)
+
 
             sta_con_plc.close()
 

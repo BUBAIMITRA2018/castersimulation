@@ -8,10 +8,11 @@ logger = logging.getLogger("main.log")
 
 class Cal_AllDigital:
 
-    def __init__(self,df,com):
+    def __init__(self,df,com,filename):
         self.mylock = threading.Lock()
         self.df = df
         self.com = com
+        self.filename = filename
         self.listofdigital = []
         self.listofdigitalarea = []
         self.devicelistperarea = [[]]
@@ -26,7 +27,7 @@ class Cal_AllDigital:
             n =0
             self.listofdigital.clear()
             while n< len(self.df.index):
-                self.df.iloc[n, 0] = Fn_digitalsignal(self.com, self.df, n)
+                self.df.iloc[n, 0] = Fn_digitalsignal(self.com, self.df, n,self.filename)
                 self.listofdigital.append(self.df.iloc[n,0])
                 n = n + 1
 
@@ -37,7 +38,6 @@ class Cal_AllDigital:
             for area in self.listofdigitalarea:
                 list1 = []
                 for item in self.listofdigital:
-                    print(item.areaname)
 
                     if str(item.areaname) == str(area):
                         list1.append(item)

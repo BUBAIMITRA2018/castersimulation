@@ -486,7 +486,7 @@ class FormUi:
         self.siemensdrivestartbutton.grid(column=1, row=4)
 
         self.conveyor2dstartbutton = ttk.Button(self.win, text='Conveyor_Start', command=self.conveyor2dstart)
-        self.conveyor2dstartbutton.grid(column=1, row=4)
+        self.conveyor2dstartbutton.grid(column=1, row=5)
 
 
 
@@ -597,7 +597,7 @@ class ThirdUi:
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('SMS RH SIMULATION')
+        root.title('SMS JSW RH2 SIMULATION')
 
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
@@ -644,7 +644,7 @@ class App:
 
 def main():
     logging.basicConfig(level=logging.DEBUG)
-    df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='Tag List')
+
     root = tk.Tk()
     app = App(root)
     app.root.mainloop()

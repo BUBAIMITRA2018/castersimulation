@@ -8,9 +8,10 @@ logger = logging.getLogger("main.log")
 
 class Cal_ABBDrives:
 
-    def __init__(self,df,com):
+    def __init__(self,df,com,filename):
         self.df = df
         self.com = com
+        self.filename = filename
         self.listofdrives = []
         self.listofdrivearea = []
         self.devicelistperarea = [[]]
@@ -25,7 +26,7 @@ class Cal_ABBDrives:
             self.listofdrives.clear()
             while n< len(self.df.index):
 
-                self.df.iloc[n, 0] = Fn_ABP_Drive(self.com, self.df, n)
+                self.df.iloc[n, 0] = Fn_ABP_Drive(self.com, self.df, n,self.filename)
                 self.listofdrives.append(self.df.iloc[n,0])
                 n = n + 1
 
@@ -55,15 +56,6 @@ class Cal_ABBDrives:
 
 
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
-
-    def __setstate__(self, state):
-        # Restore instance attributes.
-        self.__dict__.update(state)
 
 
     @property

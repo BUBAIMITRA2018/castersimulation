@@ -13,10 +13,12 @@ import allvalve2sprocessing
 import allencoderprocessing
 import allsiemensdriveprocessing
 import allcontrolvalvesprocessing
+import allpropotionalvalvesprocessing
 import allanalogprocessing
+import alldigitalprocessing
+import allabpdriveprocessing
+import allschneiderdriveprocessing
 
-from readgeneral_v2 import *
-from  writegeneral_v2 import *
 
 
 import general
@@ -35,7 +37,7 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import ttk, VERTICAL, HORIZONTAL, N, S, E, W, DISABLED, NORMAL
 
 logger = logging.getLogger("main.log")
-print(logger)
+# print(logger)
 
 
 class Clock(threading.Thread):
@@ -218,7 +220,6 @@ class FormUi:
         try:
 
             self.import_file_path = filedialog.askopenfilename()
-
             self.comm_object = general.General(self.import_file_path)
             self._elementlist = []
             self.tagvalueitemlist = []
@@ -241,11 +242,6 @@ class FormUi:
                 level = logging.INFO
                 messege =  'Event:' + "PLC Simulation Successfully Connected"
                 logger.log(level, messege)
-
-            # else:
-            #     level = logging.ERROR
-            #     messege = 'Event:' + "Wrong Excel Confriguation"
-            #     logger.log(level, messege)
 
 
 
@@ -274,8 +270,13 @@ class FormUi:
             self.sov1sprocessobject = allvalve1sprocessing.sov1sprocess(self.alldevices, self.import_file_path)
             self.sov2sprocessobject = allvalve2sprocessing.sov2sprocess(self.alldevices, self.import_file_path)
             self.controlvalveprocessobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
+            self.propotionvalveobjects = allpropotionalvalvesprocessing.proportionalvalveprocess(self.alldevices,
+                                                                                            self.import_file_path)
             self.siemensdriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldevices,self.import_file_path)
             self.analogobject = allanalogprocessing.analogprocess(self.alldevices,self.import_file_path)
+            self.digitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
+            self.abbobject = allabpdriveprocessing.abpdriveprocessing(self.alldevices,self.import_file_path)
+            self.schneiderobject = allschneiderdriveprocessing.schneiderdriveprocessing(self.alldevices, self.import_file_path)
 
 
 
@@ -338,21 +339,41 @@ class FormUi:
             allencoderprocessing.process(com, devices)
             # time.sleep(2)
 
-    def callsiemensDrives(self,com,devices):
+    def callABBDrives(self,com,devices):
+        while not self.DEAD:
+            self.abbobject.process()
+            # time.sleep(2)a
+
+    def callSchneiderDrives(self, com, devices):
+        while not self.DEAD:
+            self.schneiderobject.process()
+            # time.sleep(2)a
+
+    def callSiemensDrives(self, com, devices):
         while not self.DEAD:
             self.siemensdriveobject.process()
-            # time.sleep(2)a
+
+
 
     def callcontrolvalves(self,com,devices):
         while not self.DEAD:
             self.controlvalveprocessobject.process()
             # time.sleep(2)
 
+    def callproportionalvalves(self, com, devices):
+        while not self.DEAD:
+            self.propotionvalveobjects.process()
+            # time.sleep(2)
+
+    def calldiigitalprocess(self,com,devices):
+        while not self.DEAD:
+            self.digitalobject.process()
+
+
 
 
     def motor1dstart(self):
         self.DEAD = False
-
         self.motor1dtread = threading.Thread(target=self.callallmotor1d, args=(self.comm_object, self.alldevices))
         self.listofthread.append(self.motor1dtread)
         self.motor1dtread.start()
@@ -393,11 +414,23 @@ class FormUi:
         self.analogtread.start()
         self.analogstartbutton.configure(text="analogstarted")
 
-    def seimensdrivestart(self):
+    def abbdrivestart(self):
         self.DEAD = False
-        self.siemnenstread = threading.Thread(target=self.callsiemensDrives, args=(self.comm_object, self.alldevices))
+        self.abbdrivetread = threading.Thread(target=self.callABBDrives, args=(self.comm_object, self.alldevices))
+        self.abbdrivetread.start()
+        self.abbdrivestartbutton.configure(text="ABBdrivestarted")
+
+    def siemensdrivestart(self):
+        self.DEAD = False
+        self.siemnenstread = threading.Thread(target=self.callSiemensDrives, args=(self.comm_object, self.alldevices))
         self.siemnenstread.start()
-        self.seimensdrivestartbutton.configure(text="drivestarted")
+        self.siemensdrivestartbutton.configure(text="Siemensdrivestarted")
+
+    def schneiderdrivestart(self):
+        self.DEAD = False
+        self.schneidertread = threading.Thread(target=self.callSchneiderDrives, args=(self.comm_object, self.alldevices))
+        self.schneidertread.start()
+        self.siemensdrivestartbutton.configure(text="Schneiderdrivestarted")
 
     def controlvalvestart(self):
         self.DEAD = False
@@ -405,14 +438,18 @@ class FormUi:
         self.controlvalvetread.start()
         self.controlvalvestartbutton.configure(text="controlvalvestarted")
 
+    def propotionalvalvestart(self):
+        self.DEAD = False
+        self.proportionalvalvetread = threading.Thread(target=self.callproportionalvalves,args=(self.comm_object, self.alldevices))
+        self.proportionalvalvetread.start()
+        self.proportionalvalvestartbutton.configure(text="proportionalvalvestarted")
 
-
-
-
-
-
-
-
+    def digitalprocessstart(self):
+        self.DEAD = False
+        self.digitaltread = threading.Thread(target=self.calldiigitalprocess, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.digitaltread)
+        self.digitaltread.start()
+        self.digitalstartbutton.configure(text="digitaltarted")
 
     def startprocess(self):
 
@@ -431,17 +468,29 @@ class FormUi:
         self.sov2startbutton = ttk.Button(self.win, text='sov2start', command=self.sov2start)
         self.sov2startbutton.grid(column=0, row=3)
 
+        self.digitalstartbutton = ttk.Button(self.win, text='digital', command=self.digitalprocessstart)
+        self.digitalstartbutton.grid(column=0, row=4)
+
         self.encoderstartbutton = ttk.Button(self.win, text='encoderstart', command=self.encoderstart)
         self.encoderstartbutton.grid(column=1, row=0)
 
         self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
         self.analogstartbutton.grid(column=1, row=1)
 
-        self.seimensdrivestartbutton = ttk.Button(self.win, text='drivestart', command=self.seimensdrivestart)
-        self.seimensdrivestartbutton.grid(column=1, row=2)
+        self.abbdrivestartbutton = ttk.Button(self.win, text='abbdrivestart', command=self.abbdrivestart)
+        self.abbdrivestartbutton.grid(column=1, row=2)
 
         self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
         self.controlvalvestartbutton.grid(column=1, row=3)
+
+        self.siemensdrivestartbutton = ttk.Button(self.win, text='siemensDriveStart', command=self.siemensdrivestart)
+        self.siemensdrivestartbutton.grid(column=1, row=4)
+
+        self.schneiderdrivestartbutton = ttk.Button(self.win, text='schneiderDriveStart', command=self.schneiderdrivestart)
+        self.schneiderdrivestartbutton.grid(column=0, row=5)
+
+        self.proportionalvalvestartbutton = ttk.Button(self.win, text='proportionalvalvestart', command=self.propotionalvalvestart)
+        self.proportionalvalvestartbutton.grid(column=1, row=5)
 
 
     def stopprocess(self):
@@ -453,8 +502,12 @@ class FormUi:
         self.sov2startbutton.configure(text = 'sov2start')
         self.encoderstartbutton.configure(text = 'encoderstart')
         self.controlvalvestartbutton.configure(text = 'controlvalstart')
+        self.proportionalvalvestartbutton.configure(text='proportionalvalstart')
         self.analogstartbutton.configure(text = 'analogstart')
-        self.seimensdrivestartbutton.configure(text = 'drivestart')
+        self.siemensdrivestartbutton.configure(text = 'siemensdrivestart')
+        self.digitalstartbutton.configure(text='digitalstart')
+        self.abbdrivestartbutton.configure(text = 'abbdrivestart')
+        self.schneiderdrivestartbutton.configure(text = 'schneiderdrivesstart')
 
 
 
@@ -515,7 +568,7 @@ class FormUi:
 
     def collectwritetaglist(self):
         list1 = []
-        df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='WriteGeneral')
+        df = pd.read_excel(self.import_file_path, sheet_name='WriteGeneral')
         n = 0
         while n < len(df.index):
             list1.append(str(df.iloc[n,0]))
@@ -549,7 +602,7 @@ class ThirdUi:
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('SMS SIMULATION')
+        root.title('SMS JSW CASTER DRIVE PLC SIMULATION')
 
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
@@ -592,7 +645,7 @@ class App:
 
 def main():
     logging.basicConfig(level=logging.DEBUG)
-    df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='Tag List')
+
     root = tk.Tk()
     app = App(root)
     app.root.mainloop()

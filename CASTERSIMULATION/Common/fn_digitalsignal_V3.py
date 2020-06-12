@@ -1,19 +1,21 @@
-from logger import *
-from event_V2 import *
-from time import sleep
 import logging
-import threading
 from event_V2 import *
+from clientcomm_v1 import *
+from readgeneral_v2 import *
+from  writegeneral_v2 import *
+
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_digitalsignal']
 
 
+
 class Fn_digitalsignal(Eventmanager):
 
-    def __init__(self, com, df, idxNo, ):
+    def __init__(self, com, df, idxNo, filename):
         self._idxNo = idxNo
         self.gen = com
         self.df = df
+        self.filename = filename
 
         self.cond1_val = False
         self.cond2_val = False
@@ -58,22 +60,76 @@ class Fn_digitalsignal(Eventmanager):
 
     def initilizedigitalinput(self):
         try:
-            self.gen.writegeneral.writesymbolvalue(self.OutDigital, 0 , 'S7WLBit')
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
+            writegeneral.writesymbolvalue(self.OutDigital, 0 , 'S7WLBit')
+            level = logging.INFO
+            messege = self.devicename + ":" + self.OutDigital + " is trigger by 0"
+            logger.log(level, messege)
+            sta_con_plc.disconnect()
         except Exception as e:
             level = logging.ERROR
             messege = "Fn_Digitalsignal" + self.devicename + " Error messege(initilization)" + str(e.args)
             logger.log(level, messege)
 
     def digitalprocess(self):
-        cond1_val = self.gen.readgeneral.readsymbolvalue(self.cond1,'S7WLBit','PE')
-        cond2_val = self.gen.readgeneral.readsymbolvalue(self.cond2, 'S7WLBit', 'PE')
-        cond3_val = self.gen.readgeneral.readsymbolvalue(self.cond3, 'S7WLBit', 'PE')
-        cond4_val = self.gen.readgeneral.readsymbolvalue(self.cond4, 'S7WLBit', 'PE')
 
-        if cond1_val and cond2_val and cond3_val and cond4_val:
-            self.gen.writegeneral.writesymbolvalue(self.OutDigital, 1, 'S7WLBit')
-        else:
-            pass
+        try:
+
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
+
+            if (len(self.cond1) > 3):
+                cond1_val = readgeneral.readsymbolvalue(self.cond1, 'S7WLBit', 'PE')
+            else:
+                cond1_val = 0
+
+            if (len(self.cond2) > 3):
+                cond2_val = readgeneral.readsymbolvalue(self.cond2, 'S7WLBit', 'PE')
+            else:
+                cond2_val = 0
+
+            if (len(self.cond3) > 3):
+                cond3_val = readgeneral.readsymbolvalue(self.cond3, 'S7WLBit', 'PE')
+            else:
+                cond3_val = 0
+
+            if (len(self.cond4) > 3):
+                cond4_val = readgeneral.readsymbolvalue(self.cond4, 'S7WLBit', 'PE')
+            else:
+                cond4_val = 0
+
+            if cond1_val and cond2_val and cond3_val and cond4_val:
+                writegeneral.writesymbolvalue(self.OutDigital, 1, 'S7WLBit')
+
+                level = logging.INFO
+                messege = self.devicename + ":" + self.OutDigital + " is trigger by" + "1"
+                logger.log(level, messege)
+
+            else:
+                print("digital process 2")
+                writegeneral.writesymbolvalue(self.OutDigital, 0, 'S7WLBit')
+
+
+                level = logging.INFO
+                messege = self.devicename + ":" + self.OutDigital + " is trigger by" + "0"
+                logger.log(level, messege)
+
+            sta_con_plc.disconnect()
+
+
+        except Exception as e:
+            log_exception(e)
+            level = logging.INFO
+            messege = "Fn_Digitalsignal" +self.devicename + ":" + " Exception rasied(process): " + str(e.args) + str(e)
+            logger.log(level, messege)
+
+
+
 
     @property
     def Cond1Val (self):

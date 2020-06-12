@@ -12,7 +12,6 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            print("motor executed")
             item.OnCmd = args[1].readsymbolvalue(item.oncmdtag,'S7WLBit','PA')
 
             if len(item.offcmdtag) > 3:

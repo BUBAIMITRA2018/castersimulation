@@ -127,12 +127,15 @@ class Fn_AnalogTx(Eventmanager):
                                     writegeneral.writesymbolvalue(self.outputtag, 'analog', 0)
 
 
+                                print("analog value is",self.outrawvalue)
+
+
                             if self.type == 'ramp':
 
                                 if (self.cmdtag1value and self.cmdtag2value and self.cmdtag3value and self.cmdtag4value):
 
                                     currentrawvalue = readgeneral.readsymbolvalue(self.outputtag,'analog')
-                                    currentpv = ((self.highlimit - self.lowerlimit) * (currentrawvalue/27648))
+                                    currentpv = ((self.highlimit - self.lowerlimit) * (currentrawvalue/10000))
                                     if self.val > currentpv:
                                         diff = self.val - currentpv
                                         self.targetvalue = currentpv + diff * .01
@@ -143,7 +146,7 @@ class Fn_AnalogTx(Eventmanager):
 
                                 else:
                                     currentrawvalue = readgeneral.readsymbolvalue(self.outputtag, 'analog')
-                                    currentpv = ((self.highlimit - self.lowerlimit) * (currentrawvalue / 27648))
+                                    currentpv = ((self.highlimit - self.lowerlimit) * (currentrawvalue / 10000))
                                     if self.val < currentpv:
                                         diff = currentpv - self.lowerlimit
                                         self.targetvalue = currentpv - diff * .01
@@ -153,9 +156,6 @@ class Fn_AnalogTx(Eventmanager):
 
 
 
-                            level1 = logging.WARNING
-                            messege1 = self.devicename + ":" + self.outputtag + " value is " + str(self.outrawvalue)
-                            logger.log(level1, messege1)
 
                         sta_con_plc.close()
 
@@ -168,7 +168,7 @@ class Fn_AnalogTx(Eventmanager):
 
 
     def scaling(self, val, highlimit, lowlimit):
-        rawvalue = int((val * 27648) / (highlimit - lowlimit))
+        rawvalue = int((val * 10000) / (highlimit - lowlimit))
         return rawvalue
 
     @property

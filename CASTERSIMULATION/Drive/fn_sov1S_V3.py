@@ -63,8 +63,9 @@ class Fn_Sov1S(Eventmanager):
         sta_con_plc = client.opc_client_connect(self.filename)
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
+        if len(self.closeFBtag) > 3:
+            writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
 
-        writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
 
         sta_con_plc.disconnect()
 
@@ -79,14 +80,16 @@ class Fn_Sov1S(Eventmanager):
 
             self.cmdtagvalue = readgeneral.readsymbolvalue(self.cmdtag,'S7WLBit','PA')
             if self.cmdtagvalue:
-                writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
+                if len(self.closeFBtag) > 3:
+                    writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.openFBtag, 1, 'S7WLBit')
 
 
 
             if not self.cmdtagvalue:
                 writegeneral.writesymbolvalue(self.openFBtag, 0, 'S7WLBit')
-                writegeneral.writesymbolvalue(self.closeFBtag, 1, 'S7WLBit')
+                if len(self.closeFBtag) > 3:
+                    writegeneral.writesymbolvalue(self.closeFBtag, 1, 'S7WLBit')
 
 
 

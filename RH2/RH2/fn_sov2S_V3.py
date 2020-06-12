@@ -81,18 +81,8 @@ class Fn_Sov2S(Eventmanager):
     def initilizedigitalinput(self):
 
         try:
-            client = Communication()
-            sta_con_plc = client.opc_client_connect(self.filename)
-            readgeneral = ReadGeneral(sta_con_plc)
-            writegeneral = WriteGeneral(sta_con_plc)
+            pass
 
-            if len(self.closeFBtag) > 3:
-                writegeneral.writesymbolvalue(self.closeFBtag, 'digital', 1)
-                level1 = logging.INFO
-                messege1 = self.devicename + ":" + self.closeFBtag + " is trigger by 1"
-                logger.log(level1, messege1)
-
-            sta_con_plc.close()
 
 
         except Exception as e:
@@ -110,19 +100,27 @@ class Fn_Sov2S(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
+            print("SOV VALVE EXECUTE")
+
             self.opncmdvalue =  readgeneral.readsymbolvalue(self.opencmdtag, "digital")
             self.clscmdvalue =  readgeneral.readsymbolvalue(self.closecmdtag, "digital")
 
 
 
             if self.opncmdvalue == True and self.clscmdvalue == False:
-                writegeneral.writesymbolvalue(self.closeFBtag, 'digital', 1)
+                writegeneral.writesymbolvalue(self.closeFBtag, 'digital', 0)
                 if len(self.torquecloseFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torquecloseFBtag,"digital", 0)
-                sleep(self.delaytimetag)
+
                 writegeneral.writesymbolvalue(self.openFBtag, 'digital', 1)
                 if len(self.torqueOpenFBtag) > 3:
-                    writegeneral.writesymbolvalue(self.torqueOpenFBtag, "digital", 0)
+                    writegeneral.writesymbolvalue(self.torqueOpenFBtag, "digital", 1)
+
+                level = logging.WARNING
+                messege = self.devicename + ":" + self.closeFBtag + " is trigger by 0" + self.openFBtag + "  is trigger by 1 "
+                logger.log(level, messege)
+
+
 
                 self.opnFB = True
                 self.clsFB = False
@@ -130,25 +128,24 @@ class Fn_Sov2S(Eventmanager):
                 self.torqueopnFB = True
 
 
-                level = logging.WARNING
-                messege = self.devicename + ":" + self.torquecloseFBtag + " is trigger by 0" \
-                + self.closeFBtag + " is trigger by 0" + self.openFBtag + " is trigger by 1 " \
-                + self.torqueOpenFBtag + "is trigger by 1"
-                logger.log(level, messege)
+
+
 
             if self.opncmdvalue == False and self.clscmdvalue == True:
                 writegeneral.writesymbolvalue(self.openFBtag,"digital", 0)
                 if len(self.torqueOpenFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torqueOpenFBtag,"digital", 0)
-                sleep(self.delaytimetag)
+
                 writegeneral.writesymbolvalue(self.closeFBtag, "digital",1)
                 if len(self.torquecloseFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torquecloseFBtag,"digital", 1)
+
                 level = logging.WARNING
-                messege = self.devicename + ":" + self.torquecloseFBtag + " is trigger by 1" \
-                          + self.closeFBtag + " is trigger by 1" + self.openFBtag + " is trigger by 0 " \
-                          + self.torqueOpenFBtag + "is trigger by 0"
+                messege = self.devicename + ":" + self.closeFBtag + " is trigger by 1" + self.openFBtag + " " \
+                                                                                                          "is trigger by 0 "
                 logger.log(level, messege)
+
+
 
                 self.opnFB = False
                 self.clsFB = True

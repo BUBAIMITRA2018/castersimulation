@@ -39,7 +39,7 @@ class Fn_outsignal():
             sta_con_plc = client.opc_client_connect(self.filename)
             writegeneral = WriteGeneral(sta_con_plc)
             writegeneral.writesymbolvalue(self.OutDigital,"digital", self.Value)
-            sta_con_plc.disconnect()
+            sta_con_plc.close()
 
         except Exception as e:
             level = logging.ERROR

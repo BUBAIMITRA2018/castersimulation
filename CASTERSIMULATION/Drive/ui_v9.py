@@ -14,9 +14,10 @@ import allencoderprocessing
 import allsiemensdriveprocessing
 import allcontrolvalvesprocessing
 import allanalogprocessing
+import alldigitalprocessing
+import allabpdriveprocessing
 
-from readgeneral_v2 import *
-from  writegeneral_v2 import *
+
 
 
 import general
@@ -35,7 +36,7 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import ttk, VERTICAL, HORIZONTAL, N, S, E, W, DISABLED, NORMAL
 
 logger = logging.getLogger("main.log")
-print(logger)
+# print(logger)
 
 
 class Clock(threading.Thread):
@@ -270,6 +271,8 @@ class FormUi:
             self.controlvalveprocessobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
             self.siemensdriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldevices,self.import_file_path)
             self.analogobject = allanalogprocessing.analogprocess(self.alldevices,self.import_file_path)
+            self.digitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
+            self.abbobject = allabpdriveprocessing.abpdriveprocessing(self.alldevices,self.import_file_path)
 
 
 
@@ -332,15 +335,20 @@ class FormUi:
             allencoderprocessing.process(com, devices)
             # time.sleep(2)
 
-    def callsiemensDrives(self,com,devices):
+    def callDrives(self,com,devices):
         while not self.DEAD:
-            self.siemensdriveobject.process()
+            self.abbobject.process()
             # time.sleep(2)a
 
     def callcontrolvalves(self,com,devices):
         while not self.DEAD:
             self.controlvalveprocessobject.process()
             # time.sleep(2)
+
+    def calldiigitalprocess(self,com,devices):
+        while not self.DEAD:
+            self.digitalobject.process()
+
 
 
 
@@ -388,9 +396,9 @@ class FormUi:
 
     def seimensdrivestart(self):
         self.DEAD = False
-        self.siemnenstread = threading.Thread(target=self.callsiemensDrives, args=(self.comm_object, self.alldevices))
+        self.siemnenstread = threading.Thread(target=self.callDrives, args=(self.comm_object, self.alldevices))
         self.siemnenstread.start()
-        self.seimensdrivestartbutton.configure(text="drivestarted")
+        self.drivestartbutton.configure(text="drivestarted")
 
     def controlvalvestart(self):
         self.DEAD = False
@@ -398,14 +406,12 @@ class FormUi:
         self.controlvalvetread.start()
         self.controlvalvestartbutton.configure(text="controlvalvestarted")
 
-
-
-
-
-
-
-
-
+    def digitalprocessstart(self):
+        self.DEAD = False
+        self.digitaltread = threading.Thread(target=self.calldiigitalprocess, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.digitaltread)
+        self.digitaltread.start()
+        self.digitalstartbutton.configure(text="digitaltarted")
 
     def startprocess(self):
 
@@ -424,14 +430,17 @@ class FormUi:
         self.sov2startbutton = ttk.Button(self.win, text='sov2start', command=self.sov2start)
         self.sov2startbutton.grid(column=0, row=3)
 
+        self.digitalstartbutton = ttk.Button(self.win, text='digital', command=self.digitalprocessstart)
+        self.digitalstartbutton.grid(column=0, row=4)
+
         self.encoderstartbutton = ttk.Button(self.win, text='encoderstart', command=self.encoderstart)
         self.encoderstartbutton.grid(column=1, row=0)
 
         self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
         self.analogstartbutton.grid(column=1, row=1)
 
-        self.seimensdrivestartbutton = ttk.Button(self.win, text='drivestart', command=self.seimensdrivestart)
-        self.seimensdrivestartbutton.grid(column=1, row=2)
+        self.drivestartbutton = ttk.Button(self.win, text='drivestart', command=self.seimensdrivestart)
+        self.drivestartbutton.grid(column=1, row=2)
 
         self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
         self.controlvalvestartbutton.grid(column=1, row=3)
@@ -447,7 +456,8 @@ class FormUi:
         self.encoderstartbutton.configure(text = 'encoderstart')
         self.controlvalvestartbutton.configure(text = 'controlvalstart')
         self.analogstartbutton.configure(text = 'analogstart')
-        self.seimensdrivestartbutton.configure(text = 'drivestart')
+        self.drivestartbutton.configure(text = 'drivestart')
+        self.digitalstartbutton.configure(text='digitalstart')
 
 
 
@@ -508,7 +518,7 @@ class FormUi:
 
     def collectwritetaglist(self):
         list1 = []
-        df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='WriteGeneral')
+        df = pd.read_excel(self.import_file_path, sheet_name='WriteGeneral')
         n = 0
         while n < len(df.index):
             list1.append(str(df.iloc[n,0]))
@@ -585,7 +595,7 @@ class App:
 
 def main():
     logging.basicConfig(level=logging.DEBUG)
-    df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='Tag List')
+
     root = tk.Tk()
     app = App(root)
     app.root.mainloop()

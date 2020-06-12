@@ -21,6 +21,8 @@ class Communication:
             df = pd.read_excel(filename, sheet_name='Tag List')
             ipaddress = str(df.iloc[0, 11])
             portno = int(df.iloc[1, 11])
+
+
             self.client = ModbusClient(host=ipaddress, port=portno, auto_open=True)
             self.client.open()
             is_connected = self.client.is_open()    

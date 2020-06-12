@@ -1,9 +1,17 @@
-
-from logger import *
 from observable import *
-import logging
+from clientcomm_v1 import *
+from readgeneral_v2 import *
+
 
 logger = logging.getLogger("main.log")
+
+
+
+
+
+
+
+
 
 class AreaObserver:
 
@@ -12,34 +20,52 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.Cond1Val = args[1].readgeneral.readsymbolvalue(item.cond1,'S7WLBit','PA')
-            item.Cond2Val = args[1].readgeneral.readsymbolvalue(item.cond2, 'S7WLBit', 'PA')
-            item.Cond3Val = args[1].readgeneral.readsymbolvalue(item.cond3, 'S7WLBit', 'PA')
-            item.Cond4Val = args[1].readgeneral.readsymbolvalue(item.cond4, 'S7WLBit', 'PA')
 
-subject = Observable()
-observer = AreaObserver(subject)
+            if (len(item.cond1) > 3):
+                item.Cond1Val = args[1].readsymbolvalue(item.cond1, 'S7WLBit', 'PE')
 
-def process(comobject,alldevices):
-    for area, devices in readkeyandvalues(alldevices):
-        try:
-            areavalue = comobject.readgeneral.readsymbolvalue(area,'S7WLBit','PA')
+            if (len(item.cond2) > 3):
+                item.Cond2Val = args[1].readsymbolvalue(item.cond2, 'S7WLBit', 'PE')
+
+            if (len(item.cond3) > 3):
+                item.Cond3Val = args[1].readsymbolvalue(item.cond3, 'S7WLBit', 'PE')
+
+            if (len(item.cond4) > 4):
+                item.Cond4Val = args[1].readsymbolvalue(item.cond4, 'S7WLBit', 'PE')
+
+
+
+
+
+
+class digitalprocess:
+    def __init__(self,alldevices,filename):
+        self.alldevices = alldevices
+        self.filename = filename
+        self.subject = Observable()
+        self.observer = AreaObserver(self.subject)
+        self.client = Communication()
+        self.sta_con_plc = self.client.opc_client_connect(filename)
+        self.readgeneral = ReadGeneral(self.sta_con_plc)
+
+    def process(self):
+        for area, devices in readkeyandvalues(self.alldevices):
+            areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
             if areavalue == 1:
-                observer.notify(devices,comobject)
+                self.observer.notify(devices, self.readgeneral)
 
-        except Exception as e:
-            log_exception(e)
-            level = logging.ERROR
-            messege = "alldigitalprocessing" + " Error messege(process)" + str(e.args)
-            # logger.log(level, messege)
-            log_exception(e)
+
+
+
+
+
+
 
 
 
 def readkeyandvalues(alldevice):
 
-         digitaldictionary = alldevice.alldigitalsignalobjects.dictionary
-
+         digitaldictionary = alldevice.alldigitalsignals.dictionary
          areas = list(digitaldictionary.keys())
          n = 0
          while n < len(areas):

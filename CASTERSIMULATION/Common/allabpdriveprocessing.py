@@ -1,6 +1,8 @@
 
 from logger import *
 from observal import *
+from clientcomm_v1 import *
+from readgeneral_v2 import *
 import logging
 
 logger = logging.getLogger("main.log")
@@ -13,6 +15,7 @@ class AreaObserver:
         for item in args[0]:
             item.controlword = args[1].readgeneral.readtagvalue(item.cw)
             item.speedsetpoint = args[1].readgeneral.readtagvalue(item.speedSP)
+
             if len(item.brakeopncmd) > 3:
                 item.breakopencmd = args[1].readgeneral.readtagvalue(item.brakeopncmd)
             if len(item.startcmdtag) > 3:
@@ -20,26 +23,27 @@ class AreaObserver:
             if len(item.stopcmdtag) > 3:
                 item.StopCmd = args[1].readgeneral.readtagvalue(item.stopcmdtag)
 
+class abpdriveprocessing :
 
+    def __init__(self, alldevices, filename):
+        self.subject = Observable()
+        self.alldevices = alldevices
+        self.observer = AreaObserver(self.subject)
+        self.client = Communication()
+        self.sta_con_plc = self.client.opc_client_connect(filename)
+        self.observer = AreaObserver(self.subject)
+        self.readgeneral = ReadGeneral(self.sta_con_plc)
 
-subject = Observable()
-observer = AreaObserver(subject)
+    def process(self):
 
-def process(comobject,alldevices):
-    for area, devices in readkeyandvalues(alldevices):
-        try:
-
-            areavalue = comobject.readgeneral.readtagvalue(area)
-
+        for area, devices in readkeyandvalues(self.alldevices):
+            areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
             if areavalue == 1:
-                observer.notify(devices,comobject)
+                self.observer.notify(devices, self.readgeneral)
 
-        except Exception as e:
-            log_exception(e)
-            level = logging.ERROR
-            messege = "allabbdriveprocessing" + " Error messege(process)" + str(e.args)
-            logger.log(level, messege)
-            log_exception(e)
+
+
+
 
 
 def readkeyandvalues(alldevice):

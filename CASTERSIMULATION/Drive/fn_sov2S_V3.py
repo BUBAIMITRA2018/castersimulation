@@ -87,7 +87,7 @@ class Fn_Sov2S(Eventmanager):
 
 
     def initilizedigitalinput(self):
-        print('the control valve was here')
+
 
         try:
             pass
@@ -102,7 +102,7 @@ class Fn_Sov2S(Eventmanager):
     def sov2sprocess(self):
 
         try:
-            print('control valve is running')
+
             client = Communication()
             sta_con_plc = client.opc_client_connect(self.filename)
             readgeneral = ReadGeneral(sta_con_plc)
@@ -132,9 +132,7 @@ class Fn_Sov2S(Eventmanager):
 
 
                 level = logging.WARNING
-                messege = self.devicename + ":" + self.torquecloseFBtag + " is trigger by 0" \
-                         + self.closeFBtag + " is trigger by 0" + self.openFBtag + " is trigger by 1 " \
-                         + self.torqueOpenFBtag + "is trigger by 1"
+                messege = self.devicename + ":" + self.closeFBtag + " is trigger by 0" + self.openFBtag + " is trigger by 1 "
 
                 logger.log(level, messege)
 
@@ -152,10 +150,7 @@ class Fn_Sov2S(Eventmanager):
                 # if len(self.closeLS)>3:
                 #     writegeneral.writesymbolvalue(self.closeLS, 1, 'S7WLBit')
                 level = logging.WARNING
-                messege = self.devicename + ":" + self.torquecloseFBtag + " is trigger by 1" \
-                          + self.closeFBtag + " is trigger by 1" + self.openFBtag + " is trigger by 0 " \
-                          + self.torqueOpenFBtag + "is trigger by 0"
-
+                messege = self.devicename + ":" + self.closeFBtag + " is trigger by 1" + self.openFBtag + " is trigger by 0 "
                 logger.log(level, messege)
 
             if self.opncmdvalue == False and self.clscmdvalue == False:
@@ -230,23 +225,6 @@ class Fn_Sov2S(Eventmanager):
     @torqueopnFB.setter
     def torqueopnFB(self, value):
         self._opntorqueFBvalue = value
-
-    # @property
-    # def closeLSFB(self):
-    #     return self._closeLSFBvalue
-    #
-    # @closeLSFB.setter
-    # def closeLSFB(self, value):
-    #     self._closeLSFBvalue = value
-    #
-    # @property
-    # def openLSFB(self):
-    #     return self._openLSFBvalue
-    #
-    # @openLSFB.setter
-    # def openLSFB(self, value):
-    #     self._openLSFBvalue = value
-
 
 
     @property

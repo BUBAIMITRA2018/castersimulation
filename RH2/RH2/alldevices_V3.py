@@ -8,6 +8,8 @@ import pandas as pd
 import calallcontrolvalves_V3
 import callalloutsignals_V3
 import callallvibrofeeder_V3
+import callallsiemensdrive1D_V3
+import callalldigital_V3
 
 
 class AllDevices:
@@ -23,6 +25,8 @@ class AllDevices:
         self.dfCON = pd.read_excel(import_file_path,sheet_name='ControlValves')
         self.dfoutsignal = pd.read_excel(import_file_path,sheet_name='OutputTx')
         self.dfvibrofeeder = pd.read_excel(import_file_path,sheet_name='VibroFeeder')
+        self.dfsiemensdrive = pd.read_excel(import_file_path, sheet_name='SiemensDrive')
+        self.dfdigitalsignal = pd.read_excel(import_file_path, sheet_name='DigitalTx')
 
         self.allsov1sobjects = callallsov1S_V3.Cal_AllSov1S(self.dfS1S,comobject,import_file_path)
         self.allmtor1dobjects = callallmotor1D_V3.Cal_AllMotor1D(self.dfM1D, comobject,import_file_path)
@@ -32,6 +36,9 @@ class AllDevices:
         self.allcontrolvalveobjects =  calallcontrolvalves_V3.Cal_AllControlValves(self.dfCON,comobject,import_file_path)
         self.alloutsignalobjects =  callalloutsignals_V3.Cal_AllOutsingnal(self.dfoutsignal,comobject,import_file_path)
         self.allvibrofeederobjects = callallvibrofeeder_V3.Cal_AllVibroFeeder(self.dfvibrofeeder,comobject,import_file_path)
+        self.allsiemensdrivesobjects = callallsiemensdrive1D_V3.Cal_AllSiemensDrive1D(self.dfsiemensdrive,comobject,import_file_path)
+        self.alldigitalsignalobjects = callalldigital_V3.Cal_AllDigital(self.dfdigitalsignal, comobject, import_file_path)
+
 
 
 
@@ -52,16 +59,26 @@ class AllDevices:
         return self.allmotor2dobjects
 
     @property
-    def allanalog(self):
+    def allanalogsignalobjects(self):
         return self.allanalogobjects
 
     @property
-    def allcontrolvalve(self):
+    def allcontrolvalves(self):
         return self.allcontrolvalveobjects
 
     @property
     def allvibrofeeder(self):
         return self.allvibrofeederobjects
+
+    @property
+    def alldigitalsignals(self):
+        return self.alldigitalsignalobjects
+
+    @property
+    def allsiemensdrives(self):
+        return self.allsiemensdrivesobjects
+
+
 
 
 

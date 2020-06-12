@@ -88,7 +88,6 @@ class ControlPanelUi:
     def deskon1func(self):
 
         self.writegeneral.writesymbolvalue('401.0', 1, 'S7WLBit')
-        print('heheheheheheheehehheehheheheheehheheheehheehhehehehehhe')
 
     def deskon2func(self):
 

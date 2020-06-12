@@ -75,7 +75,7 @@ class Fn_ControlValves(Eventmanager):
              self.currentvalue = readgeneral.readsymbolvalue(self.pv,"digital")
 
             writegeneral.writesymbolvalue(self.pv,'analog', self.currentvalue)
-            sta_con_plc.disconnect()
+            sta_con_plc.close()
 
 
         except Exception as e:
