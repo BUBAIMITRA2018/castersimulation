@@ -101,13 +101,22 @@ class Fn_Siemens_Drive(Eventmanager):
                     self.mtrnominalSpd = int(tag)
 
                 if col == 21:
-                    self.plcscancycle = str(tag)
+                    self.plcscancycle = float(tag)
 
                 if col == 22:
                     self.driveEngg = int(tag)
 
-                if col == 22:
+                if col == 23:
                     self.kval = int(tag)
+                    print("Kval is",self.kval)
+
+                if col == 24:
+                    self.encodertype = str(tag)
+                    print("encoder type",self.encodertype)
+
+                if col == 25:
+                    self.resolution = int(tag)
+
 
 
 
@@ -128,6 +137,14 @@ class Fn_Siemens_Drive(Eventmanager):
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
 
+        if len(self.encoderoutputtag) > 3:
+            writegeneral.writesymbolvalue(self.encoderoutputtag, 0, 'S7WLWord')
+            level = logging.INFO
+            messege = self.devicename + ":" + self.encoderoutputtag + " is trigger by 0"
+            logger.log(level, messege)
+
+
+
 
         if self.connectiontype == "HARDWARE":
 
@@ -147,7 +164,7 @@ class Fn_Siemens_Drive(Eventmanager):
             else:
                 pass
 
-            sta_con_plc.disconnect()
+        sta_con_plc.disconnect()
 
     def driveprocess(self):
 
@@ -258,14 +275,95 @@ class Fn_Siemens_Drive(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
-            self.drivespeedfbvalue = readgeneral.readsymbolvalue(self.speedFB,'S7WLWord','PA')
-            self._fastcountvalue = self.fastcount
+            print("encoder process executed")
 
-            self._encodervalue = self.drivespeedfbvalue * self.mtrnominalSpd * self.plcscancycle * self.driveEngg * self.kval
+            if self.encodertype == "incremental" :
 
-            writegeneral.writesymbolvalue(self.encoderoutputtag, self._encodervalue, 'S7WLWord')
+
+                self.drivespeedfbvalue = readgeneral.readDBvalue(self.speedFB,'S7WLReal')
+
+
+
+                print( "drive speed feedback value",self.drivespeedfbvalue)
+
+                currentencodervalue = readgeneral.readsymbolvalue(self.encoderoutputtag, 'S7WLWord', 'PE')
+                # self.drivespeedfbvalue = readgeneral.readsymbolvalue(self.speedFB, 'S7WLWord', 'PA')
+
+                self._fastcountvalue = self.fastcount
+
+                self._encodervaluerate = ((self.drivespeedfbvalue * self.mtrnominalSpd * self.plcscancycle * self.resolution )/(self.driveEngg * 60))* self.kval
+
+                print("encodervalue rate", self._encodervaluerate)
+
+
+
+                if self.drivespeedfbvalue != 0.0 :
+
+                    nextencodervalue = currentencodervalue + self._encodervaluerate
+
+                    writegeneral.writesymbolvalue(self.encoderoutputtag, nextencodervalue, 'S7WLWord')
+
+                    print("next encoder value is",nextencodervalue)
+
+                    if nextencodervalue > 32000:
+                        writegeneral.writesymbolvalue(self.encoderoutputtag, -32000, 'S7WLWord')
+
+                    if nextencodervalue <= -32000:
+                        writegeneral.writesymbolvalue(self.encoderoutputtag, 32000, 'S7WLWord')
+
+
+                print("encoder value",self.encoderoutputtag)
+
+
+
+            if self.encodertype == "absolute":
+                self.drivespeedfbvalue = readgeneral.readDBvalue(self.speedFB, 'S7WLReal')
+
+                print("mtrnorminal speed", self.mtrnominalSpd )
+                print("drive engineering value", self.driveEngg)
+
+
+
+
+                self._encodervaluerate = int((self.drivespeedfbvalue * self.mtrnominalSpd * self.plcscancycle * self.resolution) / (
+                            self.driveEngg * 60)) * self.kval
+
+
+                self.currentencodervalue = readgeneral.readsymbolvalue(self.encoderoutputtag, 'S7WLWord', 'PE')
+
+                print("encodervalue rate",self._encodervaluerate)
+                print("drive speed feedback", self.drivespeedfbvalue)
+
+                if self.currentencodervalue > 27648:
+                    writegeneral.writesymbolvalue(self.encoderoutputtag, 27648, 'S7WLWord')
+
+                if self.currentencodervalue < 0:
+                    writegeneral.writesymbolvalue(self.encoderoutputtag, 0, 'S7WLWord')
+
+
+                if self.drivespeedfbvalue > 0.0 :
+
+                    if self.currentencodervalue < 27648:
+                        print(" current encoder value is", self.currentencodervalue)
+                        nextencodervalue = self.currentencodervalue + self._encodervaluerate
+                        writegeneral.writesymbolvalue(self.encoderoutputtag, nextencodervalue, 'S7WLWord')
+                        print("next value is", nextencodervalue)
+
+
+                if self.drivespeedfbvalue < 0.0:
+
+                    if self.currentencodervalue > 0:
+                        print(" current encoder value is", self.currentencodervalue)
+                        print("current encoder value")
+                        nextencodervalue = self.currentencodervalue + self._encodervaluerate
+                        writegeneral.writesymbolvalue(self.encoderoutputtag, nextencodervalue, 'S7WLWord')
+                        print("next value is", nextencodervalue)
+
+
 
             sta_con_plc.disconnect()
+
+
 
 
         except Exception as e:
@@ -326,9 +424,9 @@ class Fn_Siemens_Drive(Eventmanager):
 
     @BreakOpenCmd.setter
     def BreakOpenCmd(self, value):
-        if value != self._breakopencmd:
+        if value == True :
             super().fire2()
-            print("Fire encoder process")
+
 
 
     @property

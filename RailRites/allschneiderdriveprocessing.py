@@ -12,15 +12,15 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.controlword = args[1].readgeneral.readtagvalue(item.cw)
-            item.speedsetpoint = args[1].readgeneral.readtagvalue(item.speedSP)
+            item.controlword = args[1].readDBvalue(item.cw,'S7WLWord')
+            item.speedsetpoint = args[1].readDBvalue(item.speedSP,'S7WLWord')
 
             if len(item.brakeopncmd) > 3:
-                item.breakopencmd = args[1].readgeneral.readtagvalue(item.brakeopncmd)
+                item.breakopencmd = args[1].readsymbolvalue(item.brakeopncmd,'S7WLBit','PA')
             if len(item.startcmdtag) > 3:
-                item.StartCmd = args[1].readgeneral.readtagvalue(item.startcmdtag)
+                item.StartCmd = args[1].readsymbolvalue(item.startcmdtag,'S7WLBit','PA')
             if len(item.stopcmdtag) > 3:
-                item.StopCmd = args[1].readgeneral.readtagvalue(item.stopcmdtag)
+                item.StopCmd = args[1].readsymbolvalue(item.stopcmdtag,'S7WLBit','PA')
 
 class schneiderdriveprocessing :
 
@@ -47,13 +47,14 @@ class schneiderdriveprocessing :
 
 def readkeyandvalues(alldevice):
 
-         dictionary = alldevice.alldrives.dictionary
+         schneiderdictionary = alldevice.allschneiders.dictionary
 
-         areas = list(dictionary.keys())
+         areas = list(schneiderdictionary.keys())
          n = 0
+
          while n < len(areas):
              area = areas[n]
-             devices = dictionary[area]
+             devices = schneiderdictionary[area]
              yield area,devices
              n = n + 1
 

@@ -23,7 +23,7 @@ class Fn_AnalogTx(Eventmanager):
         self.setup()
         self.analoginitialization()
         super().__init__(lambda: self.analogprocess())
-        print("initilization complete")
+
 
 
     def setup(self):
@@ -66,6 +66,9 @@ class Fn_AnalogTx(Eventmanager):
                 if col == 12:
                     self.cmdtag4 = str(item)
 
+                if col == 13:
+                    self.type = str(item)
+
 
         except Exception as e:
             log_exception(e)
@@ -80,25 +83,6 @@ class Fn_AnalogTx(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
-            if(len(self.cmdtag1) > 3):
-                self.cmdtag1value = readgeneral.readsymbolvalue(self.cmdtag1,'S7WLBit','PA')
-            else:
-                self.cmdtag1value = 1
-
-            if (len(self.cmdtag2) > 3):
-                self.cmdtag2value = readgeneral.readsymbolvalue(self.cmdtag2,'S7WLBit','PA')
-            else:
-                self.cmdtag2value = 1
-
-            if (len(self.cmdtag3) > 3):
-                self.cmdtag3value = readgeneral.readsymbolvalue(self.cmdtag3,'S7WLBit','PA')
-            else:
-                self.cmdtag3value = 1
-
-            if (len(self.cmdtag4) > 3):
-                self.cmdtag4value = readgeneral.readsymbolvalue(self.cmdtag4,'S7WLBit','PA')
-            else:
-                self.cmdtag4value = 1
 
             writegeneral.writesymbolvalue(self.outputtag, 0 , 'S7WLWord')
 
@@ -123,30 +107,77 @@ class Fn_AnalogTx(Eventmanager):
                         readgeneral = ReadGeneral(sta_con_plc)
                         writegeneral = WriteGeneral(sta_con_plc)
 
-                        if (self.cmdtag1value and self.cmdtag2value and self.cmdtag3value and self.cmdtag4value):
+                        if (len(self.cmdtag1) > 3):
+                            self.cmdtag1value = readgeneral.readsymbolvalue(self.cmdtag1, 'S7WLBit', 'PA')
+                        else:
+                            self.cmdtag1value = 1
 
-                            if self.selval==1 and self.val > self.lowerlimit and self.val < self.highlimit :
+                        if (len(self.cmdtag2) > 3):
+                            self.cmdtag2value = readgeneral.readsymbolvalue(self.cmdtag2, 'S7WLBit', 'PA')
+                        else:
+                            self.cmdtag2value = 1
 
-                                a = abs(self.val - 0.005)
-                                b = abs(self.val + 0.005)
-                                self.targetvalue = random.uniform(a, b)
-                                self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
-                                writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue,'S7WLWord')
+                        if (len(self.cmdtag3) > 3):
+                            self.cmdtag3value = readgeneral.readsymbolvalue(self.cmdtag3, 'S7WLBit', 'PA')
+                        else:
+                            self.cmdtag3value = 1
 
+                        if (len(self.cmdtag4) > 3):
+                            self.cmdtag4value = readgeneral.readsymbolvalue(self.cmdtag4, 'S7WLBit', 'PA')
+                        else:
+                            self.cmdtag4value = 1
 
-                            if not self.selval and  self.val > self.lowerlimit and self.val < self.highlimit and  self.val != 0 :
-                                highband = self.highlimit - self.val
-                                lowerband = self.val - self.lowerlimit
-                                self.targetvalue = random.uniform(highband, lowerband)
-                                self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
-                                writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue,'S7WLWord')
+                        if self.type == 'normal':
 
-                            if self.val == 0 and self.selval==1 :
-                                writegeneral.writesymbolvalue(self.outputtag, 0, 'S7WLWord')
+                            if (self.cmdtag1value and self.cmdtag2value and self.cmdtag3value and self.cmdtag4value):
+
+                                if self.selval == 1 and self.val > self.lowerlimit and self.val < self.highlimit:
+                                    a = abs(self.val - 0.005)
+                                    b = abs(self.val + 0.005)
+                                    self.targetvalue = random.uniform(a, b)
+                                    self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
+                                    writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue, 'S7WLWord')
+
+                                if not self.selval and self.val > self.lowerlimit and self.val < self.highlimit and self.val != 0:
+                                    highband = self.highlimit - self.val
+                                    lowerband = self.val - self.lowerlimit
+                                    self.targetvalue = random.uniform(highband, lowerband)
+                                    self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
+                                    writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue, 'S7WLWord')
+
+                                if self.val == 0 and self.selval == 1:
+                                    writegeneral.writesymbolvalue(self.outputtag, 0, 'S7WLWord')
 
                             sta_con_plc.disconnect()
 
-                            print('the value of analog is ',self.outrawvalue)
+
+                        if self.type == 'ramp':
+
+                            if (self.cmdtag1value and self.cmdtag2value and self.cmdtag3value and self.cmdtag4value):
+
+                                currentrawvalue = readgeneral.readsymbolvalue(self.outputtag,'S7WLWord','PE')
+                                currentpv = ((self.highlimit - self.lowerlimit) * (currentrawvalue/27648))
+                                if self.val > currentpv:
+                                    diff = (self.val - currentpv)/2
+                                    self.targetvalue = currentpv + diff
+                                    self.outrawvalue = self.scaling(self.targetvalue, self.highlimit,
+                                                                    self.lowerlimit)
+                                    writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue, 'S7WLWord')
+
+
+                            else:
+                                currentrawvalue = readgeneral.readsymbolvalue(self.outputtag,'S7WLWord','PE')
+                                currentpv = ((self.highlimit - self.lowerlimit) * (currentrawvalue / 27648))
+                                if self.lowerlimit < currentpv:
+                                    diff = (currentpv - self.lowerlimit)/2
+                                    self.targetvalue = currentpv - diff
+                                    self.outrawvalue = self.scaling(self.targetvalue, self.highlimit,
+                                                                    self.lowerlimit)
+                                    writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue, 'S7WLWord')
+
+                            sta_con_plc.disconnect()
+
+
 
 
                             level1 = logging.WARNING
@@ -155,7 +186,6 @@ class Fn_AnalogTx(Eventmanager):
 
                     except Exception as e:
                         level = logging.ERROR
-                        print(e.args)
                         messege = "Analog" + self.devicename + " Error messege(process)" + str(e.args)
                         logger.log(level, messege)
                         log_exception(e)

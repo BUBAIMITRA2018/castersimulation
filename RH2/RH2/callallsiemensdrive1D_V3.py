@@ -26,6 +26,8 @@ class Cal_AllSiemensDrive1D:
             # Make a lis of area
             self.listofsiemensdrivearea = list(set(self.df['Sub-Area']))
 
+
+
             # Make a list of devices
 
             n =0
@@ -35,6 +37,9 @@ class Cal_AllSiemensDrive1D:
                 self.listofsiemensdrive1D.append(self.df.iloc[n,0])
                 n = n + 1
 
+            print(self.listofsiemensdrive1D)
+
+
 
 
             # per area wise device list
@@ -42,7 +47,6 @@ class Cal_AllSiemensDrive1D:
             for area in self.listofsiemensdrivearea:
                 list1 = []
                 for item in self.listofsiemensdrive1D:
-
 
                     if str(item.areaname) == str(area):
                         list1.append(item)
@@ -61,18 +65,9 @@ class Cal_AllSiemensDrive1D:
         except Exception as e :
             log_exception(e)
             level = logging.ERROR
-            messege = 'Event:' + "callallmotor1D" + str(e.args)
+            messege = 'Event:' + "Cal_AllSiemensDrive1D" + str(e.args)
             logger.log(level, messege)
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
-
-    def __setstate__(self, state):
-        # Restore instance attributes.
-        self.__dict__.update(state)
 
 
     @property

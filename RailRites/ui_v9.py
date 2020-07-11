@@ -12,11 +12,6 @@ import allvalve1sprocessing
 import allvalve2sprocessing
 import allencoderprocessing
 import allsiemensdriveprocessing
-import allcontrolvalvesprocessing
-import allpropotionalvalvesprocessing
-import allanalogprocessing
-import alldigitalprocessing
-import allabpdriveprocessing
 import allschneiderdriveprocessing
 
 
@@ -265,17 +260,16 @@ class FormUi:
             time.sleep(1)
 
 
-            self.allmotor1dprocessobject = allmotor1dprocessing_V1.motor1dprocess(self.alldevices,self.import_file_path)
+            # self.allmotor1dprocessobject = allmotor1dprocessing_V1.motor1dprocess(self.alldevices,self.import_file_path)
             self.motor2dprocessobject = allmotor2dprocessing.motor2dprocess(self.alldevices,self.import_file_path)
-            self.sov1sprocessobject = allvalve1sprocessing.sov1sprocess(self.alldevices, self.import_file_path)
-            self.sov2sprocessobject = allvalve2sprocessing.sov2sprocess(self.alldevices, self.import_file_path)
-            self.controlvalveprocessobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
-            self.propotionvalveobjects = allpropotionalvalvesprocessing.proportionalvalveprocess(self.alldevices,
-                                                                                            self.import_file_path)
-            self.siemensdriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldevices,self.import_file_path)
-            self.analogobject = allanalogprocessing.analogprocess(self.alldevices,self.import_file_path)
-            self.digitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
-            self.abbobject = allabpdriveprocessing.abpdriveprocessing(self.alldevices,self.import_file_path)
+            # self.sov1sprocessobject = allvalve1sprocessing.sov1sprocess(self.alldevices, self.import_file_path)
+            # self.sov2sprocessobject = allvalve2sprocessing.sov2sprocess(self.alldevices, self.import_file_path)
+            # self.controlvalveprocessobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
+            # self.propotionvalveobjects = allpropotionalvalvesprocessing.proportionalvalveprocess(self.alldevices,self.import_file_path)
+            # self.siemensdriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldevices,self.import_file_path)
+            # self.analogobject = allanalogprocessing.analogprocess(self.alldevices,self.import_file_path)
+            # self.digitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
+            # self.abbobject = allabpdriveprocessing.abpdriveprocessing(self.alldevices,self.import_file_path)
             self.schneiderobject = allschneiderdriveprocessing.schneiderdriveprocessing(self.alldevices, self.import_file_path)
 
 
@@ -303,10 +297,10 @@ class FormUi:
             self.progressbar.stop()
 
 
-    def callallmotor1d(self,com,devices):
-
-        while not self.DEAD:
-            self.allmotor1dprocessobject.process()
+    # def callallmotor1d(self,com,devices):
+    #
+    #     while not self.DEAD:
+    #         self.allmotor1dprocessobject.process()
 
 
     def callallmotor2d(self,com,devices):
@@ -316,68 +310,68 @@ class FormUi:
             # allmotor2dprocessing.process(com, devices,self.import_file_path)
 
 
-    def callallsov1s(self,com,devices):
-        # self.sov1sreadgeneral = ReadGeneral(com.sta_con_plc)
-
-        while not self.DEAD:
-            self.sov1sprocessobject.process()
-
-            # time.sleep(5)
-
-    def callallsov2s(self, com, devices):
-        while not self.DEAD:
-            self.sov2sprocessobject.process()
-            # time.sleep(2)
+    # def callallsov1s(self,com,devices):
+    #     # self.sov1sreadgeneral = ReadGeneral(com.sta_con_plc)
     #
-    def callallanalogs(self,com, devices):
-        while not self.DEAD:
-            self.analogobject.process()
-            # time.sleep(2)
-
-    def callendocers(self,com,devices):
-        while not self.DEAD:
-            allencoderprocessing.process(com, devices)
-            # time.sleep(2)
-
-    def callABBDrives(self,com,devices):
-        while not self.DEAD:
-            self.abbobject.process()
-            # time.sleep(2)a
+    #     while not self.DEAD:
+    #         self.sov1sprocessobject.process()
+    #
+    #         # time.sleep(5)
+    #
+    # def callallsov2s(self, com, devices):
+    #     while not self.DEAD:
+    #         self.sov2sprocessobject.process()
+    #         # time.sleep(2)
+    # #
+    # def callallanalogs(self,com, devices):
+    #     while not self.DEAD:
+    #         self.analogobject.process()
+    #         # time.sleep(2)
+    #
+    # def callendocers(self,com,devices):
+    #     while not self.DEAD:
+    #         allencoderprocessing.process(com, devices)
+    #         # time.sleep(2)
+    #
+    # def callABBDrives(self,com,devices):
+    #     while not self.DEAD:
+    #         self.abbobject.process()
+    #         # time.sleep(2)a
 
     def callSchneiderDrives(self, com, devices):
         while not self.DEAD:
             self.schneiderobject.process()
             # time.sleep(2)a
 
-    def callSiemensDrives(self, com, devices):
-        while not self.DEAD:
-            self.siemensdriveobject.process()
+    # def callSiemensDrives(self, com, devices):
+    #     while not self.DEAD:
+    #         self.siemensdriveobject.process()
+    #
+    #
+    #
+    # def callcontrolvalves(self,com,devices):
+    #     while not self.DEAD:
+    #         self.controlvalveprocessobject.process()
+    #         # time.sleep(2)
+    #
+    # def callproportionalvalves(self, com, devices):
+    #     while not self.DEAD:
+    #         self.propotionvalveobjects.process()
+    #         # time.sleep(2)
+    #
+    # def calldiigitalprocess(self,com,devices):
+    #     while not self.DEAD:
+    #         self.digitalobject.process()
 
 
 
-    def callcontrolvalves(self,com,devices):
-        while not self.DEAD:
-            self.controlvalveprocessobject.process()
-            # time.sleep(2)
 
-    def callproportionalvalves(self, com, devices):
-        while not self.DEAD:
-            self.propotionvalveobjects.process()
-            # time.sleep(2)
-
-    def calldiigitalprocess(self,com,devices):
-        while not self.DEAD:
-            self.digitalobject.process()
-
-
-
-
-    def motor1dstart(self):
-        self.DEAD = False
-        self.motor1dtread = threading.Thread(target=self.callallmotor1d, args=(self.comm_object, self.alldevices))
-        self.listofthread.append(self.motor1dtread)
-        self.motor1dtread.start()
-        self.motor1dstartbutton.configure(text="motor1dstarted")
+    # def motor1dstart(self):
+    #     self.DEAD = False
+    #     self.motor1dtread = threading.Thread(target=self.callallmotor1d, args=(self.comm_object, self.alldevices))
+    #     self.listofthread.append(self.motor1dtread)
+    #     self.motor1dtread.start()
+    #     self.motor1dstartbutton.configure(text="motor1dstarted")
 
     def motor2dstart(self):
         self.DEAD = False
@@ -386,127 +380,127 @@ class FormUi:
         self.motor2dtread.start()
         self.motor2dstartbutton.configure(text="motor2dstarted")
 
-    def sov1start(self):
-        self.DEAD = False
-        self.sov1stread = threading.Thread(target=self.callallsov1s, args=(self.comm_object, self.alldevices))
-        self.listofthread.append(self.sov1stread)
-        self.sov1stread.start()
-        self.sov1startbutton.configure(text="sov1started")
+    # def sov1start(self):
+    #     self.DEAD = False
+    #     self.sov1stread = threading.Thread(target=self.callallsov1s, args=(self.comm_object, self.alldevices))
+    #     self.listofthread.append(self.sov1stread)
+    #     self.sov1stread.start()
+    #     self.sov1startbutton.configure(text="sov1started")
+    #
+    # def sov2start(self):
+    #     self.DEAD = False
+    #     self.sov2stread = threading.Thread(target=self.callallsov2s, args=(self.comm_object, self.alldevices))
+    #     self.listofthread.append(self.sov2stread)
+    #     self.sov2stread.start()
+    #     self.sov2startbutton.configure(text="sov2started")
+    #
+    # def encoderstart(self):
+    #     self.DEAD = False
+    #     self.encodertread = threading.Thread(target=self.callendocers, args=(self.comm_object, self.alldevices))
+    #     self.listofthread.append(self.encodertread)
+    #     self.encodertread.start()
+    #     self.motor1dstartbutton.configure(text="motor1dstarted")
+    #
+    # def analogstart(self):
+    #     self.DEAD = False
+    #     self.analogtread = threading.Thread(target=self.callallanalogs, args=(self.comm_object, self.alldevices))
+    #     self.listofthread.append(self.analogtread)
+    #     self.analogtread.start()
+    #     self.analogstartbutton.configure(text="analogstarted")
+    #
+    # def abbdrivestart(self):
+    #     self.DEAD = False
+    #     self.abbdrivetread = threading.Thread(target=self.callABBDrives, args=(self.comm_object, self.alldevices))
+    #     self.abbdrivetread.start()
+    #     self.abbdrivestartbutton.configure(text="ABBdrivestarted")
 
-    def sov2start(self):
-        self.DEAD = False
-        self.sov2stread = threading.Thread(target=self.callallsov2s, args=(self.comm_object, self.alldevices))
-        self.listofthread.append(self.sov2stread)
-        self.sov2stread.start()
-        self.sov2startbutton.configure(text="sov2started")
-
-    def encoderstart(self):
-        self.DEAD = False
-        self.encodertread = threading.Thread(target=self.callendocers, args=(self.comm_object, self.alldevices))
-        self.listofthread.append(self.encodertread)
-        self.encodertread.start()
-        self.motor1dstartbutton.configure(text="motor1dstarted")
-
-    def analogstart(self):
-        self.DEAD = False
-        self.analogtread = threading.Thread(target=self.callallanalogs, args=(self.comm_object, self.alldevices))
-        self.listofthread.append(self.analogtread)
-        self.analogtread.start()
-        self.analogstartbutton.configure(text="analogstarted")
-
-    def abbdrivestart(self):
-        self.DEAD = False
-        self.abbdrivetread = threading.Thread(target=self.callABBDrives, args=(self.comm_object, self.alldevices))
-        self.abbdrivetread.start()
-        self.abbdrivestartbutton.configure(text="ABBdrivestarted")
-
-    def siemensdrivestart(self):
-        self.DEAD = False
-        self.siemnenstread = threading.Thread(target=self.callSiemensDrives, args=(self.comm_object, self.alldevices))
-        self.siemnenstread.start()
-        self.siemensdrivestartbutton.configure(text="Siemensdrivestarted")
+    # def siemensdrivestart(self):
+    #     self.DEAD = False
+    #     self.siemnenstread = threading.Thread(target=self.callSiemensDrives, args=(self.comm_object, self.alldevices))
+    #     self.siemnenstread.start()
+    #     self.siemensdrivestartbutton.configure(text="Siemensdrivestarted")
 
     def schneiderdrivestart(self):
         self.DEAD = False
         self.schneidertread = threading.Thread(target=self.callSchneiderDrives, args=(self.comm_object, self.alldevices))
         self.schneidertread.start()
-        self.siemensdrivestartbutton.configure(text="Schneiderdrivestarted")
+        self.schneiderdrivestartbutton.configure(text="Schneiderdrivestarted")
 
-    def controlvalvestart(self):
-        self.DEAD = False
-        self.controlvalvetread = threading.Thread(target=self.callcontrolvalves,args=(self.comm_object, self.alldevices))
-        self.controlvalvetread.start()
-        self.controlvalvestartbutton.configure(text="controlvalvestarted")
-
-    def propotionalvalvestart(self):
-        self.DEAD = False
-        self.proportionalvalvetread = threading.Thread(target=self.callproportionalvalves,args=(self.comm_object, self.alldevices))
-        self.proportionalvalvetread.start()
-        self.proportionalvalvestartbutton.configure(text="proportionalvalvestarted")
-
-    def digitalprocessstart(self):
-        self.DEAD = False
-        self.digitaltread = threading.Thread(target=self.calldiigitalprocess, args=(self.comm_object, self.alldevices))
-        self.listofthread.append(self.digitaltread)
-        self.digitaltread.start()
-        self.digitalstartbutton.configure(text="digitaltarted")
+    # def controlvalvestart(self):
+    #     self.DEAD = False
+    #     self.controlvalvetread = threading.Thread(target=self.callcontrolvalves,args=(self.comm_object, self.alldevices))
+    #     self.controlvalvetread.start()
+    #     self.controlvalvestartbutton.configure(text="controlvalvestarted")
+    #
+    # def propotionalvalvestart(self):
+    #     self.DEAD = False
+    #     self.proportionalvalvetread = threading.Thread(target=self.callproportionalvalves,args=(self.comm_object, self.alldevices))
+    #     self.proportionalvalvetread.start()
+    #     self.proportionalvalvestartbutton.configure(text="proportionalvalvestarted")
+    #
+    # def digitalprocessstart(self):
+    #     self.DEAD = False
+    #     self.digitaltread = threading.Thread(target=self.calldiigitalprocess, args=(self.comm_object, self.alldevices))
+    #     self.listofthread.append(self.digitaltread)
+    #     self.digitaltread.start()
+    #     self.digitalstartbutton.configure(text="digitaltarted")
 
     def startprocess(self):
 
         self.win = tk.Toplevel(self.frame)
         self.win.geometry("250x200")
 
-        self.motor1dstartbutton = ttk.Button(self.win, text='motor1dstart', command=self.motor1dstart)
-        self.motor1dstartbutton.grid(column=0, row=0)
+        # self.motor1dstartbutton = ttk.Button(self.win, text='motor1dstart', command=self.motor1dstart)
+        # self.motor1dstartbutton.grid(column=0, row=0)
 
         self.motor2dstartbutton = ttk.Button(self.win, text='motor2dstart', command=self.motor2dstart)
-        self.motor2dstartbutton.grid(column=0, row=1)
+        self.motor2dstartbutton.grid(column=0, row=0)
 
-        self.sov1startbutton = ttk.Button(self.win, text='sov1start', command=self.sov1start)
-        self.sov1startbutton.grid(column=0, row=2)
-
-        self.sov2startbutton = ttk.Button(self.win, text='sov2start', command=self.sov2start)
-        self.sov2startbutton.grid(column=0, row=3)
-
-        self.digitalstartbutton = ttk.Button(self.win, text='digital', command=self.digitalprocessstart)
-        self.digitalstartbutton.grid(column=0, row=4)
-
-        self.encoderstartbutton = ttk.Button(self.win, text='encoderstart', command=self.encoderstart)
-        self.encoderstartbutton.grid(column=1, row=0)
-
-        self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
-        self.analogstartbutton.grid(column=1, row=1)
-
-        self.abbdrivestartbutton = ttk.Button(self.win, text='abbdrivestart', command=self.abbdrivestart)
-        self.abbdrivestartbutton.grid(column=1, row=2)
-
-        self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
-        self.controlvalvestartbutton.grid(column=1, row=3)
-
-        self.siemensdrivestartbutton = ttk.Button(self.win, text='siemensDriveStart', command=self.siemensdrivestart)
-        self.siemensdrivestartbutton.grid(column=1, row=4)
+        # self.sov1startbutton = ttk.Button(self.win, text='sov1start', command=self.sov1start)
+        # self.sov1startbutton.grid(column=0, row=2)
+        #
+        # self.sov2startbutton = ttk.Button(self.win, text='sov2start', command=self.sov2start)
+        # self.sov2startbutton.grid(column=0, row=3)
+        #
+        # self.digitalstartbutton = ttk.Button(self.win, text='digital', command=self.digitalprocessstart)
+        # self.digitalstartbutton.grid(column=0, row=4)
+        #
+        # self.encoderstartbutton = ttk.Button(self.win, text='encoderstart', command=self.encoderstart)
+        # self.encoderstartbutton.grid(column=1, row=0)
+        #
+        # self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
+        # self.analogstartbutton.grid(column=1, row=1)
+        #
+        # self.abbdrivestartbutton = ttk.Button(self.win, text='abbdrivestart', command=self.abbdrivestart)
+        # self.abbdrivestartbutton.grid(column=1, row=2)
+        #
+        # self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
+        # self.controlvalvestartbutton.grid(column=1, row=3)
+        #
+        # self.siemensdrivestartbutton = ttk.Button(self.win, text='siemensDriveStart', command=self.siemensdrivestart)
+        # self.siemensdrivestartbutton.grid(column=1, row=4)
 
         self.schneiderdrivestartbutton = ttk.Button(self.win, text='schneiderDriveStart', command=self.schneiderdrivestart)
-        self.schneiderdrivestartbutton.grid(column=0, row=5)
+        self.schneiderdrivestartbutton.grid(column=0, row=1)
 
-        self.proportionalvalvestartbutton = ttk.Button(self.win, text='proportionalvalvestart', command=self.propotionalvalvestart)
-        self.proportionalvalvestartbutton.grid(column=1, row=5)
+        # self.proportionalvalvestartbutton = ttk.Button(self.win, text='proportionalvalvestart', command=self.propotionalvalvestart)
+        # self.proportionalvalvestartbutton.grid(column=1, row=5)
 
 
     def stopprocess(self):
 
         self.DEAD = True
-        self.motor1dstartbutton.configure(text = 'motor1dstart')
+        # self.motor1dstartbutton.configure(text = 'motor1dstart')
         self.motor2dstartbutton.configure(text = 'motor2dstart')
-        self.sov1startbutton.configure(text = 'sov1start')
-        self.sov2startbutton.configure(text = 'sov2start')
-        self.encoderstartbutton.configure(text = 'encoderstart')
-        self.controlvalvestartbutton.configure(text = 'controlvalstart')
-        self.proportionalvalvestartbutton.configure(text='proportionalvalstart')
-        self.analogstartbutton.configure(text = 'analogstart')
-        self.siemensdrivestartbutton.configure(text = 'siemensdrivestart')
-        self.digitalstartbutton.configure(text='digitalstart')
-        self.abbdrivestartbutton.configure(text = 'abbdrivestart')
+        # self.sov1startbutton.configure(text = 'sov1start')
+        # self.sov2startbutton.configure(text = 'sov2start')
+        # self.encoderstartbutton.configure(text = 'encoderstart')
+        # self.controlvalvestartbutton.configure(text = 'controlvalstart')
+        # self.proportionalvalvestartbutton.configure(text='proportionalvalstart')
+        # self.analogstartbutton.configure(text = 'analogstart')
+        # self.siemensdrivestartbutton.configure(text = 'siemensdrivestart')
+        # self.digitalstartbutton.configure(text='digitalstart')
+        # self.abbdrivestartbutton.configure(text = 'abbdrivestart')
         self.schneiderdrivestartbutton.configure(text = 'schneiderdrivesstart')
 
 

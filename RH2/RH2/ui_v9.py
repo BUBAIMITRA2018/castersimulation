@@ -16,6 +16,7 @@ import allanalogprocessing
 import allcontrolvalvesprocessing
 import  allsiemensdriveprocessing
 import  allconveyor2dprocessing
+import allrampprocessing
 import general
 import Encoder_Operation_V1
 import time
@@ -265,8 +266,13 @@ class FormUi:
             self.allanalogobject = allanalogprocessing.analogprocess(self.alldevices, self.import_file_path)
             self.allcontrolvalveobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
             self.alldigitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
-            self.allsiemendriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldigitalobject,self.import_file_path)
+            self.allsiemendriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldevices,self.import_file_path)
             self.allconveyorobject = allconveyor2dprocessing.conveyor2dprocess(self.alldevices,self.import_file_path)
+            self.allrampobjects = allrampprocessing.rampprocess(self.alldevices,self.import_file_path)
+
+            self.progressbar['value'] = 50
+            self.frame.update_idletasks()
+            time.sleep(1)
 
 
 
@@ -326,6 +332,11 @@ class FormUi:
     def callallanalog(self):
         while TRUE:
             self.allanalogobject.process()
+
+
+    def callallramp(self):
+        while TRUE:
+            self.allrampobjects.process()
 
     def callallcontrolvalve(self):
         while TRUE:
@@ -415,13 +426,13 @@ class FormUi:
         self.controlvalvetread = threading.Thread(target=self.callallcontrolvalve)
         self.listofthread.append(self.controlvalvetread)
         self.controlvalvetread.start()
-        self.controlvalvestartbutton.configure(text="ControlValve1dStarted")
+        self.controlvalvestartbutton.configure(text="ControlValveStarted")
 
     #
 
     def digitalstart(self):
         self.DEAD = False
-        self.digitalinputtread = threading.Thread(target=self.callalldigital())
+        self.digitalinputtread = threading.Thread(target=self.callalldigital)
         self.listofthread.append(self.digitalinputtread)
         self.digitalinputtread.start()
         self.digitalstartbutton.config(text = 'DigitalStarted')
@@ -430,7 +441,7 @@ class FormUi:
 
     def siemendrivestart(self):
         self.DEAD = False
-        self.siemensdrivetread = threading.Thread(target=self.callallsiemensdrive())
+        self.siemensdrivetread = threading.Thread(target=self.callallsiemensdrive)
         self.listofthread.append(self.siemensdrivetread)
         self.siemensdrivetread.start()
         self.siemensdrivestartbutton.config(text='SiemenDriveStarted')
@@ -438,10 +449,17 @@ class FormUi:
 
     def conveyor2dstart(self):
         self.DEAD = False
-        self.conveyor2dtread = threading.Thread(target=self.callallconveyor2d())
+        self.conveyor2dtread = threading.Thread(target=self.callallconveyor2d)
         self.listofthread.append(self.conveyor2dtread)
         self.conveyor2dtread.start()
-        self.conveyor2dstartbutton.config(text='SiemenDriveStarted')
+        self.conveyor2dstartbutton.config(text='Controlvalve2DStarted')
+
+    def rampstart(self):
+        self.DEAD = False
+        self.ramptread = threading.Thread(target=self.callallramp)
+        self.listofthread.append(self.ramptread)
+        self.ramptread.start()
+        self.rampstartbutton.config(text='RampStarted')
 
     #
 
@@ -485,8 +503,11 @@ class FormUi:
         self.siemensdrivestartbutton = ttk.Button(self.win, text='SiemensDrive_Start', command=self.siemendrivestart)
         self.siemensdrivestartbutton.grid(column=1, row=4)
 
-        self.conveyor2dstartbutton = ttk.Button(self.win, text='Conveyor_Start', command=self.conveyor2dstart)
+        self.conveyor2dstartbutton = ttk.Button(self.win, text='Conveyor2D_Start', command=self.conveyor2dstart)
         self.conveyor2dstartbutton.grid(column=1, row=5)
+
+        self.rampstartbutton = ttk.Button(self.win, text='Ramp_Start', command=self.rampstart)
+        self.rampstartbutton.grid(column=0, row=5)
 
 
 
@@ -510,6 +531,7 @@ class FormUi:
         self.conveyorstartbutton.config(text = 'Conveyor1dStart')
         self.vibrofeederstartbutton.config(text = 'VibrofeederStart')
         self.conveyor2dstartbutton.config(text = 'Conveyor2dStrat')
+        self.rampstartbutton.configure(text = 'RampStart')
 
 
 

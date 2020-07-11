@@ -34,18 +34,18 @@ class Cal_AllControlValves:
             # Declear empty list
                 # per area wise device list
                 # Declear empty list
-                for area in self.listofcontrolvalvesarea:
-                    list1 = []
-                    for item in self.listofcontrolvalvesobjects:
-                        if str(item.areaname) == str(area):
-                            list1.append(item)
-                    self.devicelistperarea.append(list1)
+            for area in self.listofcontrolvalvesarea:
+                list1 = []
+                for item in self.listofcontrolvalvesobjects:
+                    if str(item.areaname) == str(area):
+                        list1.append(item)
+                self.devicelistperarea.append(list1)
 
-                keys = self.listofcontrolvalvesarea
-                values = self.devicelistperarea[1:]
+            keys = self.listofcontrolvalvesarea
+            values = self.devicelistperarea[1:]
 
-                # Declear empty list
-                self.dictionary = dict(zip(keys, values))
+            # Declear empty list
+            self.dictionary = dict(zip(keys, values))
 
 
 

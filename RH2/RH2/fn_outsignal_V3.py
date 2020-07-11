@@ -21,10 +21,10 @@ class Fn_outsignal():
         try:
             for tag, col in self.readalltags():
 
-                if col == 3:
+                if col == 4:
                     self.OutDigital = str(tag)
 
-                if col == 4:
+                if col == 5:
                     self.Value = int(tag)
 
         except Exception as e:
@@ -39,6 +39,7 @@ class Fn_outsignal():
             sta_con_plc = client.opc_client_connect(self.filename)
             writegeneral = WriteGeneral(sta_con_plc)
             writegeneral.writesymbolvalue(self.OutDigital,"digital", self.Value)
+
             sta_con_plc.close()
 
         except Exception as e:

@@ -2,7 +2,7 @@ from logger import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
-from event_V3 import *
+from event_V2 import *
 
 import logging
 
@@ -36,7 +36,7 @@ class Fn_Siemens_Drive(Eventmanager):
         self.speedSP_val  = 0
         self.setup()
         self.initilizedigitalinput()
-        super().__init__(lambda: self.driveprocess(),lambda : self.encoderprocess())
+        super().__init__(lambda: self.driveprocess())
 
 
 
@@ -90,24 +90,24 @@ class Fn_Siemens_Drive(Eventmanager):
 
                 if col == 17:
                     self.breakopencmdtag = str(tag)
+                #
+                # if col == 18:
+                #     self.fastcount = int(tag)
+                #
+                # if col == 19:
+                #     self.encoderoutputtag = str(tag)
+                #
+                # if col == 20:
+                #     self.mtrnominalSpd = int(tag)
 
-                if col == 18:
-                    self.fastcount = int(tag)
+                # if col == 21:
+                #     self.plcscancycle = float(tag)
 
-                if col == 19:
-                    self.encoderoutputtag = str(tag)
-
-                if col == 20:
-                    self.mtrnominalSpd = int(tag)
-
-                if col == 21:
-                    self.plcscancycle = str(tag)
-
-                if col == 22:
-                    self.driveEngg = int(tag)
-
-                if col == 23:
-                    self.kval = int(tag)
+                # if col == 22:
+                #     self.driveEngg = int(tag)
+                #
+                # if col == 23:
+                #     self.kval = int(tag)
 
 
 
@@ -157,87 +157,105 @@ class Fn_Siemens_Drive(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
-            if self.connectiontype == "PROFIBUS":
+
+
+            if self.connectiontype == "profibus":
+                print("siemens drive executed")
 
                 if len(self.cw) > 3 and len(self.sw) > 3 and len(self.speedSP):
                     self.cw_val = int(readgeneral.readsymbolvalue(self.cw, 'analog'))
-                    if self.cw_val == 1087:
-                        writegeneral.writesymbolvalue(self.sw,'analog', 13111)
+                    print("control value", self.cw_val)
+
+                    if self.cw_val == 1150:
+
+                        writegeneral.writesymbolvalue(self.sw,'analog', 13107)
+
                         writegeneral.writesymbolvalue(self.current,'analog', 0)
                         writegeneral.writesymbolvalue(self.torque,'analog', 0)
                         writegeneral.writesymbolvalue(self.speedFB, 'analog', 0)
 
+                        # messege1 = self.devicename + ":" + str(self.sw) + " tag value is " + "13111"
+                        # level = logging.WARNING
+                        # logger.log(level, messege1)
+
+
 
                     if self.cw_val == 1151:
-                        self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'digital'))
-                        writegeneral.writesymbolvalue(self.sw,'analog', 14135)
+                        self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'analog'))
                         writegeneral.writesymbolvalue(self.current,'analog', 13824)
                         writegeneral.writesymbolvalue(self.torque,'analog', 13824)
                         writegeneral.writesymbolvalue(self.speedFB,'analog', self.speedSP_val)
+                        writegeneral.writesymbolvalue(self.sw, 'analog', 30519)
 
-                    messege1 = self.devicename + ":" + self.sw + " tag value is " + "13111" \
-                               + self.speedFB + " tag value is " + str(self.speedSP_val)
-                    level = logging.WARNING
-                    logger.log(level, messege1)
 
-            if self.connectiontype == "HARDWARE":
-
-                if len(self.stopcmdtag) > 3:
-                    self.stopcmdvalue = readgeneral.readsymbolvalue(self.stopcmdtag, 'digital')
-
-                oncommandvalue = readgeneral.readsymbolvalue(self.startcmdtag, 'digital')
-                runfbvalue = readgeneral.readsymbolvalue(self.onfbtag, 'digital')
-
-                if oncommandvalue == True and runfbvalue == False:
-                    writegeneral.writesymbolvalue(self.onfbtag,'digital', 1)
-                    self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'analog'))
-                    writegeneral.writesymbolvalue(self.current,'analog', 13824)
-                    writegeneral.writesymbolvalue(self.torque, 'analog',13824)
-                    writegeneral.writesymbolvalue(self.speedFB,'analog', self.speedSP_val)
-
-                    self.runFB = 1
-                    level2 = logging.WARNING
-                    messege2 = self.devicename + ":" + self.startcmdtag + " value is 1"
-                    logger.log(level2, messege2)
-
-                    level1 = logging.INFO
-                    messege1 = self.devicename + ":" + self.onfbtag + " is trigger by 1"
-                    logger.log(level1, messege1)
-
-                if runfbvalue == True and oncommandvalue == False:
-                    self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'analog'))
-                    writegeneral.writesymbolvalue(self.current,'analog',0)
-                    writegeneral.writesymbolvalue(self.torque,'analog', 0)
-                    writegeneral.writesymbolvalue(self.speedFB,'analog', self.speedSP_val)
-                    writegeneral.writesymbolvalue(self.onfbtag,'analog', 0)
-                    self.runFB = 0
-
-                    level2 = logging.WARNING
-                    messege2 = self.devicename + ":" + self.startcmdtag + " value is 0"
-                    logger.log(level2, messege2)
-
-                    level1 = logging.INFO
-                    messege1 = self.devicename + ":" + self.onfbtag + " is trigger by 0"
-                    logger.log(level1, messege1)
-
-                if len(self.stopcmdtag) > 3:
-                    if runfbvalue == True and self.stopcmdvalue == True:
+                    if self.cw_val == 3199:
                         self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'analog'))
-                        writegeneral.writesymbolvalue(self.current,'analog', 0)
-                        writegeneral.writesymbolvalue(self.torque,'analog', 0)
+                        writegeneral.writesymbolvalue(self.current,'analog', 13824)
+                        writegeneral.writesymbolvalue(self.torque,'analog', 13824)
                         writegeneral.writesymbolvalue(self.speedFB,'analog', self.speedSP_val)
-                        writegeneral.writesymbolvalue(self.onfbtag,'analog', 0)
-                        self.runFB = 0
+                        writegeneral.writesymbolvalue(self.sw, 'analog', 14135)
 
-                    level2 = logging.WARNING
-                    messege2 = self.devicename + ":" + self.stopcmdtag + " value is 0"
-                    logger.log(level2, messege2)
 
-                    level1 = logging.INFO
-                    messege1 = self.devicename + ":" + self.onfbtag + " is trigger by 0"
-                    logger.log(level1, messege1)
 
-                sta_con_plc.disconnect()
+
+            # if self.connectiontype == "HARDWARE":
+            #
+            #     if len(self.stopcmdtag) > 3:
+            #         self.stopcmdvalue = readgeneral.readsymbolvalue(self.stopcmdtag, 'digital')
+            #
+            #     oncommandvalue = readgeneral.readsymbolvalue(self.startcmdtag, 'digital')
+            #     runfbvalue = readgeneral.readsymbolvalue(self.onfbtag, 'digital')
+            #
+            #     if oncommandvalue == True and runfbvalue == False:
+            #         writegeneral.writesymbolvalue(self.onfbtag,'digital', 1)
+            #         self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'analog'))
+            #         writegeneral.writesymbolvalue(self.current,'analog', 13824)
+            #         writegeneral.writesymbolvalue(self.torque, 'analog',13824)
+            #         writegeneral.writesymbolvalue(self.speedFB,'analog', self.speedSP_val)
+            #
+            #         self.runFB = 1
+            #         level2 = logging.WARNING
+            #         messege2 = self.devicename + ":" + self.startcmdtag + " value is 1"
+            #         logger.log(level2, messege2)
+            #
+            #         level1 = logging.INFO
+            #         messege1 = self.devicename + ":" + self.onfbtag + " is trigger by 1"
+            #         logger.log(level1, messege1)
+            #
+            #     if runfbvalue == True and oncommandvalue == False:
+            #         self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'analog'))
+            #         writegeneral.writesymbolvalue(self.current,'analog',0)
+            #         writegeneral.writesymbolvalue(self.torque,'analog', 0)
+            #         writegeneral.writesymbolvalue(self.speedFB,'analog', self.speedSP_val)
+            #         writegeneral.writesymbolvalue(self.onfbtag,'analog', 0)
+            #         self.runFB = 0
+            #
+            #         level2 = logging.WARNING
+            #         messege2 = self.devicename + ":" + self.startcmdtag + " value is 0"
+            #         logger.log(level2, messege2)
+            #
+            #         level1 = logging.INFO
+            #         messege1 = self.devicename + ":" + self.onfbtag + " is trigger by 0"
+            #         logger.log(level1, messege1)
+            #
+            #     if len(self.stopcmdtag) > 3:
+            #         if runfbvalue == True and self.stopcmdvalue == True:
+            #             self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'analog'))
+            #             writegeneral.writesymbolvalue(self.current,'analog', 0)
+            #             writegeneral.writesymbolvalue(self.torque,'analog', 0)
+            #             writegeneral.writesymbolvalue(self.speedFB,'analog', self.speedSP_val)
+            #             writegeneral.writesymbolvalue(self.onfbtag,'analog', 0)
+            #             self.runFB = 0
+            #
+            #         level2 = logging.WARNING
+            #         messege2 = self.devicename + ":" + self.stopcmdtag + " value is 0"
+            #         logger.log(level2, messege2)
+            #
+            #         level1 = logging.INFO
+            #         messege1 = self.devicename + ":" + self.onfbtag + " is trigger by 0"
+            #         logger.log(level1, messege1)
+
+                sta_con_plc.close()
 
 
 
@@ -245,36 +263,36 @@ class Fn_Siemens_Drive(Eventmanager):
 
             log_exception(e)
             level = logging.ERROR
-            messege = "SIEMENS DRIVES" + self.devicename + " Error messege(driveprocess)" + str(e.args)
+            messege = "SIEMENS DRIVES" + str(self.devicename) + " Error messege(driveprocess)" + str(e.args)
             logger.log(level, messege)
 
-    def encoderprocess(self):
-
-
-        try:
-
-            client = Communication()
-            sta_con_plc = client.opc_client_connect(self.filename)
-            readgeneral = ReadGeneral(sta_con_plc)
-            writegeneral = WriteGeneral(sta_con_plc)
-
-            self.drivespeedfbvalue = readgeneral.readsymbolvalue(self.speedFB,'analog')
-            self._fastcountvalue = self.fastcount
-
-            self._encodervalue = self.drivespeedfbvalue * self.mtrnominalSpd * self.plcscancycle * self.driveEngg * self.kval
-
-            writegeneral.writesymbolvalue(self.encoderoutputtag,'analog', self._encodervalue)
-
-            sta_con_plc.disconnect()
-
-
-        except Exception as e:
-            log_exception(e)
-            level = logging.INFO
-            messege = self.devicename + ":" + " Exception rasied(Encoderprocess): " + str(e.args) + str(e)
-            logger.log(level, messege)
-
-
+    # def encoderprocess(self):
+    #
+    #
+    #     try:
+    #
+    #         client = Communication()
+    #         sta_con_plc = client.opc_client_connect(self.filename)
+    #         readgeneral = ReadGeneral(sta_con_plc)
+    #         writegeneral = WriteGeneral(sta_con_plc)
+    #
+    #         self.drivespeedfbvalue = readgeneral.readsymbolvalue(self.speedFB,'analog')
+    #         self._fastcountvalue = self.fastcount
+    #
+    #         self._encodervalue = self.drivespeedfbvalue * self.mtrnominalSpd * self.plcscancycle * self.driveEngg * self.kval
+    #
+    #         writegeneral.writesymbolvalue(self.encoderoutputtag,'analog', self._encodervalue)
+    #
+    #         sta_con_plc.disconnect()
+    #
+    #
+    #     except Exception as e:
+    #         log_exception(e)
+    #         level = logging.INFO
+    #         messege = self.devicename + ":" + " Exception rasied(Encoderprocess): " + str(e.args) + str(e)
+    #         logger.log(level, messege)
+    #
+    #
 
 
 
@@ -285,8 +303,8 @@ class Fn_Siemens_Drive(Eventmanager):
     @controlword.setter
     def controlword(self, value):
         if value != self._cw:
-            print("drive is fire")
-            super().fire1()
+            print("fire")
+            super().fire()
             self._cw = value
 
     @property
@@ -306,7 +324,7 @@ class Fn_Siemens_Drive(Eventmanager):
     @speedsetpoint.setter
     def speedsetpoint(self, value):
         if value != self._speedsetpoint:
-            super().fire1()
+            super().fire()
             self._speedsetpoint = value
 
 
@@ -317,7 +335,7 @@ class Fn_Siemens_Drive(Eventmanager):
     @StartCmd.setter
     def StartCmd(self, value):
         if value != self._startcmdvalue:
-            super().fire1()
+            super().fire()
             self._startcmdvalue = value
 
     @property

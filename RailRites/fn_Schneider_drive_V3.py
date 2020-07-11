@@ -127,6 +127,7 @@ class Fn_Schneider_Drive(Eventmanager):
 
         try:
 
+
             client = Communication()
             sta_con_plc = client.opc_client_connect(self.filename)
             readgeneral = ReadGeneral(sta_con_plc)
@@ -143,25 +144,40 @@ class Fn_Schneider_Drive(Eventmanager):
 
 
             if len(self.cw)>3 and len(self.sw)>3 and len(self.speedSP)>3:
-                self.cw_val = int(readgeneral.readDBvalue(self.cw,'S7WLWord'))
-                self.sw_val = int(readgeneral.readDBvalue(self.sw,'S7WLWord'))
-                if  self.cw_val != 0 and self.cw_val == 6:
-                    writegeneral.writeDBvalue(self.sw,11,'S7WLWord')
+                print('the CW tag ', self.cw)
 
+                self.cw_val = (readgeneral.readDBvalue(self.cw,'S7WLWord'))
+
+                print('the SW tag ', self.sw)
+                self.sw_val = (readgeneral.readDBvalue(self.sw,'S7WLWord'))
                 self.speedSP_val = int(readgeneral.readDBvalue(self.speedSP, 'S7WLWord'))
+
+                if self.cw_val != 0 and self.cw_val == 6:
+                    writegeneral.writeDBvalue(self.sw,11,'S7WLWord')
+                    if len(self.torque) > 3:
+                        writegeneral.writeDBvalue(self.torque, 0, 'S7WLWord')
+
+                    if len(self.dcvoltage) > 3:
+                        writegeneral.writeDBvalue(self.dcvoltage, 0, 'S7WLWord')
+
+                    if len(self.current) > 3:
+                        writegeneral.writeDBvalue(self.current, 0, 'S7WLWord')
+                    writegeneral.writeDBvalue(self.speedFB,self.speedSP_val, 'S7WLWord')
+
+
 
                 if self.cw_val != 0 and self.cw_val == 15:
                     writegeneral.writeDBvalue(self.sw,527,'S7WLWord')
                     writegeneral.writeDBvalue(self.speedFB, self.speedSP_val, 'S7WLWord')
 
                     if len(self.torque) > 3:
-                        writegeneral.writeDBvalue(self.torque, 13175, 'S7WLWord')
+                        writegeneral.writeDBvalue(self.torque, 130, 'S7WLWord')
 
                     if len(self.dcvoltage) > 3:
                         writegeneral.writeDBvalue(self.dcvoltage, 13175, 'S7WLWord')
 
                     if len(self.current) > 3:
-                        writegeneral.writeDBvalue(self.current, 13175, 'S7WLWord')
+                        writegeneral.writeDBvalue(self.current, 13, 'S7WLWord')
 
 
 
@@ -170,13 +186,13 @@ class Fn_Schneider_Drive(Eventmanager):
                     writegeneral.writeDBvalue(self.speedFB, self.speedSP_val, 'S7WLWord')
 
                     if len(self.torque) > 3:
-                        writegeneral.writeDBvalue(self.torque, 13175, 'S7WLWord')
+                        writegeneral.writeDBvalue(self.torque, 130, 'S7WLWord')
 
                     if len(self.dcvoltage) > 3:
                         writegeneral.writeDBvalue(self.dcvoltage, 13175, 'S7WLWord')
 
                     if len(self.current) > 3:
-                        writegeneral.writeDBvalue(self.current, 13175, 'S7WLWord')
+                        writegeneral.writeDBvalue(self.current, 13, 'S7WLWord')
 
 
                 if self.cw_val != 0 and self.cw_val == 64:
@@ -184,7 +200,7 @@ class Fn_Schneider_Drive(Eventmanager):
                     writegeneral.writeDBvalue(self.speedFB, 0, 'S7WLWord')
 
                     if len(self.torque) > 3:
-                        writegeneral.writeDBvalue(self.torque, 0, 'S7WLWord')
+                        writegeneral.writeDBvalue(self.torque, 0, 'SS7WLWord')
 
                     if len(self.dcvoltage) > 3:
                         writegeneral.writeDBvalue(self.dcvoltage, 0, 'S7WLWord')
@@ -195,7 +211,7 @@ class Fn_Schneider_Drive(Eventmanager):
 
 
                 if self.cw_val != 0 and self.cw_val == 128:
-                    writegeneral.writeDBvalue(self.sw, 11, 'S7WLWord')
+                    writegeneral.writeDBvalue(self.sw, 11, 'SS7WLWord')
                     writegeneral.writeDBvalue(self.speedFB, 0, 'S7WLWord')
 
                     if len(self.torque) > 3:
@@ -229,7 +245,7 @@ class Fn_Schneider_Drive(Eventmanager):
         except Exception as e:
             log_exception(e)
             level = logging.ERROR
-            messege = "Fn_Schneider_Drive" + self.devicename + " Error messege(setup)" + str(e.args)
+            messege = "Fn_Schneider_Drive" + self.devicename + " Error messege(process)" + str(e.args)
             logger.log(level, messege)
 
     @property

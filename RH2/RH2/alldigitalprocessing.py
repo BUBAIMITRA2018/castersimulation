@@ -15,10 +15,18 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.Cond1Val = args[1].readsymbolvalue(item.cond1,"digital")
-            item.Cond2Val = args[1].readsymbolvalue(item.cond2, "digital")
-            item.Cond3Val = args[1].readsymbolvalue(item.cond3,"digital")
-            item.Cond4Val = args[1].readsymbolvalue(item.cond4, "digital")
+
+            if (len(item.cond1) > 3):
+                item.Cond1Val = args[1].readsymbolvalue(item.cond1, "digital")
+
+            if (len(item.cond2) > 3):
+                item.Cond2Val = args[1].readsymbolvalue(item.cond2, "digital")
+
+            if (len(item.cond3) > 3):
+                item.Cond3Val = args[1].readsymbolvalue(item.cond3, "digital")
+
+            if (len(item.cond4) > 4):
+                item.Cond4Val = args[1].readsymbolvalue(item.cond4, "digital")
 
 
 

@@ -35,10 +35,14 @@ class WriteGeneral():
         self.client.write_area(areas['PE'], 0, self.byte, self.result)
 
     def writeDBvalue(self, address, tagvalue, datatype, dataarea):
-        addressconverted = float(address)
-        self.byte = int(addressconverted)
-        self.bit = round((addressconverted - self.byte) * 10)
-        self.dataarea = int(dataarea)
+        addressconverted = str(address)
+        data1 = addressconverted[addressconverted.find("b") + 1:addressconverted.find(".")]
+        data2 = addressconverted[addressconverted.find("d", 2) + 1:]
+        data3 = data2[data2.find("b") + 1:]
+        data3 = float(data3[1:])
+        self.byte = int(data3)
+        self.bit = round((data3 - self.byte) * 10)
+        self.dataarea = int(data1)
 
         if datatype == 'S7WLBit':
             self.result = self.client.read_area(areas['DB'], self.dataarea, self.byte, S7WLBit)

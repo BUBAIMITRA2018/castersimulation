@@ -53,39 +53,28 @@ class Fn_Motor2D(Eventmanager):
                     self.remFBtag = str(tag)
 
                 if col ==7:
-                    self.fwdrunFBtag = str(tag)
+                    self.fwdrunFBtag1 = str(tag)
 
                 if col == 8:
-                    self.revrunFBtag = str(tag)
+                    self.revrunFBtag1 = str(tag)
 
-                if col == 9:
-                    self.healthyFBtag = str(tag)
+                if col ==9:
+                    self.fwdrunFBtag2 = str(tag)
+
                 if col == 10:
-                    self.readyFBtag = str(tag)
+                    self.revrunFBtag2 = str(tag)
 
                 if col == 11:
-                    self.mccbonFeedBacktag = str(tag)
+                    self.fwdrunFBtag3 = str(tag)
 
                 if col == 12:
-                    self.overloadFeedBacktag = str(tag)
+                    self.revrunFBtag3 = str(tag)
 
                 if col == 13:
-                    self.faultFBtag = str(tag)
+                    self.fwdrunFBtag4 = str(tag)
 
                 if col == 14:
-                    self.delaytimetag = int(tag)
-
-                if col == 15:
-                    self.FwdPlcRlstag = str(tag)
-
-                if col == 16:
-                    self.BwdPlcRlstag = str(tag)
-
-                if col == 17:
-                    self.openLStag = str(tag)
-
-                if col == 18:
-                    self.closeLStag = str(tag)
+                    self.revrunFBtag4 = str(tag)
 
 
 
@@ -107,10 +96,34 @@ class Fn_Motor2D(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
+
             self._fwdoncmdvalue = readgeneral.readsymbolvalue(self.fwdcmdtag,'S7WLBit','PA')
             self._revoncmdvalue = readgeneral.readsymbolvalue(self.revcmdtag,'S7WLBit','PA')
-            # self._fwdrunFBvalue = readgeneral.readsymbolvalue(self.fwdrunFBtag,'S7WLBit','PA')
-            # self._revrunFBvalue = readgeneral.readsymbolvalue(self.revrunFBtag,'S7WLBit','PA')
+            if len(self.fwdrunFBtag1) > 3:
+                writegeneral.writesymbolvalue(self.fwdrunFBtag1, 0, 'S7WLBit')
+                print(self.fwdrunFBtag1)
+            if len(self.fwdrunFBtag2) > 3:
+                writegeneral.writesymbolvalue(self.fwdrunFBtag2, 0, 'S7WLBit')
+                print(self.fwdrunFBtag2)
+            if len(self.fwdrunFBtag3) > 3:
+                writegeneral.writesymbolvalue(self.fwdrunFBtag3, 0, 'S7WLBit')
+                print(self.fwdrunFBtag3)
+            if len(self.fwdrunFBtag4) > 3:
+                writegeneral.writesymbolvalue(self.fwdrunFBtag4, 0, 'S7WLBit')
+                print(self.fwdrunFBtag4)
+            if len(self.revrunFBtag1) > 3:
+                writegeneral.writesymbolvalue(self.revrunFBtag1, 0, 'S7WLBit')
+                print(self.revrunFBtag1)
+            if len(self.revrunFBtag2) > 3:
+                writegeneral.writesymbolvalue(self.revrunFBtag2, 0, 'S7WLBit')
+                print(self.revrunFBtag2)
+            if len(self.revrunFBtag3) > 3:
+                writegeneral.writesymbolvalue(self.revrunFBtag3, 0, 'S7WLBit')
+                print(self.revrunFBtag3)
+            if len(self.revrunFBtag4) > 3:
+                writegeneral.writesymbolvalue(self.revrunFBtag4, 0, 'S7WLBit')
+                print(self.revrunFBtag4)
+
 
             if len(self.remFBtag) > 3:
                 writegeneral.writesymbolvalue(self.remFBtag, 1,'S7WLBit')
@@ -121,44 +134,44 @@ class Fn_Motor2D(Eventmanager):
 
 
 
-            if len(self.healthyFBtag) > 3:
-
-                writegeneral.writesymbolvalue(self.healthyFBtag, 1,'S7WLBit')
-                level = logging.INFO
-                messege = self.devicename + ":" + self.healthyFBtag + " is trigger by 1"
-                logger.log(level, messege)
-
-
-
-            if len(self.readyFBtag) > 3:
-                writegeneral.writesymbolvalue(self.readyFBtag, 1,'S7WLBit')
-                level = logging.INFO
-                messege = self.devicename + ":" + self.readyFBtag + " is trigger by 1"
-                logger.log(level, messege)
-
-
-
-            if len(self.mccbonFeedBacktag) > 3:
-                writegeneral.writesymbolvalue(self.mccbonFeedBacktag, 1,'S7WLBit')
-                level = logging.INFO
-                messege = self.devicename + ":" + self.mccbonFeedBacktag + " is trigger by 1"
-                logger.log(level, messege)
-
-
-
-            if len(self.overloadFeedBacktag) > 3:
-                writegeneral.writesymbolvalue(self.overloadFeedBacktag, 0,'S7WLBit')
-                level = logging.INFO
-                messege = self.devicename + ":" + self.overloadFeedBacktag + " is trigger by 0"
-                logger.log(level, messege)
-
-
-
-            if len(self.faultFBtag) > 3:
-                writegeneral.writesymbolvalue(self.faultFBtag, 1,'S7WLBit')
-                level = logging.INFO
-                messege = self.devicename + ":" + self.faultFBtag + " is trigger by 1"
-                logger.log(level, messege)
+            # if len(self.healthyFBtag) > 3:
+            #
+            #     writegeneral.writesymbolvalue(self.healthyFBtag, 1,'S7WLBit')
+            #     level = logging.INFO
+            #     messege = self.devicename + ":" + self.healthyFBtag + " is trigger by 1"
+            #     logger.log(level, messege)
+            #
+            #
+            #
+            # if len(self.readyFBtag) > 3:
+            #     writegeneral.writesymbolvalue(self.readyFBtag, 1,'S7WLBit')
+            #     level = logging.INFO
+            #     messege = self.devicename + ":" + self.readyFBtag + " is trigger by 1"
+            #     logger.log(level, messege)
+            #
+            #
+            #
+            # if len(self.mccbonFeedBacktag) > 3:
+            #     writegeneral.writesymbolvalue(self.mccbonFeedBacktag, 1,'S7WLBit')
+            #     level = logging.INFO
+            #     messege = self.devicename + ":" + self.mccbonFeedBacktag + " is trigger by 1"
+            #     logger.log(level, messege)
+            #
+            #
+            #
+            # if len(self.overloadFeedBacktag) > 3:
+            #     writegeneral.writesymbolvalue(self.overloadFeedBacktag, 0,'S7WLBit')
+            #     level = logging.INFO
+            #     messege = self.devicename + ":" + self.overloadFeedBacktag + " is trigger by 0"
+            #     logger.log(level, messege)
+            #
+            #
+            #
+            # if len(self.faultFBtag) > 3:
+            #     writegeneral.writesymbolvalue(self.faultFBtag, 1,'S7WLBit')
+            #     level = logging.INFO
+            #     messege = self.devicename + ":" + self.faultFBtag + " is trigger by 1"
+            #     logger.log(level, messege)
 
             sta_con_plc.disconnect()
 
@@ -183,33 +196,71 @@ class Fn_Motor2D(Eventmanager):
             self.revcmdvalue =  readgeneral.readsymbolvalue(self.revcmdtag,'S7WLBit','PA')
 
             if self.fwdcmdvalue == True and self.revcmdvalue == False:
+                if len(self.revrunFBtag1) > 3:
+                    writegeneral.writesymbolvalue(self.revrunFBtag1, 0, 'S7WLBit')
+                if len(self.revrunFBtag2) > 3:
+                    writegeneral.writesymbolvalue(self.revrunFBtag2, 0, 'S7WLBit')
+                if len(self.revrunFBtag3) > 3:
+                    writegeneral.writesymbolvalue(self.revrunFBtag3, 0, 'S7WLBit')
+                if len(self.revrunFBtag4) > 3:
+                    writegeneral.writesymbolvalue(self.revrunFBtag4, 0, 'S7WLBit')
 
-                # writegeneral.writesymbolvalue(self.fwdrunFBtag, 1,'S7WLBit')
-                # writegeneral.writesymbolvalue(self.revrunFBtag, 0,'S7WLBit')
+                if len(self.fwdrunFBtag1) > 3:
+                    writegeneral.writesymbolvalue(self.fwdrunFBtag1, 1,'S7WLBit')
+                if len(self.fwdrunFBtag2) > 3:
+                    writegeneral.writesymbolvalue(self.fwdrunFBtag2, 1,'S7WLBit')
+                if len(self.fwdrunFBtag3) > 3:
+                    writegeneral.writesymbolvalue(self.fwdrunFBtag3, 1,'S7WLBit')
+                if len(self.fwdrunFBtag4) > 3:
+                    writegeneral.writesymbolvalue(self.fwdrunFBtag4, 1,'S7WLBit')
 
-                sleep( self.delaytimetag)
-                writegeneral.writesymbolvalue(self.openLStag, 1, 'S7WLBit')
-                writegeneral.writesymbolvalue(self.closeLStag, 0, 'S7WLBit')
 
-                self.RevRunFB = False
-                self.FwdRunFB  = True
+                self.RevRunFB1 = False
+                self.RevRunFB2 = False
+                self.RevRunFB3 = False
+                self.RevRunFB4 = False
+
+                self.FwdRunFB1 = True
+                self.FwdRunFB2 = True
+                self.FwdRunFB3 = True
+                self.FwdRunFB4 = True
+
                 level = logging.WARNING
-                messege = self.devicename + ":" + self.fwdrunFBtag + " is trigger by 1" + self.openLStag + "is triggered by 1"
+                messege = self.devicename + ":" + self.fwdrunFBtag1 +" / "+ self.fwdrunFBtag2 +" / "+ self.fwdrunFBtag3 +" / "+ self.fwdrunFBtag4 + " is trigger by 1"
                 logger.log(level, messege)
 
             if self.fwdcmdvalue == False and self.revcmdvalue == True:
+                if len(self.fwdrunFBtag1) > 3:
+                    writegeneral.writesymbolvalue(self.fwdrunFBtag1, 0,'S7WLBit')
+                if len(self.fwdrunFBtag2) > 3:
+                    writegeneral.writesymbolvalue(self.fwdrunFBtag2, 0,'S7WLBit')
+                if len(self.fwdrunFBtag3) > 3:
+                    writegeneral.writesymbolvalue(self.fwdrunFBtag3, 0,'S7WLBit')
+                if len(self.fwdrunFBtag4) > 3:
+                    writegeneral.writesymbolvalue(self.fwdrunFBtag4, 0,'S7WLBit')
 
-                # writegeneral.writesymbolvalue(self.fwdrunFBtag, 0,'S7WLBit')
-                # writegeneral.writesymbolvalue(self.revrunFBtag, 1,'S7WLBit')
+                if len(self.revrunFBtag1) > 3:
+                    writegeneral.writesymbolvalue(self.revrunFBtag1, 1, 'S7WLBit')
+                if len(self.revrunFBtag2) > 3:
+                    writegeneral.writesymbolvalue(self.revrunFBtag2, 1, 'S7WLBit')
+                if len(self.revrunFBtag3) > 3:
+                    writegeneral.writesymbolvalue(self.revrunFBtag3, 1, 'S7WLBit')
+                if len(self.revrunFBtag4) > 3:
+                    writegeneral.writesymbolvalue(self.revrunFBtag4, 1, 'S7WLBit')
 
-                sleep(self.delaytimetag)
 
-                writegeneral.writesymbolvalue(self.openLStag, 0, 'S7WLBit')
-                writegeneral.writesymbolvalue(self.closeLStag, 1, 'S7WLBit')
-                self.RevRunFB = True
-                self.FwdRunFB = False
+                self.FwdRunFB1 = False
+                self.FwdRunFB2 = False
+                self.FwdRunFB3 = False
+                self.FwdRunFB3 = False
+
+                self.RevRunFB1 = True
+                self.RevRunFB2 = True
+                self.RevRunFB3 = True
+                self.RevRunFB4 = True
+
                 level = logging.WARNING
-                messege = self.devicename + ":" +self.revrunFBtag + " is trigger by 1" + self.closeLStag + "is triggered by 1"
+                messege = self.devicename + ":" + self.revrunFBtag1 + " / " + self.revrunFBtag2 + " / " + self.revrunFBtag3 + " / " +  self.revrunFBtag4 + " is trigger by 1"
                 logger.log(level, messege)
 
 
@@ -254,20 +305,20 @@ class Fn_Motor2D(Eventmanager):
 
 
     @property
-    def FwdRunFB(self):
-        return self._fwdrunFBvalue
+    def FwdRunFB1(self):
+        return self._fwdrunFBvalue1
 
-    @FwdRunFB.setter
-    def FwdRunFB(self,value):
-        self._fwdrunFBvalue = value
+    @FwdRunFB1.setter
+    def FwdRunFB1(self,value):
+        self._fwdrunFBvalue1 = value
 
     @property
-    def RevRunFB(self):
-        return self._revrunFBvalue
+    def RevRunFB1(self):
+        return self._revrunFBvalue1
 
-    @RevRunFB.setter
-    def RevRunFB(self, value):
-        self._revrunFBvalue = value
+    @RevRunFB1.setter
+    def RevRunFB1(self, value):
+        self._revrunFBvalue1 = value
 
     @property
     def OpenLSFB(self):
@@ -289,6 +340,54 @@ class Fn_Motor2D(Eventmanager):
             super().fire()
             self._closeLSvalue = value
 
+    @property
+    def FwdRunFB2(self):
+        return self._fwdrunFBvalue2
+
+    @FwdRunFB2.setter
+    def FwdRunFB2(self, value):
+        self._fwdrunFBvalue2 = value
+
+    @property
+    def RevRunFB2(self):
+        return self._revrunFBvalue2
+
+    @RevRunFB2.setter
+    def RevRunFB2(self, value):
+        self._revrunFBvalue2 = value
+
+    @property
+    def FwdRunFB3(self):
+        return self._fwdrunFBvalue3
+
+    @FwdRunFB3.setter
+    def FwdRunFB3(self, value):
+        self._fwdrunFBvalue3 = value
+
+    @property
+    def RevRunFB3(self):
+        return self._revrunFBvalue3
+
+    @RevRunFB3.setter
+    def RevRunFB3(self, value):
+        self._revrunFBvalue3 = value
+
+    @property
+    def FwdRunFB4(self):
+        return self._fwdrunFBvalue4
+
+    @FwdRunFB4.setter
+    def FwdRunFB4(self, value):
+        self._fwdrunFBvalue4 = value
+
+    @property
+    def RevRunFB4(self):
+        return self._revrunFBvalue4
+
+    @RevRunFB4.setter
+    def RevRunFB4(self, value):
+        self._revrunFBvalue4 = value
+
 
 
     @property
@@ -300,9 +399,9 @@ class Fn_Motor2D(Eventmanager):
     def readalltags(self):
         n = 3
         row, col = self.df.shape
-        print(col)
         while n < col:
             data = self.df.iloc[self._idxNo, n]
+            print(data)
             yield data,n
             n = n + 1
 

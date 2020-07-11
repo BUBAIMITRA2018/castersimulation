@@ -37,6 +37,8 @@ class Fn_ControlValves(Eventmanager):
 
             self.lowpvvalue = int(self.df.iloc[self._idxNo, 8])
 
+            self.type = str(self.df.iloc[self._idxNo, 9])
+
 
         except Exception as e:
 
@@ -54,27 +56,53 @@ class Fn_ControlValves(Eventmanager):
         try:
             if len(self.sp) > 0 :
 
+                if (self.type == 'positive'):
+                    print("control valve is executed")
 
-                
-                self.currentvalue = readgeneral.readsymbolvalue(self.pv,"digital")
-                self.spvalue = readgeneral.readsymbolvalue(self.sp,"digital")
+                    self.currentvalue = readgeneral.readsymbolvalue(self.pv, "analog")
+                    self.spvalue = readgeneral.readsymbolvalue(self.sp, "analog")
 
-                rawspvalue = self.scalingconvtoraw(self.spvalue,self.highpvvalue,self.lowpvvalue)
-                if rawspvalue > self.currentvalue:
-                    diff = rawspvalue - self.currentvalue
-                    count= .01*diff
-                    self.currentvalue = self.currentvalue + count
+                    if self.spvalue > self.currentvalue:
+                        diff = self.spvalue - self.currentvalue
+                        count = .1 * diff
+                        self.currentvalue = self.currentvalue + count
+                        writegeneral.writesymbolvalue(self.pv, 'analog', self.currentvalue)
 
-                if rawspvalue < self.currentvalue:
-                    diff = self.currentvalue-rawspvalue
-                    count1=.01*diff
-                    self.currentvalue = self.currentvalue - count1
+                    if self.spvalue < self.currentvalue:
+                        diff = self.currentvalue - self.spvalue
+                        count1 = .1 * diff
+                        self.currentvalue = self.currentvalue - count1
+                        writegeneral.writesymbolvalue(self.pv, 'analog', self.currentvalue)
+
+                if (self.type == 'negative'):
+
+                    self.currentvalue = readgeneral.readsymbolvalue(self.pv, "analog")
+                    self.spvalue = readgeneral.readsymbolvalue(self.sp, "analog")
+                    print("setpoint value is ", self.spvalue)
+                    print("current value is ", self.currentvalue)
+
+                    self.manipulatedsp = 10000 - self.spvalue
+                    print("manupulated  value is ", self.manipulatedsp)
+
+                    if self.manipulatedsp > self.currentvalue:
+                        diff = self.manipulatedsp - self.currentvalue
+                        count = .01 * diff
+                        self.currentvalue = self.currentvalue + count
+                        writegeneral.writesymbolvalue(self.pv, 'analog', self.currentvalue)
+
+                    if self.manipulatedsp < self.currentvalue:
+                        diff = self.currentvalue - self.manipulatedsp
+                        count1 = .01 * diff
+                        self.currentvalue = self.currentvalue - count1
+                        writegeneral.writesymbolvalue(self.pv, 'analog', self.currentvalue)
+
+                print(self.devicename + " controlvalve value is " + str (self.currentvalue))
 
 
-            else:
-             self.currentvalue = readgeneral.readsymbolvalue(self.pv,"digital")
 
-            writegeneral.writesymbolvalue(self.pv,'analog', self.currentvalue)
+
+
+
             sta_con_plc.close()
 
 
@@ -89,13 +117,13 @@ class Fn_ControlValves(Eventmanager):
 
 
     def scalingconvtoraw(self, val, highlimit, lowlimit):
-        rawvalue = int((val * 1) / (highlimit - lowlimit))
+        rawvalue = int((val * 10000) / (highlimit - lowlimit))
         # print(rawvalue)
         return rawvalue
 
     @property
     def processval(self):
-        pv = float((self.currentvalue/27648)*(self.highpvvalue - self.lowpvvalue))
+        pv = float((self.currentvalue/10000)*(self.highpvvalue - self.lowpvvalue))
         print(pv)
         return  pv
 

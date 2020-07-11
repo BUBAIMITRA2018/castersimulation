@@ -1,7 +1,6 @@
 
 
 from observable import *
-import logging
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 
@@ -15,8 +14,9 @@ class AreaObserver:
     def notify(self,  *args, **kwargs):
         for item in args[0]:
             item.controlword = args[1].readsymbolvalue(item.cw,'analog')
+
             item.speedsetpoint = args[1].readsymbolvalue(item.speedSP, 'analog')
-            item.BreakOpenCmd = args[1].readsymbolvalue(item.speedSP, 'analog')
+            # item.BreakOpenCmd = args[1].readsymbolvalue(item.speedSP, 'analog')
             if len(item.startcmdtag) > 3:
                 item.StartCmd = args[1].readsymbolvalue(item.startcmdtag, 'digital')
             if len(item.stopcmdtag) > 3:
@@ -37,16 +37,24 @@ class siemensdriveprocessing :
 
     def process(self):
 
+
+
+
         for area, devices in readkeyandvalues(self.alldevices):
+
+
             areavalue = self.readgeneral.readsymbolvalue(area, 'digital')
+
             if areavalue == 1:
+
                 self.observer.notify(devices, self.readgeneral)
 
 
 
 def readkeyandvalues(alldevice):
-
          siemensdrivedictionary = alldevice.allsiemensdrives.dictionary
+         print(siemensdrivedictionary)
+
          areas = list(siemensdrivedictionary.keys())
          n = 0
          while n < len(areas):

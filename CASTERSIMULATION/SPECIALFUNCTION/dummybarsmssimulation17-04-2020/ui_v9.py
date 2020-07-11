@@ -5,18 +5,20 @@ import signal
 import multiprocessing
 import PIL.Image
 import PIL.ImageTk
-
+import AutocompleteCombox
+import  allturndishcarprocessing
 import alldummybarprocessing
-from readgeneral_v2 import *
-from  writegeneral_v2 import *
+
+
+
 
 
 import general
-
+import Encoder_Operation_V1
 import time
 from ListView2 import *
 from logger import *
-import alldevices_V3
+
 from clientcomm_v1 import *
 import threading
 from tkinter import filedialog
@@ -27,7 +29,9 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import ttk, VERTICAL, HORIZONTAL, N, S, E, W, DISABLED, NORMAL
 
 logger = logging.getLogger("main.log")
-print(logger)
+
+
+# print(logger)
 
 
 class Clock(threading.Thread):
@@ -52,49 +56,8 @@ class Clock(threading.Thread):
         self._stop_event.set()
 
 
-class thread_with_trace(threading.Thread):
-    def __init__(self, *args, **keywords):
-        threading.Thread.__init__(self, *args, **keywords)
-        self.killed = False
-
-    def start(self):
-        self.__run_backup = self.run
-        self.run = self.__run
-        threading.Thread.start(self)
-
-    def __run(self):
-        sys.settrace(self.globaltrace)
-        self.__run_backup()
-        self.run = self.__run_backup
-
-    def globaltrace(self, frame, event, arg):
-        if event == 'call':
-            return self.localtrace
-        else:
-            return None
-
-    def localtrace(self, frame, event, arg):
-        if self.killed:
-            if event == 'line':
-                raise SystemExit()
-        return self.localtrace
-
-    def kill(self):
-        self.killed = True
-
-class process_with_trace(multiprocessing.Process):
-    def __init__(self, *args, **keywords):
-        multiprocessing.Process.__init__(self, *args, **keywords)
-        self.killed = False
-
-        self.queue = multiprocessing.Queue()
 
 
-    def run(self):
-        self.process = multiprocessing.Process.start(self)
-
-    def kill(self):
-        self.process.terminate()
 
 
 class QueueHandler(logging.Handler):
@@ -176,23 +139,8 @@ class FormUi:
 
 
 
-    def encoderoperation(self):
-        # df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='Encoder')
 
-        Encoder_Operation_V1.Encoder_Operation(self.frame,self.comm_object,self.alldevices )
 
-    def conectionpopup(self):
-        self.connect = tk.Toplevel(self.frame)
-        self.connect.geometry('400x200')
-        ttk.Label(self.connect, text='Browser').grid(column=2, row=0)
-        value = StringVar()
-        self.excelpath = ttk.Entry(self.connect, width=40, textvariable=value)
-        self.excelpath.grid(column=2, row=1)
-        self.button1 = ttk.Button(self.connect, text='sumit', command=self.connectwithplc(), state=NORMAL)
-        self.button1.grid(column=1, row=2, sticky=W, padx=5, pady=5)
-
-        excelpath = str(self.excelpath.get())
-        return excelpath
 
 
 
@@ -202,9 +150,7 @@ class FormUi:
         try:
 
             self.import_file_path = filedialog.askopenfilename()
-
             self.comm_object = general.General(self.import_file_path)
-            print('hello mayank')
             self._elementlist = []
             self.tagvalueitemlist = []
             self.plc_cmd_list = []
@@ -215,7 +161,7 @@ class FormUi:
             now = datetime.datetime.now()
             messege = "Error is " +str(e) + "from communication function"
             logger.log(level,messege)
-            log_exception(e)
+
             print(e.args)
 
         finally:
@@ -226,11 +172,6 @@ class FormUi:
                 level = logging.INFO
                 messege =  'Event:' + "PLC Simulation Successfully Connected"
                 logger.log(level, messege)
-
-            # else:
-            #     level = logging.ERROR
-            #     messege = 'Event:' + "Wrong Excel Confriguation"
-            #     logger.log(level, messege)
 
 
 
@@ -244,28 +185,17 @@ class FormUi:
 
         try:
 
-            self.listofwritetags = self.collectwritetaglist()
+
             self.progressbar['value'] = 20
             time.sleep(1)
             self.frame.update_idletasks()
-            self.alldevices = alldevices_V3.AllDevices(self.comm_object,self.import_file_path)
             self.progressbar['value'] = 30
             self.frame.update_idletasks()
             time.sleep(1)
 
 
-
-            self.dummybarprocessobject = alldummybarprocessing.dummybardprocess(self.alldevices, self.import_file_path)
-
-
-
-            # con1,con2 = multiprocessing.Pipe()
-
-            # con1.send(self.alldevice)
-            # con2.send(self.comm_object)
-
-
-            # Multithreading section
+            self.allturdishprocessobject = allturndishcarprocessing.allturdishcarprocess(self.import_file_path)
+            self.alldummybarobject = alldummybarprocessing.alldummybarprocess(self.import_file_path)
 
 
             self.button2.config(text="Initialized")
@@ -289,21 +219,34 @@ class FormUi:
             self.progressbar.stop()
 
 
+    def callallturdishcar(self):
+
+        while not self.DEAD:
+            self.allturdishprocessobject.process()
+
+    def callalldummybar(self):
+        while not self.DEAD:
+            self.alldummybarobject.process()
 
 
-    def calldummybars(self,com,devices):
-        while TRUE:
-            self.dummybarprocessobject.process()
+
+
+
+    def turdishstart(self):
+        self.DEAD = False
+        self.turndishcartread = threading.Thread(target=self.callallturdishcar)
+        self.listofthread.append(self.turndishcartread)
+        self.turndishcartread.start()
+        self.turdishcarstartbutton.configure(text="TurndishCarStarted")
+
 
 
     def dummybarstart(self):
-        self.dummybartread = threading.Thread(target=self.calldummybars,args=(self.comm_object, self.alldevices))
-        self.dummybartread.start()
-
-
-
-
-
+        self.DEAD = False
+        self.dummbartread = threading.Thread(target=self.callalldummybar)
+        self.listofthread.append(self.dummbartread)
+        self.dummbartread.start()
+        self.dunnybarstartbutton.configure(text="DummybarStarted")
 
 
 
@@ -313,94 +256,23 @@ class FormUi:
         self.win = tk.Toplevel(self.frame)
         self.win.geometry("250x200")
 
-        self.dummybarstartbutton = ttk.Button(self.win, text='dummybarstart', command=self.dummybarstart)
-        self.dummybarstartbutton.grid(column=1, row=4)
+        self.turdishcarstartbutton = ttk.Button(self.win, text='TurndishCarStart', command=self.turdishstart)
+        self.turdishcarstartbutton.grid(column=0, row=0)
 
-
-
+        self.dunnybarstartbutton = ttk.Button(self.win, text='DummybarStart', command=self.dummybarstart)
+        self.dunnybarstartbutton.grid(column=1, row=0)
 
 
 
 
     def stopprocess(self):
-        pass
 
-        # for item in self.listofthread:
-        #     item.kill()
-        #
-        # for item in self.listofprocess:
-        #     item.kill()
-
-
-    def writetag(self):
-
-        tagname = self.tagname_entered.get()
-        datatype = self.datatype_entered.get()
-        tagvalue = int(self.tagvalue.get())
-        # tagvalue = 1
-        try:
-
-
-            if len(tagname) > 3:
-                print("length is",len(str(tagname)))
-                self.comm_object.writegeneral.writesymbolvalue(tagname, tagvalue,datatype)
-
-                level = logging.DEBUG
-                messege = tagname + " Force Value is " + str(tagvalue)
-                logger.log(level, messege)
-
-        except Exception as e :
-            log_exception(e)
-            level = logging.ERROR
-            messege = "Error is " +str(e) + "from Force function"
-            logger.log(level, messege)
-
-    def force(self):
-        self.win = tk.Toplevel(self.frame)
-        self.win.geometry('300x100')
-
-        self.listofwritetags  =self.collectwritetaglist()
-        ttk.Label(self.win,text = 'Choose Tag').grid(column=1,row = 0)
-        self.tagname_entered = AutocompleteCombox.AutocompleteCombobox(self.win,width=10)
-        self.tagname_entered.grid(column=1,row = 1)
-
-        self.datatype_entered = AutocompleteCombox.AutocompleteCombobox(self.win, width=10)
-        self.datatype_entered.grid(column=1, row=2)
-
-        self.tagname_entered.set_completion_list(self.listofwritetags)
-        self.datatype_entered.set_completion_list(['S7WLBit','S7WLWord'])
-        self.tagname_entered.focus_set()
-        self.datatype_entered.focus_set()
-
-        ttk.Label(self.win, text='Enter Value').grid(column=2, row=0)
-        value = IntVar()
-        self.tagvalue = ttk.Entry(self.win, width=12, textvariable=value)
-        self.tagvalue.grid(column=2, row=1)
-
-        ttk.Label(self.win, text='Action').grid(column=2, row=3)
-        self.button1 = ttk.Button(self.win, text="Submit", command=self.writetag,state=NORMAL)
-        self.button1.grid(column=3, row=3)
-        # action.grid(column=3, row=3)
-        # win.bind('<Control-Q>', lambda event=None: win.destroy())
-        #  win.bind('<Control-q>', lambda event=None: win.destroy())
-        # (self.tagname_entered, tagvalue)
-        self.win.mainloop()
-
-    def collectwritetaglist(self):
-        list1 = []
-        df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='WriteGeneral')
-        n = 0
-        while n < len(df.index):
-            list1.append(str(df.iloc[n,0]))
-            n = n + 1
-        return  list1
+        self.DEAD = True
+        self.turdishcarstartbutton.configure(text = 'TurndishCarStart')
+        self.dunnybarstartbutton.configure(text='DummybarStart')
 
 
 
-
-    def creatcontrolpanel(self):
-        import fn_controlpanel
-        fn_controlpanel.Fn_ControlPanel(self.frame,self.import_file_path)
 
 
 class ThirdUi:
@@ -422,7 +294,7 @@ class ThirdUi:
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('SMS SIMULATION')
+        root.title('SMS JSW CASTER DRIVE PLC SIMULATION')
 
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
@@ -463,20 +335,9 @@ class App:
         print("System exited")
         sys.exit(0)
 
-
-# def callallanalog():
-#     import allanalogprocessing
-#     allanalogprocessing.process()
-#
-# def callallcontrolvalves():
-#     import allcontrolvalvesprocessing
-#     allcontrolvalvesprocessing.process()
-
-
-
 def main():
     logging.basicConfig(level=logging.DEBUG)
-    df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='Tag List')
+
     root = tk.Tk()
     app = App(root)
     app.root.mainloop()

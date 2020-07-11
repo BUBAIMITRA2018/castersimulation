@@ -37,7 +37,7 @@ class Cal_SchneiderDrives:
             for area in self.listofdrivearea:
                 list1 = []
                 for item in self.listofdrives:
-                    if item.areaname == area:
+                    if str(item.areaname) == str(area):
                         list1.append(item)
                 self.devicelistperarea.append(list1)
 

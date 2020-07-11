@@ -59,7 +59,7 @@ class Fn_digitalsignal(Eventmanager):
             sta_con_plc = client.opc_client_connect(self.filename)
             writegeneral = WriteGeneral(sta_con_plc)
             writegeneral.writesymbolvalue(self.OutDigital,"digital", 0 )
-            sta_con_plc.disconnect()
+            sta_con_plc.close()
         except Exception as e:
             level = logging.ERROR
             messege = "Fn_Digitalsignal" + self.devicename + " Error messege(initilization)" + str(e.args)
@@ -81,7 +81,11 @@ class Fn_digitalsignal(Eventmanager):
         if cond1_val and cond2_val and cond3_val and cond4_val:
             writegeneral.writesymbolvalue(self.OutDigital, "digital", 1)
 
-        sta_con_plc.disconnect()
+        else:
+            writegeneral.writesymbolvalue(self.OutDigital, "digital", 0)
+
+
+        sta_con_plc.close()
 
 
 

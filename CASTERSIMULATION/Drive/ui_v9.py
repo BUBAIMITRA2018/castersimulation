@@ -16,7 +16,7 @@ import allcontrolvalvesprocessing
 import allanalogprocessing
 import alldigitalprocessing
 import allabpdriveprocessing
-
+import allrampprocessing
 
 
 
@@ -273,6 +273,7 @@ class FormUi:
             self.analogobject = allanalogprocessing.analogprocess(self.alldevices,self.import_file_path)
             self.digitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
             self.abbobject = allabpdriveprocessing.abpdriveprocessing(self.alldevices,self.import_file_path)
+            self.rampobject = allrampprocessing.rampprocess(self.alldevices,self.import_file_path)
 
 
 
@@ -328,12 +329,24 @@ class FormUi:
     def callallanalogs(self,com, devices):
         while not self.DEAD:
             self.analogobject.process()
+             # time.sleep(2)
+
+    def callallramps(self, com, devices):
+        while not self.DEAD:
+            self.rampobject.process()
             # time.sleep(2)
+
+
+
 
     def callendocers(self,com,devices):
         while not self.DEAD:
             allencoderprocessing.process(com, devices)
             # time.sleep(2)
+
+    def callallsiemensdrive(self,com,devices):
+        while not self.DEAD:
+            self.siemensdriveobject.process()
 
     def callDrives(self,com,devices):
         while not self.DEAD:
@@ -394,9 +407,18 @@ class FormUi:
         self.analogtread.start()
         self.analogstartbutton.configure(text="analogstarted")
 
+    def rampstart(self):
+        self.DEAD = False
+        self.ramptread = threading.Thread(target=self.callallramps, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.ramptread)
+        self.ramptread.start()
+        self.rampstartbutton.configure(text="rampstarted")
+
+
+
     def seimensdrivestart(self):
         self.DEAD = False
-        self.siemnenstread = threading.Thread(target=self.callDrives, args=(self.comm_object, self.alldevices))
+        self.siemnenstread = threading.Thread(target=self.callallsiemensdrive, args=(self.comm_object, self.alldevices))
         self.siemnenstread.start()
         self.drivestartbutton.configure(text="drivestarted")
 
@@ -412,6 +434,11 @@ class FormUi:
         self.listofthread.append(self.digitaltread)
         self.digitaltread.start()
         self.digitalstartbutton.configure(text="digitaltarted")
+
+
+
+
+
 
     def startprocess(self):
 
@@ -445,6 +472,9 @@ class FormUi:
         self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
         self.controlvalvestartbutton.grid(column=1, row=3)
 
+        self.rampstartbutton = ttk.Button(self.win, text='rampstart', command=self.rampstart)
+        self.rampstartbutton.grid(column=1, row=4)
+
 
     def stopprocess(self):
 
@@ -458,6 +488,7 @@ class FormUi:
         self.analogstartbutton.configure(text = 'analogstart')
         self.drivestartbutton.configure(text = 'drivestart')
         self.digitalstartbutton.configure(text='digitalstart')
+        self.rampstartbutton.configure(text='rampstart')
 
 
 
