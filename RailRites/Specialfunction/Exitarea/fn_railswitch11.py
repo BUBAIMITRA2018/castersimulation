@@ -111,18 +111,17 @@ class Fn_RailSwitch11(Eventmanager):
                 writegeneral.writesymbolvalue(self.trackposition3, 0, 'S7WLBit')
                 # self.count = self.count - 1
 
-            if self.count == 4:
+            if self.drivecmdtagvalue == 2063:
                 writegeneral.writesymbolvalue(self.forwardendpoint, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.forwardendpoint1, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.forwardendpoint2, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.forwardendpoint3, 0, 'S7WLBit')
 
-            if self.count == 2:
+            if self.drivecmdtagvalue == 15:
                 writegeneral.writesymbolvalue(self.reverseendpoint, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.reverseendpoint1, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.reverseendpoint2, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.reverseendpoint3, 0, 'S7WLBit')
-
             if self.count == 5:
                 sleep(2)
                 writegeneral.writesymbolvalue(self.forwardendpoint, 1, 'S7WLBit')

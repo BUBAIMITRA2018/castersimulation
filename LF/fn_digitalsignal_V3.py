@@ -111,7 +111,7 @@ class Fn_digitalsignal(Eventmanager):
                 logger.log(level, messege)
 
             else:
-                print("digital process 2")
+
                 writegeneral.writesymbolvalue(self.OutDigital, 0, 'S7WLBit')
 
 

@@ -14,13 +14,14 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.controlword = args[1].readsymbolvalue(item.cw,'S7WLWord','PA')
-            item.speedsetpoint = args[1].readsymbolvalue(item.speedSP, 'S7WLWord', 'PA')
-            item.BreakOpenCmd = args[1].readsymbolvalue(item.speedSP, 'S7WLWord', 'PA')
-            if len(item.startcmdtag) > 3:
-                item.StartCmd = args[1].readsymbolvalue(item.startcmdtag, 'S7WLBit', 'PA')
-            if len(item.stopcmdtag) > 3:
-                item.StopCmd = args[1].readsymbolvalue(item.stopcmdtag, 'S7WLBit', 'PA')
+            speedfbback =  args[1].readDBvalue(item.speedFB,'S7WLReal')
+            if speedfbback != 0 :
+                item.BreakOpenCmd = True
+            else:
+                item.BreakOpenCmd = False
+
+
+
 
 
 

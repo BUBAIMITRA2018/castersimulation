@@ -28,10 +28,8 @@ class Fn_ABP_Drive(Eventmanager):
         self._speedsetpoint  = False
         self._startcmdvalue = False
         self._stopcmdvalue = False
-
-
-
         self.setup()
+        self.initilizedigitalinput()
         super().__init__(lambda: self.driveprocess())
 
 
@@ -106,18 +104,21 @@ class Fn_ABP_Drive(Eventmanager):
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
 
-        if len(self.DriveRdytag) > 3:
-            writegeneral.writesymbolvalue(self.DriveRdytag, 1, 'S7WLBit')
-            level = logging.INFO
-            messege = self.devicename + ":" + self.DriveRdytag + " is trigger by 1"
-            logger.log(level, messege)
+        # if len(self.DriveRdytag) > 3:
+        #     writegeneral.writeDBvalue(self.DriveRdytag, 1, 'S7WLBit')
+        #     level = logging.INFO
+        #     messege = self.devicename + ":" + self.DriveRdytag + " is trigger by 1"
+        #     logger.log(level, messege)
+        #
+        #
+        # if len(self.FaultFBtag) > 3:
+        #     writegeneral.writeDBvalue(self.FaultFBtag, 1, 'S7WLBit')
+        #     level = logging.INFO
+        #     messege = self.devicename + ":" + self.FaultFBtag + " is trigger by 1"
+        #     logger.log(level, messege)
 
 
-        if len(self.FaultFBtag) > 3:
-            writegeneral.writesymbolvalue(self.FaultFBtag, 1, 'S7WLBit')           
-            level = logging.INFO
-            messege = self.devicename + ":" + self.FaultFBtag + " is trigger by 1"
-            logger.log(level, messege)
+        writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
 
         sta_con_plc.disconnect()
 
@@ -140,96 +141,39 @@ class Fn_ABP_Drive(Eventmanager):
             if len(self.stopcmdtag) > 3:
                 self.stopcmdvalue  = readgeneral.readsymbolvalue(self.stopcmdtag,'S7WLBit', 'PA')
 
+            self.cw_val = int(readgeneral.readsymbolvalue(self.cw, 'S7WLWord', 'PA'))
 
+            if self.cw_val == 0:
+                writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
+                writegeneral.writeDBvalue(self.current, 0, 'S7WLWord')
+                writegeneral.writeDBvalue(self.torque, 0, 'S7WLWord')
+                if len(self.dcvoltage) > 3:
+                    writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
-            if len(self.cw)>3 and len(self.sw)>3 and len(self.speedSP):
-                self.cw_val = int(readgeneral.readsymbolvalue(self.cw,'S7WLWord', 'PA'))
-                self.sw_val = int(readgeneral.readsymbolvalue(self.sw,'S7WLWord', 'PA'))
-                if  self.cw_val != 0 and self.cw_val == 1150:
-                    writegeneral.writesymbolvalue(self.sw,13169,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.current, 0,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.dcvoltage,27648,'S7WLWord')
-                    self.statusword = 13169
+            if self.cw_val == 1030:
+                writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
+                writegeneral.writeDBvalue(self.current, 0, 'S7WLWord')
+                writegeneral.writeDBvalue(self.torque, 0, 'S7WLWord')
+                if len(self.dcvoltage) > 3:
+                    writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
+            if self.cw_val == 1031:
+                speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'S7WLWord', 'PA'))
+                writegeneral.writeDBvalue(self.sw, 14131, 'S7WLWord')
+                writegeneral.writeDBvalue(self.current, 17000, 'S7WLWord')
+                writegeneral.writeDBvalue(self.torque, 17000, 'S7WLWord')
+                writegeneral.writeDBvalue(self.speedFB, speedSP_val, 'S7WLWord')
+                if len(self.dcvoltage) > 3:
+                    writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
-
-                if self.cw_val != 0 and self.cw_val == 1151:
-                    
-                    writegeneral.writesymbolvalue(self.sw,13171,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.current, 40,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.torque, 40,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.dcvoltage, 27648,'S7WLWord')
-                self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP,'S7WLWord', 'PA'))
-
-
-
-                if (self.sw_val>0) and (self.cw_val == 1151) and (self.speedSP_val>0):
-                    self.speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP,'S7WLWord', 'PA'))
-                    writegeneral.writesymbolvalue(self.speedFB, self.speedSP_val,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.sw,13175,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.dcvoltage, 27648,'S7WLWord')
-
-
-
-                if(self.speedSP_val == 0):
-                    writegeneral.writesymbolvalue(self.speedFB, 0,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.dcvoltage, 27648,'S7WLWord')
-
-
-                if self.cw_val != 1151 :
-                    writegeneral.writesymbolvalue(self.sw, 13169,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.current, 0,'S7WLWord')
-                    writegeneral.writesymbolvalue(self.dcvoltage, 27648,'S7WLWord')
-
-
-
-                self.sw_val = int(readgeneral.readsymbolvalue(self.sw,'S7WLWord', 'PA'))
-                self.speed_val = int(readgeneral.readsymbolvalue(self.speedFB,'S7WLWord', 'PA'))
-
-
-
-
-                messege1 = self.devicename + ":" + self.sw + " tag value is " + str(self.sw) \
-                + self.speedFB + " tag value is " + str(self.speed_val)
-                level = logging.WARNING
-                logger.log(level, messege1)
-
-            else:
-
-                if len(self.cw) > 3:
-                    pass
-                else:
-                    messege1 = self.devicename + ":" + self.cw + " tag is missing"
-                    level2 = logging.WARNING
-                    logger.log(level2, messege1)
-
-                if len(self.sw) > 3:
-                    pass
-                else:
-                    messege2 = self.devicename + ":" + self.sw + " tag is missing"
-                    level2 = logging.WARNING
-                    logger.log(level2, messege2)
-
-                if len(self.speedSP) > 3:
-                    pass
-                else:
-                    messege3 = self.devicename + ":" + (self.sw) + " tag is missing"
-                    level2 = logging.WARNING
-                    logger.log(level2, messege3)
-
-            if self.startcmdvalue :
-                if(len(self.RunningFBtag) > 3):
-                    writegeneral.writesymbolvalue(self.RunningFBtag, 1,'S7WLBit')
-
-                if (len(self.ONFBtag) > 3):
-                    writegeneral.writesymbolvalue(self.ONFBtag, 1,'S7WLBit')
-
-            if self.stopcmdvalue:
-                if (len(self.RunningFBtag) > 3):
-                    writegeneral.writesymbolvalue(self.RunningFBtag, 0,'S7WLBit')
-
-                if (len(self.ONFBtag) > 3):
-                    writegeneral.writesymbolvalue(self.ONFBtag, 0,'S7WLBit')
+            if self.cw_val != 0 and self.cw_val == 1151:
+                speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'S7WLWord', 'PA'))
+                writegeneral.writeDBvalue(self.sw, 13111, 'S7WLWord')
+                writegeneral.writeDBvalue(self.current, 17000, 'S7WLWord')
+                writegeneral.writeDBvalue(self.torque, 17000, 'S7WLWord')
+                writegeneral.writeDBvalue(self.speedFB, speedSP_val, 'S7WLWord')
+                if len(self.dcvoltage) > 3:
+                    writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
             sta_con_plc.disconnect()
 
@@ -273,7 +217,7 @@ class Fn_ABP_Drive(Eventmanager):
         writegeneral = WriteGeneral(sta_con_plc)
         if value != self._breakopencmd:
             if len(self.brakeonFB)> 3:
-                writegeneral.writesymbolvalue(self.brakeonFB, value,'S7WLBit')
+                writegeneral.writeDBvalue(self.brakeonFB, value,'S7WLBit')
                 self.breakopenfb = value
             self._breakopencmd = value
         sta_con_plc.disconnect()
@@ -307,7 +251,6 @@ class Fn_ABP_Drive(Eventmanager):
     @StartCmd.setter
     def StartCmd(self, value):
         if value != self._startcmdvalue:
-            print("drive is fire")
             super().fire()
             self._startcmdvalue = value
 

@@ -15,8 +15,9 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.FwdOnCmd= args[1].readsymbolvalue(item.fwdcmdtag,'S7WLBit','PA')
-            item.RevOnCmd = args[1].readsymbolvalue(item.revcmdtag,'S7WLBit','PA')
+            item.motor2dprocess()
+            # item.FwdOnCmd= args[1].readsymbolvalue(item.fwdcmdtag,'S7WLBit','PA')
+            # item.RevOnCmd = args[1].readsymbolvalue(item.revcmdtag,'S7WLBit','PA')
 
 class motor2dprocess:
     def __init__(self,alldevices,filename):

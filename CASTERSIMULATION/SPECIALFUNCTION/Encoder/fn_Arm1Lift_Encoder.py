@@ -21,30 +21,49 @@ class Fn_Arm1Lift_Encoder_Encoder():
 
         self.devicename = 'Arm1Lift_Encoder'
         self.filename = filename
-        self._breakopencmd = False
-        self._breakonFB = False
-        self._speedsetpoint  = False
-        self.encoderoutputtag = ''
-        self._encodervalue = 0
-        self.speedSP_val  = 0
         self.setup()
         self.initilizedigitalinput()
 
+    Input
+    parameters(w.r.t
+    simulation):-
 
+    1.
+    SP(word)
+    2.
+    CylStokeHighLim(const.)
+    3.
+    CylStokeLowLim(const.)
+    4.
+    SysPressHighLim(const.)
+    5.
+    SysPressLowLim(const.)
+    6.
+    SamplingRate(const.)
 
+    output
+    parameter(w.r.t
+    simulation):-
+
+    1.
+    RodSidePress(word)
+    2.
+    PistonSidePress(word)
+    3.
+    SSIPosFb(dword)
 
     def setup(self):
         try:
 
-            self.areatag = str(621.4)
-            self.speedFB = str('db3623.dbd32')
-            self.encoderoutputtag = str(3226)
-            self.mtrnominalSpd = int(90)
-            self.plcscancycle = float(0.1)
-            self.driveEngg = int(16384)
-            self.kval = int(1)
-            self.encodertype = str('absolute')
-            self.resolution = int(1024)
+            self.Sptag = str()
+            self.CylStokeHighLim = float()
+            self.CylStokeLowLim = float()
+            self.SysPressHighLim = float()
+            self.SysPressLowLim = float()
+            self.SamplingRate = str()
+            self.RodSidePresstag = str()
+            self.PistonSidePresstag =str()
+            self.SSIPosFbtag = str()
 
         except Exception as e:
             level = logging.ERROR

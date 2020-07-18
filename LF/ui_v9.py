@@ -13,12 +13,11 @@ import allvalve2sprocessing
 import allencoderprocessing
 import allsiemensdriveprocessing
 import allcontrolvalvesprocessing
-import allpropotionalvalvesprocessing
 import allanalogprocessing
 import alldigitalprocessing
 import allabpdriveprocessing
-import allschneiderdriveprocessing
 import allrampprocessing
+import  allpropotionalvalvesprocessing
 
 
 
@@ -271,13 +270,12 @@ class FormUi:
             self.sov1sprocessobject = allvalve1sprocessing.sov1sprocess(self.alldevices, self.import_file_path)
             self.sov2sprocessobject = allvalve2sprocessing.sov2sprocess(self.alldevices, self.import_file_path)
             self.controlvalveprocessobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
-            self.propotionvalveobjects = allpropotionalvalvesprocessing.proportionalvalveprocess(self.alldevices, self.import_file_path)
-            self.siemensdriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldevices,self.import_file_path)
+            self.driveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldevices,self.import_file_path)
             self.analogobject = allanalogprocessing.analogprocess(self.alldevices,self.import_file_path)
             self.digitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
             self.abbobject = allabpdriveprocessing.abpdriveprocessing(self.alldevices,self.import_file_path)
-            self.schneiderobject = allschneiderdriveprocessing.schneiderdriveprocessing(self.alldevices, self.import_file_path)
-            self.allrampobjects = allrampprocessing.rampprocess(self.alldevices, self.import_file_path)
+            self.rampobject = allrampprocessing.rampprocess(self.alldevices,self.import_file_path)
+            self.proportionalvalveobject = allpropotionalvalvesprocessing.proportionalvalveprocess(self.alldevices,self.import_file_path)
 
 
 
@@ -333,44 +331,41 @@ class FormUi:
     def callallanalogs(self,com, devices):
         while not self.DEAD:
             self.analogobject.process()
+             # time.sleep(2)
+
+    def callallramps(self, com, devices):
+        while not self.DEAD:
+            self.rampobject.process()
             # time.sleep(2)
+
 
     def callendocers(self,com,devices):
         while not self.DEAD:
             allencoderprocessing.process(com, devices)
             # time.sleep(2)
+    #
+    # def callallsiemensdrive(self,com,devices):
+    #     while not self.DEAD:
+    #         self.siemensdriveobject.process()
 
-    def callABBDrives(self,com,devices):
+    def callDrives(self,com,devices):
         while not self.DEAD:
             self.abbobject.process()
             # time.sleep(2)a
-
-    def callSchneiderDrives(self, com, devices):
-        while not self.DEAD:
-            self.schneiderobject.process()
-            # time.sleep(2)a
-
-    def callSiemensDrives(self, com, devices):
-        while not self.DEAD:
-            self.siemensdriveobject.process()
-
-    def callallramp(self):
-        while TRUE:
-            self.allrampobjects.process()
 
     def callcontrolvalves(self,com,devices):
         while not self.DEAD:
             self.controlvalveprocessobject.process()
             # time.sleep(2)
 
-    def callproportionalvalves(self, com, devices):
-        while not self.DEAD:
-            self.propotionvalveobjects.process()
-            # time.sleep(2)
-
     def calldiigitalprocess(self,com,devices):
         while not self.DEAD:
             self.digitalobject.process()
+
+
+    def callpropotionalvalveprocess(self,com,deice):
+        while not self.DEAD:
+            self.proportionalvalveobject.process()
 
 
 
@@ -417,35 +412,33 @@ class FormUi:
         self.analogtread.start()
         self.analogstartbutton.configure(text="analogstarted")
 
+    def rampstart(self):
+        self.DEAD = False
+        self.ramptread = threading.Thread(target=self.callallramps, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.ramptread)
+        self.ramptread.start()
+        self.rampstartbutton.configure(text="rampstarted")
+
     def abbdrivestart(self):
         self.DEAD = False
-        self.abbdrivetread = threading.Thread(target=self.callABBDrives, args=(self.comm_object, self.alldevices))
-        self.abbdrivetread.start()
-        self.abbdrivestartbutton.configure(text="ABBdrivestarted")
+        self.abbtread = threading.Thread(target=self.callDrives,
+                                              args=(self.comm_object, self.alldevices))
+        self.abbtread.start()
+        self.drivestartbutton.configure(text="drivestarted")
 
-    def siemensdrivestart(self):
-        self.DEAD = False
-        self.siemnenstread = threading.Thread(target=self.callSiemensDrives, args=(self.comm_object, self.alldevices))
-        self.siemnenstread.start()
-        self.siemensdrivestartbutton.configure(text="Siemensdrivestarted")
 
-    def schneiderdrivestart(self):
-        self.DEAD = False
-        self.schneidertread = threading.Thread(target=self.callSchneiderDrives, args=(self.comm_object, self.alldevices))
-        self.schneidertread.start()
-        self.siemensdrivestartbutton.configure(text="Schneiderdrivestarted")
+
+    # def seimensdrivestart(self):
+    #     self.DEAD = False
+    #     self.siemnenstread = threading.Thread(target=self.callallsiemensdrive, args=(self.comm_object, self.alldevices))
+    #     self.siemnenstread.start()
+    #     self.drivestartbutton.configure(text="drivestarted")
 
     def controlvalvestart(self):
         self.DEAD = False
         self.controlvalvetread = threading.Thread(target=self.callcontrolvalves,args=(self.comm_object, self.alldevices))
         self.controlvalvetread.start()
         self.controlvalvestartbutton.configure(text="controlvalvestarted")
-
-    def propotionalvalvestart(self):
-        self.DEAD = False
-        self.proportionalvalvetread = threading.Thread(target=self.callproportionalvalves,args=(self.comm_object, self.alldevices))
-        self.proportionalvalvetread.start()
-        self.proportionalvalvestartbutton.configure(text="proportionalvalvestarted")
 
     def digitalprocessstart(self):
         self.DEAD = False
@@ -454,12 +447,15 @@ class FormUi:
         self.digitaltread.start()
         self.digitalstartbutton.configure(text="digitaltarted")
 
-    def rampstart(self):
+
+    def proportionalprocessstart(self):
         self.DEAD = False
-        self.ramptread = threading.Thread(target=self.callallramp)
-        self.listofthread.append(self.ramptread)
-        self.ramptread.start()
-        self.rampstartbutton.config(text='RampStarted')
+        self.proportionalvalvetread = threading.Thread(target=self.callpropotionalvalveprocess, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.proportionalvalvetread)
+        self.proportionalvalvetread.start()
+        self.proportionalstartbutton.configure(text="proprotionalvalvestarted")
+
+
 
 
 
@@ -490,23 +486,17 @@ class FormUi:
         self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
         self.analogstartbutton.grid(column=1, row=1)
 
-        self.abbdrivestartbutton = ttk.Button(self.win, text='abbdrivestart', command=self.abbdrivestart)
-        self.abbdrivestartbutton.grid(column=1, row=2)
+        self.drivestartbutton = ttk.Button(self.win, text='drivestart', command=self.abbdrivestart)
+        self.drivestartbutton.grid(column=1, row=2)
 
         self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
         self.controlvalvestartbutton.grid(column=1, row=3)
 
-        self.siemensdrivestartbutton = ttk.Button(self.win, text='siemensDriveStart', command=self.siemensdrivestart)
-        self.siemensdrivestartbutton.grid(column=1, row=4)
+        self.rampstartbutton = ttk.Button(self.win, text='rampstart', command=self.rampstart)
+        self.rampstartbutton.grid(column=1, row=4)
 
-        self.schneiderdrivestartbutton = ttk.Button(self.win, text='schneiderDriveStart', command=self.schneiderdrivestart)
-        self.schneiderdrivestartbutton.grid(column=0, row=5)
-
-        self.proportionalvalvestartbutton = ttk.Button(self.win, text='proportionalvalvestart', command=self.propotionalvalvestart)
-        self.proportionalvalvestartbutton.grid(column=1, row=5)
-
-        self.rampstartbutton = ttk.Button(self.win, text='Ramp_Start', command=self.rampstart)
-        self.rampstartbutton.grid(column=0, row=6)
+        self.proportionalstartbutton = ttk.Button(self.win, text='ProportionalStart', command=self.proportionalprocessstart)
+        self.proportionalstartbutton.grid(column=0, row=5)
 
 
     def stopprocess(self):
@@ -518,13 +508,14 @@ class FormUi:
         self.sov2startbutton.configure(text = 'sov2start')
         self.encoderstartbutton.configure(text = 'encoderstart')
         self.controlvalvestartbutton.configure(text = 'controlvalstart')
-        self.proportionalvalvestartbutton.configure(text='proportionalvalstart')
         self.analogstartbutton.configure(text = 'analogstart')
-        self.siemensdrivestartbutton.configure(text = 'siemensdrivestart')
+        self.drivestartbutton.configure(text = 'drivestart')
         self.digitalstartbutton.configure(text='digitalstart')
-        self.abbdrivestartbutton.configure(text = 'abbdrivestart')
-        self.schneiderdrivestartbutton.configure(text = 'schneiderdrivesstart')
-        self.rampstartbutton.configure(text='RampStart')
+        self.rampstartbutton.configure(text='rampstart')
+        self.proportionalstartbutton.configure(text='ProportionalStart')
+
+
+
 
 
 
@@ -537,7 +528,7 @@ class FormUi:
 
 
             if len(tagname) >= 3:
-                print("length is",len(str(tagname)))
+
                 self.comm_object.writegeneral.writesymbolvalue(tagname, tagvalue,datatype)
 
                 level = logging.DEBUG
@@ -551,20 +542,19 @@ class FormUi:
             logger.log(level, messege)
 
     def force(self):
-
         self.win = tk.Toplevel(self.frame)
         self.win.geometry('300x100')
 
-        self.listofwritetags = self.collectwritetaglist()
-        ttk.Label(self.win, text='Choose Tag').grid(column=1, row=0)
-        self.tagname_entered = AutocompleteCombox.AutocompleteCombobox(self.win, width=10)
-        self.tagname_entered.grid(column=1, row=1)
+        self.listofwritetags  =self.collectwritetaglist()
+        ttk.Label(self.win,text = 'Choose Tag').grid(column=1,row = 0)
+        self.tagname_entered = AutocompleteCombox.AutocompleteCombobox(self.win,width=10)
+        self.tagname_entered.grid(column=1,row = 1)
 
         self.datatype_entered = AutocompleteCombox.AutocompleteCombobox(self.win, width=10)
         self.datatype_entered.grid(column=1, row=2)
 
         self.tagname_entered.set_completion_list(self.listofwritetags)
-        self.datatype_entered.set_completion_list(['S7WLBit', 'S7WLWord'])
+        self.datatype_entered.set_completion_list(['S7WLBit','S7WLWord'])
         self.tagname_entered.focus_set()
         self.datatype_entered.focus_set()
 
@@ -574,11 +564,9 @@ class FormUi:
         self.tagvalue.grid(column=2, row=1)
 
         ttk.Label(self.win, text='Action').grid(column=2, row=3)
-        self.button1 = ttk.Button(self.win, text="Submit", command=self.writetag, state=NORMAL)
+        self.button1 = ttk.Button(self.win, text="Submit", command=self.writetag,state=NORMAL)
         self.button1.grid(column=3, row=3)
         self.win.mainloop()
-
-
 
     def collectwritetaglist(self):
         list1 = []
@@ -616,7 +604,7 @@ class ThirdUi:
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('SMS ESSER LF PLC SIMULATION')
+        root.title('SMS ESSER PLC SIMULATION')
 
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)

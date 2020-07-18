@@ -155,9 +155,9 @@ class Fn_Motor2D(Eventmanager):
 
 
             if len(self.faultFBtag) > 3:
-                writegeneral.writesymbolvalue(self.faultFBtag, 0,'S7WLBit')
+                writegeneral.writesymbolvalue(self.faultFBtag, 1,'S7WLBit')
                 level = logging.INFO
-                messege = self.devicename + ":" + self.faultFBtag + " is trigger by 0"
+                messege = self.devicename + ":" + self.faultFBtag + " is trigger by 1"
                 logger.log(level, messege)
 
             sta_con_plc.disconnect()
@@ -187,15 +187,8 @@ class Fn_Motor2D(Eventmanager):
                 writegeneral.writesymbolvalue(self.fwdrunFBtag, 1,'S7WLBit')
                 writegeneral.writesymbolvalue(self.revrunFBtag, 0,'S7WLBit')
 
-                if len(self.openLStag) > 3:
-                    writegeneral.writesymbolvalue(self.openLStag, 1, 'S7WLBit')
-
-                if len(self.closeLStag) > 3:
-                    writegeneral.writesymbolvalue(self.closeLStag, 0, 'S7WLBit')
-
-
-
-
+                writegeneral.writesymbolvalue(self.openLStag, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.closeLStag, 0, 'S7WLBit')
 
                 self.RevRunFB = False
                 self.FwdRunFB  = True
@@ -208,12 +201,8 @@ class Fn_Motor2D(Eventmanager):
                 writegeneral.writesymbolvalue(self.fwdrunFBtag, 0,'S7WLBit')
                 writegeneral.writesymbolvalue(self.revrunFBtag, 1,'S7WLBit')
 
-                if len(self.openLStag) > 3:
-                    writegeneral.writesymbolvalue(self.openLStag, 0, 'S7WLBit')
-
-                if len(self.closeLStag) > 3:
-                    writegeneral.writesymbolvalue(self.closeLStag, 1, 'S7WLBit')
-
+                writegeneral.writesymbolvalue(self.openLStag, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.closeLStag, 1, 'S7WLBit')
                 self.RevRunFB = True
                 self.FwdRunFB = False
                 level = logging.WARNING

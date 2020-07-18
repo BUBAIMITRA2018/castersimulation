@@ -13,15 +13,15 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.controlword = args[1].readgeneral.readtagvalue(item.cw)
-            item.speedsetpoint = args[1].readgeneral.readtagvalue(item.speedSP)
+            item.controlword = args[1].readsymbolvalue(item.cw,'S7WLWord', 'PA')
+            item.speedsetpoint = args[1].readsymbolvalue(item.speedSP,'S7WLWord', 'PA')
 
-            if len(item.brakeopncmd) > 3:
-                item.breakopencmd = args[1].readgeneral.readtagvalue(item.brakeopncmd)
-            if len(item.startcmdtag) > 3:
-                item.StartCmd = args[1].readgeneral.readtagvalue(item.startcmdtag)
-            if len(item.stopcmdtag) > 3:
-                item.StopCmd = args[1].readgeneral.readtagvalue(item.stopcmdtag)
+            # if len(item.brakeopncmd) > 3:
+            #     item.breakopencmd = args[1].readgeneral.readtagvalue(item.brakeopncmd)
+            # if len(item.startcmdtag) > 3:
+            #     item.StartCmd = args[1].readgeneral.readtagvalue(item.startcmdtag)
+            # if len(item.stopcmdtag) > 3:
+            #     item.StopCmd = args[1].readgeneral.readtagvalue(item.stopcmdtag)
 
 class abpdriveprocessing :
 
@@ -40,6 +40,7 @@ class abpdriveprocessing :
             areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
             if areavalue == 1:
                 self.observer.notify(devices, self.readgeneral)
+
 
 
 

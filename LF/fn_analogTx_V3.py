@@ -70,7 +70,6 @@ class Fn_AnalogTx(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
-
             writegeneral.writesymbolvalue(self.outputtag, 0 , 'S7WLWord')
 
             sta_con_plc.disconnect()

@@ -33,18 +33,16 @@ class FN_ProportionalValve(Eventmanager):
                 if col==3:
                     self.areatag = str(tag)
 
-                if col==4:
-                    self.cmdtag = str(tag)
 
-                if col == 5:
+                if col == 4:
                     self.possetpointtag = str(tag)
 
 
-                if col == 6:
+                if col == 5:
                     self.upposlimitswtag = str(tag)
 
 
-                if col == 7:
+                if col == 6:
                     self.downposlimitswtag =str(tag)
 
 
@@ -78,25 +76,34 @@ class FN_ProportionalValve(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
-            self.currentvalue = readgeneral.readsymbolvalue(self.possetpointtag, 'S7WLWord', 'PE')
+            self.currentvalue = readgeneral.readsymbolvalue(self.possetpointtag, 'S7WLWord', 'PA')
+
+            print("proportional valve start")
+            print("current value is ", self.currentvalue)
 
 
 
-            if self.currentvalue == 0:
-                time.sleep(1)
-                writegeneral.writesymbolvalue(self.downposlimitswtag, 0, 'S7WLBit')
-
-                level = logging.WARNING
-                messege = self.devicename + ":" + self.downposlimitswtag + " value is" + "1"
-                logger.log(level, messege)
-
-            if self.currentvalue == 27648:
-                time.sleep(1)
+            if self.currentvalue == 8294:
                 writegeneral.writesymbolvalue(self.upposlimitswtag, 0, 'S7WLBit')
+                time.sleep(1)
+                writegeneral.writesymbolvalue(self.downposlimitswtag, 1, 'S7WLBit')
 
                 level = logging.WARNING
                 messege = self.devicename + ":" + self.downposlimitswtag + " value is" + "1"
                 logger.log(level, messege)
+
+            if self.currentvalue == 19353:
+                writegeneral.writesymbolvalue(self.downposlimitswtag, 0, 'S7WLBit')
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.upposlimitswtag, 1, 'S7WLBit')
+
+                level = logging.WARNING
+                messege = self.devicename + ":" + self.downposlimitswtag + " value is" + "1"
+                logger.log(level, messege)
+
+
+
+
 
 
             sta_con_plc.disconnect()

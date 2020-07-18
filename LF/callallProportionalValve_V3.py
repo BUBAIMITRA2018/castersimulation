@@ -38,11 +38,11 @@ class Cal_AllProportionalValves:
             for area in self.listofProportionalvalvearea:
                 list1 = []
                 for item in self.listofPropotionalValve:
-                    if item.areaname == area:
+                    if str(item.areaname) == str(area):
                         list1.append(item)
                 self.devicelistperarea.append(list1)
 
-            keys = self.listofvfarea
+            keys = self.listofProportionalvalvearea
             values = self.devicelistperarea[1:]
             # Declear empty list
             self.dictionary = dict(zip(keys,values))

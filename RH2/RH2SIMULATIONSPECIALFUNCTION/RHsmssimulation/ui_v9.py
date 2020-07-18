@@ -7,6 +7,7 @@ import PIL.Image
 import PIL.ImageTk
 import AutocompleteCombox
 import LTC_1_Processing
+import LTC_2_Processing
 import general
 import time
 import alldevices_V3
@@ -241,6 +242,7 @@ class FormUi:
             time.sleep(1)
 
             self.LTC1object = LTC_1_Processing.LTC1Process(self.alldevices)
+            self.LTC2object = LTC_2_Processing.LTC2Process(self.alldevices)
 
 
 
@@ -275,12 +277,23 @@ class FormUi:
             self.LTC1object.process()
             # time.sleep(2)
 
+    def callLTC2(self):
+        while not self.DEAD:
+            self.LTC2object.process()
+            # time.sleep(2)
+
 
     def ltc1start(self):
         self.DEAD = False
         self.railswitchtread = threading.Thread(target=self.callLTC1)
         self.railswitchtread.start()
         self.ltc1startbutton.configure(text="ltc1started")
+
+    def ltc2start(self):
+        self.DEAD = False
+        self.ltc2thread = threading.Thread(target=self.callLTC2)
+        self.ltc2thread.start()
+        self.ltc2startbutton.configure(text="ltc2started")
 
 
 
@@ -303,11 +316,15 @@ class FormUi:
         self.ltc1startbutton = ttk.Button(self.win, text='LTC1_START', command=self.ltc1start)
         self.ltc1startbutton.grid(column=0, row=0)
 
+        self.ltc2startbutton = ttk.Button(self.win, text='LTC2_START', command=self.ltc2start)
+        self.ltc2startbutton.grid(column=0, row=1)
+
 
     def stopprocess(self):
 
         self.DEAD = True
-        self.ltc1startbutton.configure(text='railswitchstart')
+        self.ltc1startbutton.configure(text='LTC1_START')
+        self.ltc2startbutton.configure(text='LTC2_START')
 
 
 

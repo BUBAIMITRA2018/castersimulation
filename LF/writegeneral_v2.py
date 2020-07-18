@@ -34,7 +34,7 @@ class WriteGeneral():
             set_dword(self.result, 0, tagvalue)
         self.client.write_area(areas['PE'], 0, self.byte, self.result)
 
-    def writeDBvalue(self, address, tagvalue, datatype, dataarea):
+    def writeDBvalue(self, address, tagvalue, datatype):
         addressconverted = str(address)
         data1 = addressconverted[addressconverted.find("b") + 1:addressconverted.find(".")]
         data2 = addressconverted[addressconverted.find("d", 2) + 1:]

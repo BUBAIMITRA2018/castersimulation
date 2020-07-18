@@ -9,34 +9,43 @@ class AreaObserver:
         observable.register_observer(self)
 
     def notify(self,  *args, **kwargs):
-        for item in args[0]:
-            inverse_condition = False
-            propotional_condition = False
 
+        try:
+            for item in args[0]:
+                inverse_condition = False
+                propotional_condition = False
 
+                if len(item.cmdtag5) > 3:
+                    inverse_condition = (args[1].readsymbolvalue(item.cmdtag5, 'S7WLBit', 'PE')) \
+                                        or (args[1].readsymbolvalue(item.cmdtag6, 'S7WLBit', 'PE')) \
+                                        or (args[1].readsymbolvalue(item.cmdtag7, 'S7WLBit', 'PE')) \
+                                        or (args[1].readsymbolvalue(item.cmdtag8, 'S7WLBit', 'PE'))
+                    print("inverse command", inverse_condition)
 
-            if len(item.cmdtag5) > 3:
-                inverse_condition = (args[1].readsymbolvalue(item.cmdtag5, 'S7WLBit', 'PA')) \
-                                    or (args[1].readsymbolvalue(item.cmdtag6, 'S7WLBit', 'PA')) \
-                                    or (args[1].readsymbolvalue(item.cmdtag7, 'S7WLBit', 'PA')) \
-                                    or (args[1].readsymbolvalue(item.cmdtag8, 'S7WLBit', 'PA'))
+                print("tag is ", item.cmdtag1)
 
-            if len(item.cmdtag1) > 3:
-                propotional_condition = (args[1].readsymbolvalue(item.cmdtag1, 'S7WLBit', 'PA'))\
-                                        and (args[1].readsymbolvalue(item.cmdtag2, 'S7WLBit', 'PA'))\
-                                        and (args[1].readsymbolvalue(item.cmdtag3, 'S7WLBit', 'PA')) \
-                                        and (args[1].readsymbolvalue(item.cmdtag4, 'S7WLBit', 'PA'))
+                if len(item.cmdtag1) >= 3:
+                    propotional_condition = (args[1].readsymbolvalue(item.cmdtag1, 'S7WLBit', 'PE')) \
+                                            and (args[1].readsymbolvalue(item.cmdtag2, 'S7WLBit', 'PE')) \
+                                            and (args[1].readsymbolvalue(item.cmdtag3, 'S7WLBit', 'PE')) \
+                                            and (args[1].readsymbolvalue(item.cmdtag4, 'S7WLBit', 'PE'))
 
+                if len(item.cmdtag1) >= 3:
+                    item.IncreaseCmd = propotional_condition and not inverse_condition
 
-            if len(item.cmdtag1) > 3:
-                item.IncreaseCmd = propotional_condition and not inverse_condition
+                if len(item.cmdtag5) > 3:
+                    item.DecreaseCmd = inverse_condition and not propotional_condition
+                else:
+                    print("lower limit", item.lowerlimit)
+                    print("process value", item.processvalue)
+                    item.DecreaseCmd = (not propotional_condition) and (item.lowerlimit < item.processvalue)
 
-            if len(item.cmdtag5) > 3:
-                item.DecreaseCmd = inverse_condition and not propotional_condition
-            else:
-                item.DecreaseCmd = (not propotional_condition) and (item.lowerlimitvalue < item.processvalue)
+        except Exception as e:
+            level = logging.ERROR
+            print("error is ", e.args)
 
-
+            messege = "Ramp" + " Error messege(allrampprocessing)" + str(e.args)
+            logger.log(level, messege)
 
 
 class rampprocess:
@@ -54,7 +63,9 @@ class rampprocess:
     def process(self):
         for area, devices in readkeyandvalues(self.alldevices):
             areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
+
             if areavalue == 1:
+
                 self.observer.notify(devices, self.readgeneral)
 
 

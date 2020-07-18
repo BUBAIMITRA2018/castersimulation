@@ -12,7 +12,6 @@ import  callallsiemensdrive1D_V3
 import  callalldigital_V3
 import calallcontrolvalves_V3
 import callallProportionalValve_V3
-import calallSchneiderdrives_V3
 import callallramp_V3
 
 import pandas as pd
@@ -37,15 +36,13 @@ class AllDevices:
         self.dfoutsignal = pd.read_excel(import_file_path, sheet_name='OutputTx')
         self.dfanalog = pd.read_excel(import_file_path, sheet_name='AnalogTx')
         self.dfsiemensdrive = pd.read_excel(import_file_path, sheet_name='SiemensDrive')
-        self.dfschneiderdrive = pd.read_excel(import_file_path, sheet_name='SchneiderDrive')
         self.dfdigitalsignal = pd.read_excel(import_file_path, sheet_name='DigitalTx')
         self.dfcontrolvalve = pd.read_excel(import_file_path, sheet_name='ControlValves')
         self.dfPropotionalValves = pd.read_excel(import_file_path, sheet_name='ProportionalValves')
         self.dframpsignal = pd.read_excel(import_file_path, sheet_name='Ramp')
 
 
-
-
+        #
         self.allmotor1dobjects = callallmotor1D_V3.Cal_AllMotor1D(self.dfM1D, comobject,import_file_path)
         self.allmotor2dobjects = callallmotor2D_V3.Cal_AllMotor2D(self.dfM2D, comobject,import_file_path)
         self.allsov1sobjects = callallsov1S_V3.Cal_AllSov1S(self.dfS1S,comobject,import_file_path)
@@ -59,9 +56,8 @@ class AllDevices:
         self.allsiemensdrivesobjects = callallsiemensdrive1D_V3.Cal_AllSiemensDrive1D(self.dfsiemensdrive,comobject,import_file_path)
         self.alldigitalsignalobjects = callalldigital_V3.Cal_AllDigital(self.dfdigitalsignal,comobject,import_file_path)
         self.allcontrolvalveobjects = calallcontrolvalves_V3.Cal_AllControlValves(self.dfcontrolvalve,comobject,import_file_path)
-        self.allproptionalvalvesobjects = callallProportionalValve_V3.Cal_AllProportionalValves(self.dfcontrolvalve, comobject,import_file_path)
-        self.allschneiderdriveobjects = calallSchneiderdrives_V3.Cal_SchneiderDrives(self.dfschneiderdrive,comobject,import_file_path)
-        self.allrampsignalobjects = callallramp_V3.Cal_AllRampInputs(self.dframpsignal, comobject, import_file_path)
+        self.allproptionalvalvesobjects = callallProportionalValve_V3.Cal_AllProportionalValves( self.dfPropotionalValves, comobject,import_file_path)
+        self.rampobjects  = callallramp_V3.Cal_AllRampInputs(self.dframpsignal,comobject,import_file_path)
 
 
 
@@ -125,12 +121,8 @@ class AllDevices:
         return self.allproptionalvalvesobjects
 
     @property
-    def allschneiderdrives(self):
-        return self.allschneiderdriveobjects
-
-    @property
     def allrampobjects(self):
-        return self.allrampsignalobjects
+        return self.rampobjects
 
 
 

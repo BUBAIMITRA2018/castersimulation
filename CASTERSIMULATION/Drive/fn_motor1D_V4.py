@@ -191,11 +191,6 @@ class Fn_Motor1D(Eventmanager):
             messege = self.devicename + ":" + " Exception rasied(process): " + str(e.args) + str(e)
             logger.log(level, messege)
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
 
     @property
     def OnCmd(self):

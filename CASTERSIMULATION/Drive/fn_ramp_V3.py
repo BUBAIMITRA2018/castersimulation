@@ -191,7 +191,7 @@ class Fn_Ramp(Eventmanager):
             logger.log(level, messege)
 
     def scaling(self, val, highlimit, lowlimit):
-        rawvalue = int((val * 10000) / (highlimit - lowlimit))
+        rawvalue = int((val * 27648) / (highlimit - lowlimit))
         return rawvalue
 
     @property

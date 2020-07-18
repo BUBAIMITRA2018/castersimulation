@@ -64,7 +64,7 @@ class Fn_Sov1S(Eventmanager):
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
         if len(self.closeFBtag) > 3:
-            writegeneral.writesymbolvalue(self.closeFBtag, 1, 'S7WLBit')
+            writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
 
 
         sta_con_plc.disconnect()

@@ -3,6 +3,7 @@ from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
+import time
 from event_V2 import *
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_LTC1signal']
@@ -22,46 +23,22 @@ class Fn_LTC1signal(Eventmanager):
 
         try:
 
-            self.MainPowerSupplyMccbFault = str(25800)
-            self.MCBPOWERSUPPLYON = str(25801)
-            self.ControlSupplyMpcb415VAcFault = str(25802)
-            self.ControlSupplyForContactorsMpcb110VAcFault = str(25803)
-            self.UpsSupplyFault = str(25804)
-            self.InputContactorSwitchedOn = str(25805)
-            self.OutputContactorSwitchedOn = str(25806)
-            self.Mtr1MccbOn = str(25807)
-            self.Mtr2MccbOn = str(25808)
-            self.Motor1ContactorSwitchedOn = str(25809)
-            self.Motor2ContactorSwitchedOn = str(25810)
-            self.LTC1breakmpccbon = str(25811)
-            self.Motor1BrakeContactorSwitchedOn = str(25812)
-            self.Motor2BrakeContactorSwitchedOn = str(25832)
-            self.Motor1MpcbFault = str(25814)
-            self.Motor2MpcbFault = str(25815)
-            self.drivesw = str(25320)
-            self.zerospeed = str(25817)
 
 
-            self.InputContactorcmd = str(26224)
-            self.OutputContactorcmd = str(26225)
-            self.Standbydrivebreakcmd = str(26234)
-            # self.BypassReversecmd = str(26227)
-            self.BrakeControlcmd = str(26226)
-            self.Motor1Contactorcmd = str(26227)
-            self.Motor2Contactorcmd = str(26228)
+            self.Ltc1OvrtrPosFb = str(25569)
+            self.Ltc1ParkPosFb = str(25570)
+            self.Ltc1ParkSlowPosFb = str(25571)
+            self.Ltc1RhLoadPosFb = str(25572)
+            self.Ltc1VslExgPosFb = str(25573)
+            self.Ltc1DekurPosFb = str(25574)
+            self.Ltc1TreatPosFb = str(25575)
+            self.Ltc1TreatSlowPosFb = str(25576)
+            self.Ltc1WireFBPosFb = str(25577)
+            self.Ltc1WireOvrtrFBPosFb = str(25578)
+            self.maindrivespeedfb = str(25321)
+            self.standbydrivespeedfb = str(25331)
+            self.positivecount = 0
 
-            # self.encoderreading = str(25000)
-            #
-            # self.Ltc1EastParkOvrtrPosFb = str(25569)
-            # self.Ltc1EastParkPosFb = str(25570)
-            # self.Ltc1LdlLoadPosFb = str(25571)
-            # self.Ltc1RhLoadPosFb = str(25572)
-            # self.Ltc1CarIntlk1PosFb = str(25573)
-            # self.Ltc1CarIntlk2PosFb= str(25574)
-            # self.Ltc1RhTreat1PosFb = str(25575)
-            # self.Ltc1RhTreat2PosFb = str(25576)
-            # self.Ltc1WfWestPark1PosFb = str(25575)
-            # self.Ltc1WfWestPark2PosFb = str(25576)
 
 
         except Exception as e:
@@ -76,19 +53,34 @@ class Fn_LTC1signal(Eventmanager):
             sta_con_plc = client.opc_client_connect(self.filename)
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
+            self.positivecount = 0
+            writegeneral.writesymbolvalue(self.Ltc1OvrtrPosFb, 'digital', 0)
+            writegeneral.writesymbolvalue(self.Ltc1ParkPosFb, 'digital', 0)
+            writegeneral.writesymbolvalue(self.Ltc1ParkSlowPosFb, 'digital', 0)
+            writegeneral.writesymbolvalue(self.Ltc1VslExgPosFb, 'digital', 0)
+            writegeneral.writesymbolvalue(self.Ltc1DekurPosFb, 'digital', 0)
+            writegeneral.writesymbolvalue(self.Ltc1TreatPosFb, 'digital', 0)
+            writegeneral.writesymbolvalue(self.Ltc1TreatSlowPosFb, 'digital', 0)
+            writegeneral.writesymbolvalue(self.Ltc1WireFBPosFb, 'digital', 0)
+            writegeneral.writesymbolvalue(self.Ltc1WireOvrtrFBPosFb, 'digital', 0)
 
-            writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Motor1MpcbFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Motor2MpcbFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Mtr1MccbOn, 'digital', 1)
-            writegeneral.writesymbolvalue(self.Mtr2MccbOn, 'digital', 1)
-            writegeneral.writesymbolvalue(self.ControlSupplyForContactorsMpcb110VAcFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.ControlSupplyMpcb415VAcFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.UpsSupplyFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Motor1MpcbFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Motor2MpcbFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.MCBPOWERSUPPLYON, 'digital', 1)
-            writegeneral.writesymbolvalue(self.LTC1breakmpccbon, 'digital', 1)
+
+
+
+
+
+            # writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 0)
+            # writegeneral.writesymbolvalue(self.Motor1MpcbFault, 'digital', 0)
+            # writegeneral.writesymbolvalue(self.Motor2MpcbFault, 'digital', 0)
+            # writegeneral.writesymbolvalue(self.Mtr1MccbOn, 'digital', 1)
+            # writegeneral.writesymbolvalue(self.Mtr2MccbOn, 'digital', 1)
+            # writegeneral.writesymbolvalue(self.ControlSupplyForContactorsMpcb110VAcFault, 'digital', 0)
+            # writegeneral.writesymbolvalue(self.ControlSupplyMpcb415VAcFault, 'digital', 0)
+            # writegeneral.writesymbolvalue(self.UpsSupplyFault, 'digital', 0)
+            # writegeneral.writesymbolvalue(self.Motor1MpcbFault, 'digital', 0)
+            # writegeneral.writesymbolvalue(self.Motor2MpcbFault, 'digital', 0)
+            # writegeneral.writesymbolvalue(self.MCBPOWERSUPPLYON, 'digital', 1)
+            # writegeneral.writesymbolvalue(self.LTC1breakmpccbon, 'digital', 1)
 
             sta_con_plc.close()
 
@@ -106,89 +98,147 @@ class Fn_LTC1signal(Eventmanager):
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
 
-        InputContactorcmd =readgeneral.readsymbolvalue(self.InputContactorcmd,"digital")
-        OutputContactorcmd = readgeneral.readsymbolvalue(self.OutputContactorcmd, "digital")
-        Standbydrivebreakcmd =readgeneral.readsymbolvalue(self.Standbydrivebreakcmd,"digital")
-        # BypassReversecmd = readgeneral.readsymbolvalue(self.BypassReversecmd, "digital")
-        BrakeControlcmd = readgeneral.readsymbolvalue(self.BrakeControlcmd, "digital")
-        Motor1Contactorcmd = readgeneral.readsymbolvalue(self.Motor1Contactorcmd, "digital")
-        Motor2Contactorcmd = readgeneral.readsymbolvalue(self.Motor1Contactorcmd, "digital")
-        drivestatuswordvale =  readgeneral.readsymbolvalue(self.drivesw, "analog")
+        self.maindrivespeedfbvalue = readgeneral.readsymbolvalue(self.maindrivespeedfb,"analog")
+        self.standbydrivespeedfbvalue = readgeneral.readsymbolvalue(self.standbydrivespeedfb,"analog")
+        # self.Ltc1OvrtrPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1OvrtrPosFb,"digital")
+        # self.Ltc1ParkPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1ParkPosFb, "digital")
+        # self.Ltc1ParkSlowPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1ParkSlowPosFb, "digital")
+        # self.Ltc1RhLoadPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1RhLoadPosFb, "digital")
+        # self.Ltc1VslExgPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1VslExgPosFb, "digital")
+        # self.Ltc1DekurPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1DekurPosFb, "digital")
+        # self.Ltc1DekurPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1DekurPosFb, "digital")
+        # self.Ltc1TreatPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1TreatPosFb, "digital")
+        # self.Ltc1TreatSlowPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1TreatSlowPosFb, "digital")
+        # self.Ltc1WireFBPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1WireFBPosFb, "digital")
+        # self.Ltc1WireOvrtrFBPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1WireOvrtrFBPosFb, "digital")
+        # self.Ltc1WireOvrtrFBPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1WireOvrtrFBPosFb, "digital")
 
-        # encodervalue = readgeneral.readsymbolvalue(self.encoderreading, "analog")
-
-        if(InputContactorcmd):
-            writegeneral.writesymbolvalue(self.InputContactorSwitchedOn, 'digital', 1)
-
-        if (OutputContactorcmd):
-            writegeneral.writesymbolvalue(self.OutputContactorSwitchedOn, 'digital', 1)
-
-        # if (BypassForwardcmd):
-        #     writegeneral.writesymbolvalue(self.BypassForwardContactorOn, 'digital', 1)
-        #
-        # if (BypassReversecmd):
-        #     writegeneral.writesymbolvalue(self.BypassReverseContactorOn, 'digital', 1)
-
-        if (Standbydrivebreakcmd):
-            writegeneral.writesymbolvalue(self.Motor2BrakeContactorSwitchedOn, 'digital', 1)
-
-        if (BrakeControlcmd):
-            writegeneral.writesymbolvalue(self.Motor1BrakeContactorSwitchedOn, 'digital', 1)
+        cond1 = self.maindrivespeedfbvalue > 0 or self.standbydrivespeedfbvalue > 0
 
 
-            # writegeneral.writesymbolvalue(self.Motor2BrakeContactorSwitchedOn, 'digital', 1)
+        if cond1 > 0:
 
-        if (Motor1Contactorcmd):
-            writegeneral.writesymbolvalue(self.Motor1ContactorSwitchedOn, 'digital', 1)
+            if self.positivecount == 0:
 
-        if (Motor2Contactorcmd):
-            writegeneral.writesymbolvalue(self.Motor2ContactorSwitchedOn, 'digital', 1)
+                writegeneral.writesymbolvalue(self.Ltc1OvrtrPosFb, 'digital', 1)
+                self.positivecount = self.positivecount + 1
 
-        self.cond1 = (drivestatuswordvale == 14135) or (drivestatuswordvale == 30519)
+            if self.positivecount == 1 :
+                writegeneral.writesymbolvalue(self.Ltc1OvrtrPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1ParkPosFb, 'digital', 1)
 
-        if self.cond1:
-           writegeneral.writesymbolvalue(self.zerospeed, 'digital', 1)
+                self.positivecount = self.positivecount + 1
+
+            if self.positivecount == 2 :
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1ParkPosFb, 'digital', 0)
+                writegeneral.writesymbolvalue(self.Ltc1ParkSlowPosFb, 'digital', 1)
+                self.positivecount = self.positivecount + 1
+
+            if self.positivecount == 3 :
+                writegeneral.writesymbolvalue(self.Ltc1ParkSlowPosFb, 'digital', 0)
+                time.sleep(8)
+                writegeneral.writesymbolvalue(self.Ltc1RhLoadPosFb, 'digital', 1)
+                self.positivecount = self.positivecount + 1
+
+            if self.positivecount == 4:
+                writegeneral.writesymbolvalue(self.Ltc1RhLoadPosFb, 'digital', 0)
+                time.sleep(10)
+                writegeneral.writesymbolvalue(self.Ltc1TreatSlowPosFb, 'digital', 1)
+                self.positivecount = self.positivecount + 1
+
+            if self.positivecount == 5:
+                writegeneral.writesymbolvalue(self.Ltc1TreatSlowPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1TreatPosFb, 'digital', 1)
+                self.positivecount = self.positivecount + 1
+
+            if self.positivecount == 6:
+                writegeneral.writesymbolvalue(self.Ltc1TreatPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1VslExgPosFb, 'digital', 1)
+                self.positivecount = self.positivecount + 1
+
+            if self.positivecount == 6:
+                writegeneral.writesymbolvalue(self.Ltc1VslExgPosFb, 'digital', 0)
+                time.sleep(10)
+                writegeneral.writesymbolvalue(self.Ltc1DekurPosFb, 'digital', 1)
+                self.positivecount = self.positivecount + 1
+
+            if self.positivecount == 7:
+                writegeneral.writesymbolvalue(self.Ltc1DekurPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1WireFBPosFb, 'digital', 1)
+                self.positivecount = self.positivecount + 1
+
+            if self.positivecount == 8:
+                writegeneral.writesymbolvalue(self.Ltc1WireFBPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1WireOvrtrFBPosFb, 'digital', 1)
+
+        cond2 = self.maindrivespeedfbvalue < 0 or self.standbydrivespeedfbvalue < 0
 
 
+        if cond2 :
+
+            if self.positivecount == 0:
+                writegeneral.writesymbolvalue(self.Ltc1ParkPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1OvrtrPosFb, 'digital', 1)
 
 
+            if self.positivecount == 1:
+                writegeneral.writesymbolvalue(self.Ltc1ParkSlowPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1ParkPosFb, 'digital', 1)
+                self.positivecount = self.positivecount - 1
 
+            if self.positivecount == 2:
+                writegeneral.writesymbolvalue(self.Ltc1RhLoadPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1ParkSlowPosFb, 'digital', 1)
+                self.positivecount = self.positivecount - 1
 
-        
-        
+            if self.positivecount == 3:
+                writegeneral.writesymbolvalue(self.Ltc1TreatSlowPosFb, 'digital', 0)
+                time.sleep(8)
+                writegeneral.writesymbolvalue(self.Ltc1RhLoadPosFb, 'digital', 1)
+                self.positivecount = self.positivecount - 1
 
-        # if (encodervalue >= 2000 and encodervalue <= 2005) :
-        #     writegeneral.writesymbolvalue(self.Ltc1EastParkOvrtrPosFb, 'digital', 1)
-        #
-        # if (encodervalue >= 2000 and encodervalue <= 2005) :
-        #     writegeneral.writesymbolvalue(self.Ltc1EastParkPosFb, 'digital', 1)
-        #
-        # if (encodervalue >= 2000 and encodervalue <= 2005) :
-        #     writegeneral.writesymbolvalue(self.Ltc1LdlLoadPosFb, 'digital', 1)
-        #
-        # if (encodervalue >= 2000 and encodervalue <= 2005):
-        #     writegeneral.writesymbolvalue(self.Ltc1RhLoadPosFb, 'digital', 1)
-        #
-        # if (encodervalue >= 2000 and encodervalue <= 2005):
-        #     writegeneral.writesymbolvalue(self.Ltc1CarIntlk1PosFb, 'digital', 1)
-        #
-        # if (encodervalue >= 2000 and encodervalue <= 2005):
-        #     writegeneral.writesymbolvalue(self.Ltc1CarIntlk2PosFb, 'digital', 1)
-        #
-        # if (encodervalue >= 2000 and encodervalue <= 2005):
-        #     writegeneral.writesymbolvalue(self.Ltc1RhTreat1PosFb, 'digital', 1)
-        #
-        # if (encodervalue >= 2000 and encodervalue <= 2005):
-        #     writegeneral.writesymbolvalue(self.Ltc1RhTreat2PosFb, 'digital', 1)
-        #
-        #
-        # if (encodervalue >= 2000 and encodervalue <= 2005):
-        #     writegeneral.writesymbolvalue(self.Ltc1WfWestPark1PosFb, 'digital', 1)
-        #
-        # if (encodervalue >= 2000 and encodervalue <= 2005):
-        #     writegeneral.writesymbolvalue(self.Ltc1WfWestPark2PosFb, 'digital', 1)
+            if self.positivecount == 4:
+                writegeneral.writesymbolvalue(self.Ltc1TreatPosFb, 'digital', 0)
+                time.sleep(10)
+                writegeneral.writesymbolvalue(self.Ltc1TreatSlowPosFb, 'digital', 1)
+                self.positivecount = self.positivecount - 1
 
+            if self.positivecount == 5:
+                writegeneral.writesymbolvalue(self.Ltc1VslExgPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1TreatPosFb, 'digital', 1)
+                self.positivecount = self.positivecount - 1
 
+            if self.positivecount == 6:
+                writegeneral.writesymbolvalue(self.Ltc1DekurPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1VslExgPosFb, 'digital', 1)
+                self.positivecount = self.positivecount - 1
+
+            if self.positivecount == 6:
+                writegeneral.writesymbolvalue(self.Ltc1WireFBPosFb, 'digital', 0)
+                time.sleep(10)
+                writegeneral.writesymbolvalue(self.Ltc1DekurPosFb, 'digital', 1)
+                self.positivecount = self.positivecount - 1
+
+            if self.positivecount == 7:
+                writegeneral.writesymbolvalue(self.Ltc1WireOvrtrFBPosFb, 'digital', 0)
+                time.sleep(5)
+                writegeneral.writesymbolvalue(self.Ltc1WireFBPosFb, 'digital', 1)
+                self.positivecount = self.positivecount - 1
+
+            if self.positivecount == 8:
+                writegeneral.writesymbolvalue(self.Ltc1WireOvrtrFBPosFb, 'digital', 1)
+                self.positivecount = self.positivecount - 1
 
         sta_con_plc.close()
 
