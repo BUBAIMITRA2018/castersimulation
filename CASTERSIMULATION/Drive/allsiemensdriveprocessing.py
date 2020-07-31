@@ -4,6 +4,7 @@ from observable import *
 import logging
 from clientcomm_v1 import *
 from readgeneral_v2 import *
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -13,12 +14,23 @@ class AreaObserver:
         observable.register_observer(self)
 
     def notify(self,  *args, **kwargs):
-        for item in args[0]:
-            speedfbback =  args[1].readDBvalue(item.speedFB,'S7WLReal')
-            if speedfbback != 0 :
-                item.BreakOpenCmd = True
-            else:
-                item.BreakOpenCmd = False
+        try:
+            for item in args[0]:
+                speedfbback = args[1].readDBvalue(item.speedFB, 'S7WLReal')
+                if speedfbback != 0:
+                    item.BreakOpenCmd = True
+                else:
+                    item.BreakOpenCmd = False
+
+            gc.collect()
+
+        except Exception as e:
+            log_exception(e)
+            level = logging.INFO
+            messege = 'AreaObserver' + ":" + " Exception rasied(process): " + str(e.args) + str(e)
+            logger.log(level, messege)
+
+
 
 
 
@@ -38,10 +50,24 @@ class siemensdriveprocessing :
 
     def process(self):
 
-        for area, devices in readkeyandvalues(self.alldevices):
-            areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
-            if areavalue == 1:
-                self.observer.notify(devices, self.readgeneral)
+        try:
+            for area, devices in readkeyandvalues(self.alldevices):
+                areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
+                if areavalue == 1:
+                    self.observer.notify(devices, self.readgeneral)
+
+            gc.collect()
+
+
+
+        except Exception as e:
+            log_exception(e)
+            level = logging.INFO
+            messege = "siemensdriveprocessing" + ":" + " Exception rasied(driveprocess): " + str(e.args) + str(e)
+            logger.log(level, messege)
+
+
+
 
 
 

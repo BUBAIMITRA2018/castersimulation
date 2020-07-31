@@ -12,15 +12,16 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.controlword = args[1].readDBvalue(item.cw,'S7WLWord')
-            item.speedsetpoint = args[1].readDBvalue(item.speedSP,'S7WLWord')
-
-            if len(item.brakeopncmd) > 3:
-                item.breakopencmd = args[1].readsymbolvalue(item.brakeopncmd,'S7WLBit','PA')
-            if len(item.startcmdtag) > 3:
-                item.StartCmd = args[1].readsymbolvalue(item.startcmdtag,'S7WLBit','PA')
-            if len(item.stopcmdtag) > 3:
-                item.StopCmd = args[1].readsymbolvalue(item.stopcmdtag,'S7WLBit','PA')
+            item.driveprocess()
+            # item.controlword = args[1].readDBvalue(item.cw,'S7WLWord')
+            # item.speedsetpoint = args[1].readDBvalue(item.speedSP,'S7WLWord')
+            #
+            # if len(item.brakeopncmd) > 3:
+            #     item.breakopencmd = args[1].readsymbolvalue(item.brakeopncmd,'S7WLBit','PA')
+            # if len(item.startcmdtag) > 3:
+            #     item.StartCmd = args[1].readsymbolvalue(item.startcmdtag,'S7WLBit','PA')
+            # if len(item.stopcmdtag) > 3:
+            #     item.StopCmd = args[1].readsymbolvalue(item.stopcmdtag,'S7WLBit','PA')
 
 class schneiderdriveprocessing :
 

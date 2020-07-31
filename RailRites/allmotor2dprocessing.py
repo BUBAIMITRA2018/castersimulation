@@ -19,6 +19,7 @@ class AreaObserver:
             # item.FwdOnCmd= args[1].readsymbolvalue(item.fwdcmdtag,'S7WLBit','PA')
             # item.RevOnCmd = args[1].readsymbolvalue(item.revcmdtag,'S7WLBit','PA')
 
+
 class motor2dprocess:
     def __init__(self,alldevices,filename):
         self.subject = Observable()

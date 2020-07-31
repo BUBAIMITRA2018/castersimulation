@@ -3,12 +3,11 @@ from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
-from event_V2 import *
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_LANCEsignal']
 
 
-class Fn_LANCEsignal(Eventmanager):
+class Fn_LANCEsignal():
 
     def __init__(self, filename ):
 
@@ -17,56 +16,50 @@ class Fn_LANCEsignal(Eventmanager):
         self.devicename = "Lance"
         self.setup()
         self.initilizedigitalinput()
-        super().__init__(lambda: self.process())
+
 
     def setup(self):
 
         try:
-
             self.MainPowerSupplyMccbFault = str(25884)
-            self.AuxPowerMpcb415VAcFault = str(25885)
+            self.ControlSupplyMpcb415VAcFault = str(25885)
+            self.ControlSupplyForContactorsMpcb110VAcFault = str(25887)
             self.UpsSupplyFault = str(25886)
-            self.DriveInputSupplyMccbFault =str(25587)
-            self.HoistOverloadRelayTripped = str(25588)
+            self.IncommerMccb = str(25888)
             self.InputContactorSwitchedOn = str(25889)
             self.OutputContactorSwitchedOn = str(25890)
-            self.BypassContactorSwitchedOn = str(25891)
-            self.LanceHoistControlSupplyForContactorsMcb110VAcFault = str(25892)
-            self.LanceHoistBrakeContactorSwitchedOn = str(25893)
-            self.LanceHoistThermisterAlarm = str(25894)
-            self.LanceHoistThermisterFault = str(25895)
-            self.LanceHoistBrakeMpcbFault = str(25896)
-            self.LanceHoistMainSupplyMccb415VAcFault = str(25897)
+            self.BrakeMbcbOn = str(25892)
+            self.BrakeContactorSwitchedOn = str(25893)
+            self.Motor1TemparatureAlarm = str(25894)
+            self.Motor1TemparatureFault = str(25895)
+            self.DriveZeroSpeed = str(25891)
+            self.maindrivespeedfb = str(25301)
+            self.standbydrivespeedfb = str(25311)
+            self.encodertag  = str(25280)
+            self.SimMFLSlewPos = str()
+
+            self.mflhoistultopposition =str(25588)
+            self.mflhoisttopposition = str(25589)
+            self.mflhoistambushposition = str(25590)
+            self.mflhoistbottomposition = str(25591)
+            self.mflhoistulbottomposition = str(25592)
+            self.mflparkpositionovertravel = str(25593)
+            self.mflparkposition = str(25594)
+            self.mflhotofftakeposition = str(25595)
+            self.mflhotoffovertakeposition = str(25596)
 
 
-            self.InputContactorcmd = str(26256)
-            self.OutputContactorcmd = str(26257)
-            self.LanceHoistBypassContactorCmd = str(26258)
-            self.LanceHoistBrakeContactorCmd = str(26259)
-            self.LanceHoistBypassInputContactorcmd = str(26260)
-            self.LanceHoistBypassOutputContactorcmd = str(26261)
-            self.LanceHoistBypassBypassContactorcmd = str(26262)
-            self. LanceHoistBypassBrakeContactorcmd = str(26262)
 
-            self.encoderreading = str(25000)
-
-            self.MflHoistUltTopPosFb = str(25588)
-            self.MflHoistTopPosFb = str(25589)
-            self.MflHoistAmbPosFb = str(25590)
-            self.MflHoistBtmPosFb= str(25591)
-            self.MflHoistUltBtmPosFb = str(25592)
-            self.MflSlwParkOvrtrPosFb = str(25593)
-            self.MflSlwParkPosFb = str(25594)
-            self.MflSlwHotOfPosFb = str(25595)
-            self.MflSlwHotOfOvrtrPosFb = str(25596)
-
+            self.Ltc1InputCommand = str(26256)
+            self.Ltc1OutputCommand = str(26257)
+            self.Ltc1BreakOnCommand = str(26258)
 
 
         except Exception as e:
-            level = logging.ERROR
-            messege = "FN_LTC1" + self.devicename + " Error messege(setup)" + str(e.args)
-            logger.log(level, messege)
-            log_exception(e)
+                level = logging.ERROR
+                messege = "FN_Lance" + self.devicename + " Error messege(setup)" + str(e.args)
+                logger.log(level, messege)
+                log_exception(e)
 
     def initilizedigitalinput(self):
         try:
@@ -75,15 +68,13 @@ class Fn_LANCEsignal(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
-            writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.AuxPowerMpcb415VAcFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.UpsSupplyFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.HoistOverloadRelayTripped, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistControlSupplyForContactorsMcb110VAcFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistThermisterAlarm, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistThermisterFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistBrakeMpcbFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistMainSupplyMccb415VAcFault, 'digital', 0)
+            writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 1)
+            writegeneral.writesymbolvalue(self.ControlSupplyMpcb415VAcFault, 'digital', 1)
+            writegeneral.writesymbolvalue(self.UpsSupplyFault, 'digital', 1)
+            writegeneral.writesymbolvalue(self.ControlSupplyForContactorsMpcb110VAcFault, 'digital', 1)
+            writegeneral.writesymbolvalue(self.IncommerMccb, 'digital', 1)
+            writegeneral.writesymbolvalue(self.BrakeMbcbOn, 'digital', 1)
+
 
             sta_con_plc.close()
 
@@ -101,53 +92,82 @@ class Fn_LANCEsignal(Eventmanager):
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
 
-        InputContactorcmd =readgeneral.readsymbolvalue(self.InputContactorcmd,"digital")
-        OutputContactorcmd = readgeneral.readsymbolvalue(self.OutputContactorcmd, "digital")
-        LanceHoistBypassContactorCmd =readgeneral.readsymbolvalue(self.LanceHoistBypassContactorCmd,"digital")
-        LanceHoistBrakeContactorCmd = readgeneral.readsymbolvalue(self.LanceHoistBrakeContactorCmd, "digital")
 
-        encodervalue = readgeneral.readsymbolvalue(self.encoderreading, "analog")
+        self.encodertagvalue =  readgeneral.readsymbolvalue(self.encodertag, "analog")
+        # self.slewpositionvalue = readgeneral.readsymbolvalue(self.SimMFLSlewPos, "analog")
+        #
+        # if(self.slewpositionvalue <= 1000):
+        #     writegeneral.writesymbolvalue(self.mflparkpositionovertravel, 'digital', 1)
+        # else:
+        #     writegeneral.writesymbolvalue(self.mflparkpositionovertravel, 'digital', 0)
+        #
+        # if (self.slewpositionvalue > 1000) and (self.slewpositionvalue < 2000):
+        #
+        #     writegeneral.writesymbolvalue(self.mflparkposition, 'digital', 1)
+        # else:
+        #     writegeneral.writesymbolvalue(self.mflparkposition, 'digital', 0)
+        #
+        # if (self.slewpositionvalue >= 8000) and (self.slewpositionvalue < 9000):
+        #
+        #     writegeneral.writesymbolvalue(self.mflhotofftakeposition, 'digital', 1)
+        # else:
+        #     writegeneral.writesymbolvalue(self.mflhotofftakeposition, 'digital', 0)
+        #
+        # if (self.slewpositionvalue >= 9000):
+        #
+        #     writegeneral.writesymbolvalue(self.mflhotoffovertakeposition, 'digital', 1)
+        # else:
+        #     writegeneral.writesymbolvalue(self.mflhotoffovertakeposition, 'digital', 0)
 
-        if(InputContactorcmd):
-            writegeneral.writesymbolvalue(self.InputContactorSwitchedOn, 'digital', 1)
-
-        if (OutputContactorcmd):
-            writegeneral.writesymbolvalue(self.OutputContactorSwitchedOn, 'digital', 1)
-
-        if (LanceHoistBypassContactorCmd):
-            writegeneral.writesymbolvalue(self.BypassContactorSwitchedOn, 'digital', 1)
-
-        if (LanceHoistBrakeContactorCmd):
-            writegeneral.writesymbolvalue(self.LanceHoistBrakeContactorSwitchedOn, 'digital', 1)
+        if (self.encodertagvalue <= 100):
+            writegeneral.writesymbolvalue(self.mflhoistultopposition, 'digital', 1)
+        else:
+            writegeneral.writesymbolvalue(self.mflhoistultopposition, 'digital', 0)
 
 
+        if (self.encodertagvalue > 150) and (self.encodertagvalue < 250) :
+            writegeneral.writesymbolvalue(self.mflhoisttopposition, 'digital', 1)
+        else:
+            writegeneral.writesymbolvalue(self.mflhoisttopposition, 'digital', 0)
 
-        if (encodervalue >= 2000 and encodervalue <= 2005) :
-            writegeneral.writesymbolvalue(self.MflHoistUltTopPosFb, 'digital', 1)
 
-        if (encodervalue >= 2000 and encodervalue <= 2005) :
-            writegeneral.writesymbolvalue(self.MflHoistTopPosFb, 'digital', 1)
+        if (self.encodertagvalue > 450) and (self.encodertagvalue < 550) :
+            writegeneral.writesymbolvalue(self.mflhoistambushposition, 'digital', 1)
+        else:
+            writegeneral.writesymbolvalue(self.mflhoistambushposition, 'digital', 0)
 
-        if (encodervalue >= 2000 and encodervalue <= 2005):
-            writegeneral.writesymbolvalue(self.MflHoistAmbPosFb, 'digital', 1)
+        if (self.encodertagvalue > 2950) and (self.encodertagvalue < 3050):
+            writegeneral.writesymbolvalue(self.mflhoistbottomposition, 'digital', 1)
+        else:
+            writegeneral.writesymbolvalue(self.mflhoistbottomposition, 'digital', 0)
 
-        if (encodervalue >= 2000 and encodervalue <= 2005):
-            writegeneral.writesymbolvalue(self.MflHoistBtmPosFb, 'digital', 1)
+        if (self.encodertagvalue >= 3100):
+            writegeneral.writesymbolvalue(self.mflhoistulbottomposition, 'digital', 1)
+        else:
+            writegeneral.writesymbolvalue(self.mflhoistulbottomposition, 'digital', 0)
 
-        if (encodervalue >= 2000 and encodervalue <= 2005):
-            writegeneral.writesymbolvalue(self.MflHoistUltBtmPosFb, 'digital', 1)
 
-        if (encodervalue >= 2000 and encodervalue <= 2005):
-            writegeneral.writesymbolvalue(self.MflSlwParkOvrtrPosFb, 'digital', 1)
 
-        if (encodervalue >= 2000 and encodervalue <= 2005):
-            writegeneral.writesymbolvalue(self.MflSlwParkPosFb, 'digital', 1)
+        InputContactorcmdvalue = readgeneral.readsymbolvalue(self.Ltc1InputCommand, "digital")
+        OutputContactorcmdvalue = readgeneral.readsymbolvalue(self.Ltc1OutputCommand, "digital")
+        BrakeControlcmdvalue = readgeneral.readsymbolvalue(self.Ltc1BreakOnCommand, "digital")
 
-        if (encodervalue >= 2000 and encodervalue <= 2005):
-            writegeneral.writesymbolvalue(self.MflSlwHotOfPosFb, 'digital', 1)
 
-        if (encodervalue >= 2000 and encodervalue <= 2005):
-            writegeneral.writesymbolvalue(self.MflSlwHotOfOvrtrPosFb, 'digital', 1)
+        writegeneral.writesymbolvalue(self.InputContactorSwitchedOn, 'digital', InputContactorcmdvalue)
+        writegeneral.writesymbolvalue(self.OutputContactorSwitchedOn, 'digital', OutputContactorcmdvalue)
+        writegeneral.writesymbolvalue(self.BrakeContactorSwitchedOn, 'digital', BrakeControlcmdvalue)
+
+        self.maindrivespeedfbvalue = readgeneral.readsymbolvalue(self.maindrivespeedfb, "analog")
+        self.standbydrivespeedfbvalue = readgeneral.readsymbolvalue(self.standbydrivespeedfb, "analog")
+
+        if self.maindrivespeedfbvalue != 0:
+            writegeneral.writesymbolvalue(self.DriveZeroSpeed, 'digital', 1)
+
+        else:
+            writegeneral.writesymbolvalue(self.DriveZeroSpeed, 'digital', 0)
+
+
+
 
 
 

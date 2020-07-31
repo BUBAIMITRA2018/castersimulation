@@ -17,8 +17,7 @@ import allanalogprocessing
 import alldigitalprocessing
 import allrailswitchprocessing
 
-from readgeneral_v2 import *
-from  writegeneral_v2 import *
+
 
 
 import general

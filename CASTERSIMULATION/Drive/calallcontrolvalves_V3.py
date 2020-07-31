@@ -2,6 +2,7 @@ from logger import *
 from fn_controlvalve_V3 import *
 import logging
 import threading
+import gc
 
 
 class Cal_AllControlValves:
@@ -46,6 +47,8 @@ class Cal_AllControlValves:
 
                 # Declear empty list
             self.dictionary = dict(zip(keys, values))
+
+            gc.collect()
 
 
 

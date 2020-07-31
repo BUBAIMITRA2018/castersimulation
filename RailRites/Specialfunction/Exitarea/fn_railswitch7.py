@@ -52,26 +52,7 @@ class Fn_RailSwitch7(Eventmanager):
             log_exception(e)
 
     def initilizedigitalinput(self):
-        client = Communication()
-        sta_con_plc = client.opc_client_connect(self.filename)
-        readgeneral = ReadGeneral(sta_con_plc)
-        writegeneral = WriteGeneral(sta_con_plc)
-        writegeneral.writesymbolvalue(self.trackposition, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition3, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint3, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint3, 0, 'S7WLBit')
-        sta_con_plc.disconnect()
-        print("intiliased")
         pass
-
     def process(self):
 
         try:
@@ -84,7 +65,9 @@ class Fn_RailSwitch7(Eventmanager):
 
             self.drivecmdtagvalue = readgeneral.readDBvalue(self.drivecmdtag, 'S7WLWord')
 
+
             if self.drivecmdtagvalue == 15 and self.count != 5:
+                print("drive in forward")
                 sleep(5)
                 writegeneral.writesymbolvalue(self.trackposition, 1, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.trackposition1, 1, 'S7WLBit')
@@ -98,6 +81,7 @@ class Fn_RailSwitch7(Eventmanager):
                 # self.count = self.count + 1
 
             if self.drivecmdtagvalue == 2063 and self.count != 0:
+                print("drive in reverse")
                 sleep(5)
                 writegeneral.writesymbolvalue(self.trackposition, 1, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.trackposition1, 1, 'S7WLBit')

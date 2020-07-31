@@ -57,7 +57,7 @@ class AllDevices:
         self.alldigitalsignalobjects = callalldigital_V3.Cal_AllDigital(self.dfdigitalsignal,comobject,import_file_path)
         self.allcontrolvalveobjects = calallcontrolvalves_V3.Cal_AllControlValves(self.dfcontrolvalve,comobject,import_file_path)
         self.allproptionalvalvesobjects = callallProportionalValve_V3.Cal_AllProportionalValves( self.dfPropotionalValves, comobject,import_file_path)
-        self.rampobjects  = callallramp_V3.Cal_AllRampInputs(self.dframpsignal,comobject,import_file_path)
+        # self.rampobjects  = callallramp_V3.Cal_AllRampInputs(self.dframpsignal,comobject,import_file_path)
 
 
 

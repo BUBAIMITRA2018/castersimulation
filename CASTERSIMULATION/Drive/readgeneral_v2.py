@@ -1,5 +1,6 @@
 from snap7.snap7types import areas, S7WLBit, S7WLWord, S7WLReal, S7WLDWord
 from  clientcomm_v1 import *
+
 __all__ = ['ReadGeneral']
 
 
@@ -34,6 +35,7 @@ class ReadGeneral():
 
 
 
+
     def readDBvalue(self, address, datatype):
         addressconverted = str(address)
         data1 = addressconverted[addressconverted.find("b") + 1:addressconverted.find(".")]
@@ -64,11 +66,7 @@ class ReadGeneral():
 
 
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
+
 
 
 

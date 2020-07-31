@@ -8,45 +8,38 @@ logger = logging.getLogger("main.log")
 __all__ = ['Fn_LanceStandbysignal']
 
 
-class Fn_LanceStandbysignal(Eventmanager):
+class Fn_LanceStandbysignal():
 
     def __init__(self,filename ):
 
         self.filename = filename
-        self.devicename = "LTC1 STANDBY"
+        self.devicename = "Lance Standby"
         self.setup()
         self.initilizedigitalinput()
-        super().__init__(lambda: self.process())
+
 
     def setup(self):
 
         try:
 
             self.MainPowerSupplyMccbFault = str(25904)
-            self.AuxPowerMpcb415VAcFault = str(25905)
-            self.UpsSupplyFault = str(25906)
-            self.DriveInputSupplyMccbFault =str(25907)
-            self.HoistOverloadRelayTripped = str(25908)
-            self.InputContactorSwitchedOn = str(25909)
-            self.OutputContactorSwitchedOn = str(25910)
-            self.BypassContactorSwitchedOn = str(25911)
-            self.LanceHoistControlSupplyForContactorsMcb110VAcFault = str(25912)
-            self.LanceHoistBrakeContactorSwitchedOn = str(25913)
-            self.LanceHoistThermisterAlarm = str(25914)
-            self.LanceHoistThermisterFault = str(25915)
-            self.LanceHoistBrakeMpcbFault = str(25916)
-            self.LanceHoistMainSupplyMccb415VAcFault = str(25917)
+            self.ControlSupplyMpcb415VAcFault = str(25905)
+            self.ControlSupplyForContactorsMpcb110VAcFault = str(25906)
+            self.IncommerMccb = str(25907)
+            self.InputContactorSwitchedOn = str(25908)
+            self.OutputContactorSwitchedOn = str(25909)
+            self.BrakeMbcbOn = str(25911)
+            self.BrakeContactorSwitchedOn = str(25912)
+            self.Motor1TemparatureAlarm = str(25913)
+            self.Motor1TemparatureFault = str(25914)
+            self.DriveZeroSpeed = str(25910)
+            self.maindrivespeedfb = str(25301)
+            self.standbydrivespeedfb = str(25311)
+            self.Ltc1CrdHlyFb = str()
 
-
-            self.InputContactorcmd = str(26256)
-            self.OutputContactorcmd = str(26257)
-            self.LanceHoistBypassContactorCmd = str(26258)
-            self.LanceHoistBrakeContactorCmd = str(26259)
-            self.LanceHoistBypassInputContactorcmd = str(26260)
-            self.LanceHoistBypassOutputContactorcmd = str(26261)
-            self.LanceHoistBypassBypassContactorcmd = str(26262)
-            self. LanceHoistBypassBrakeContactorcmd = str(26262)
-
+            self.Ltc1InputCommand = str(26260)
+            self.Ltc1OutputCommand = str(26261)
+            self.Ltc1BreakOnCommand = str(26262)
 
 
 
@@ -64,15 +57,13 @@ class Fn_LanceStandbysignal(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
-            writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.AuxPowerMpcb415VAcFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.UpsSupplyFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.HoistOverloadRelayTripped, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistControlSupplyForContactorsMcb110VAcFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistThermisterAlarm, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistThermisterFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistBrakeMpcbFault, 'digital', 0)
-            writegeneral.writesymbolvalue(self.LanceHoistMainSupplyMccb415VAcFault, 'digital', 0)
+
+            writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 1)
+            writegeneral.writesymbolvalue(self.ControlSupplyMpcb415VAcFault, 'digital', 1)
+            writegeneral.writesymbolvalue(self.ControlSupplyForContactorsMpcb110VAcFault, 'digital', 1)
+            writegeneral.writesymbolvalue(self.IncommerMccb, 'digital', 1)
+            writegeneral.writesymbolvalue(self.BrakeMbcbOn, 'digital', 1)
+
 
             sta_con_plc.close()
 
@@ -90,24 +81,23 @@ class Fn_LanceStandbysignal(Eventmanager):
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
 
-        InputContactorcmd =readgeneral.readsymbolvalue(self.InputContactorcmd,"digital")
-        OutputContactorcmd = readgeneral.readsymbolvalue(self.OutputContactorcmd, "digital")
-        LanceHoistBypassContactorCmd =readgeneral.readsymbolvalue(self.LanceHoistBypassContactorCmd,"digital")
-        LanceHoistBrakeContactorCmd = readgeneral.readsymbolvalue(self.LanceHoistBrakeContactorCmd, "digital")
+        InputContactorcmdvalue = readgeneral.readsymbolvalue(self.Ltc1InputCommand, "digital")
+        OutputContactorcmdvalue = readgeneral.readsymbolvalue(self.Ltc1OutputCommand, "digital")
+        BrakeControlcmdvalue = readgeneral.readsymbolvalue(self.Ltc1BreakOnCommand, "digital")
 
+        writegeneral.writesymbolvalue(self.InputContactorSwitchedOn, 'digital', InputContactorcmdvalue)
+        writegeneral.writesymbolvalue(self.OutputContactorSwitchedOn, 'digital', OutputContactorcmdvalue)
+        writegeneral.writesymbolvalue(self.BrakeContactorSwitchedOn, 'digital', BrakeControlcmdvalue)
 
+        self.maindrivespeedfbvalue = readgeneral.readsymbolvalue(self.maindrivespeedfb, "analog")
+        self.standbydrivespeedfbvalue = readgeneral.readsymbolvalue(self.standbydrivespeedfb, "analog")
 
-        if(InputContactorcmd):
-            writegeneral.writesymbolvalue(self.InputContactorSwitchedOn, 'digital', 1)
+        if self.maindrivespeedfbvalue != 0:
+            writegeneral.writesymbolvalue(self.DriveZeroSpeed, 'digital', 1)
 
-        if (OutputContactorcmd):
-            writegeneral.writesymbolvalue(self.OutputContactorSwitchedOn, 'digital', 1)
+        else:
+            writegeneral.writesymbolvalue(self.DriveZeroSpeed, 'digital', 0)
 
-        if (LanceHoistBypassContactorCmd):
-            writegeneral.writesymbolvalue(self.BypassContactorSwitchedOn, 'digital', 1)
-
-        if (LanceHoistBrakeContactorCmd):
-            writegeneral.writesymbolvalue(self.LanceHoistBrakeContactorSwitchedOn, 'digital', 1)
 
         sta_con_plc.close()
 

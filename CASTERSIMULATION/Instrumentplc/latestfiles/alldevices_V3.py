@@ -48,7 +48,7 @@ class AllDevices:
         # self.allconveyorobjects = callallconveyor_V3.Cal_AllConveyor1D(self.dfCONV,comobject)
         # self.alldriveobjects = calallABPdrives_V3.Cal_ABBDrives(self.dfdrive,comobject)
         # self.allencoderobjects = callallEncoder_V3.Cal_AllEncoder(self.dfencoder,comobject)
-        # self.alloutsignalobjects = callalloutsignals_V3. Cal_AllOutsingnal(self.dfoutsignal, comobject,import_file_path)
+        self.alloutsignalobjects = callalloutsignals_V3. Cal_AllOutsingnal(self.dfoutsignal, comobject,import_file_path)
         self.allanalogsignalobjects = calallanalog_V3.Cal_AllAnalogInputs(self.dfanalog,comobject,import_file_path)
         # self.allsiemensdrivesobjects = callallsiemensdrive1D_V3.Cal_AllSiemensDrive1D(self.dfsiemensdrive,comobject,import_file_path)
         # self.alldigitalsignalobjects = callalldigital_V3.Cal_AllDigital(self.dfdigitalsignal,comobject,import_file_path)
@@ -59,20 +59,6 @@ class AllDevices:
 
 
 
-
-
-
-    #
-    #
-    # def __deepcopy__(self, memo):
-    #     newself = self.__class__.__new__(self.__class__)
-    #     for name, value in vars(self).items():
-    #         if name != 'mylock':
-    #             value = copy.deepcopy(value)
-    #         setattr(newself, name, value)
-    #     return newself
-    #
-    @property
     def allmotor1d(self):
         return self.allmotor1dobjects
 

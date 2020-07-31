@@ -1,6 +1,6 @@
 
 from event_V2 import *
-
+import gc
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
@@ -57,6 +57,8 @@ class Fn_AnalogTx(Eventmanager):
 
 
 
+
+
         except Exception as e:
             log_exception(e)
             level = logging.ERROR
@@ -70,9 +72,26 @@ class Fn_AnalogTx(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
-            writegeneral.writesymbolvalue(self.outputtag, 0 , 'S7WLWord')
+            if self.selval == 1 and self.val > self.lowerlimit and self.val < self.highlimit:
+                a = abs(self.val - 0.005)
+                b = abs(self.val + 0.005)
+                self.targetvalue = random.uniform(a, b)
+                self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
+                writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue, 'S7WLWord')
+
+            if not self.selval and self.val > self.lowerlimit and self.val < self.highlimit and self.val != 0:
+                highband = self.highlimit - self.val
+                lowerband = self.val - self.lowerlimit
+                self.targetvalue = random.uniform(highband, lowerband)
+                self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
+                writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue, 'S7WLWord')
+
+            if self.val == 0 and self.selval == 1:
+                writegeneral.writesymbolvalue(self.outputtag, 0, 'S7WLWord')
 
             sta_con_plc.disconnect()
+
+            gc.collect()
 
 
         except Exception as e:
@@ -82,7 +101,7 @@ class Fn_AnalogTx(Eventmanager):
             messege = self.devicename + "FN_analog(initilization)" + str(e.args)
             logger.log(level, messege)
 
-            print(messege)
+
 
 
 
@@ -93,22 +112,9 @@ class Fn_AnalogTx(Eventmanager):
                         readgeneral = ReadGeneral(sta_con_plc)
                         writegeneral = WriteGeneral(sta_con_plc)
 
-                        if self.selval == 1 and self.val > self.lowerlimit and self.val < self.highlimit:
-                            a = abs(self.val - 0.005)
-                            b = abs(self.val + 0.005)
-                            self.targetvalue = random.uniform(a, b)
-                            self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
-                            writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue, 'S7WLWord')
+                        pass
 
-                        if not self.selval and self.val > self.lowerlimit and self.val < self.highlimit and self.val != 0:
-                            highband = self.highlimit - self.val
-                            lowerband = self.val - self.lowerlimit
-                            self.targetvalue = random.uniform(highband, lowerband)
-                            self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
-                            writegeneral.writesymbolvalue(self.outputtag, self.outrawvalue, 'S7WLWord')
 
-                        if self.val == 0 and self.selval == 1:
-                            writegeneral.writesymbolvalue(self.outputtag, 0, 'S7WLWord')
 
                         sta_con_plc.disconnect()
 

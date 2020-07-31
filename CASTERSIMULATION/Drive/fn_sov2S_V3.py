@@ -3,6 +3,7 @@ from event_V2 import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -78,6 +79,8 @@ class Fn_Sov2S(Eventmanager):
                 #     self.closeLS = str(tag)
 
 
+            gc.collect()
+
 
         except Exception as e:
             level = logging.ERROR
@@ -102,6 +105,7 @@ class Fn_Sov2S(Eventmanager):
     def sov2sprocess(self):
 
         try:
+
 
             client = Communication()
             sta_con_plc = client.opc_client_connect(self.filename)
@@ -163,6 +167,7 @@ class Fn_Sov2S(Eventmanager):
                 # self._openLSFBvalue  = False
 
             sta_con_plc.disconnect()
+            gc.collect()
 
 
 

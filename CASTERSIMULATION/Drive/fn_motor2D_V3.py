@@ -6,6 +6,7 @@ from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
 import  general
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -162,6 +163,8 @@ class Fn_Motor2D(Eventmanager):
 
             sta_con_plc.disconnect()
 
+            gc.collect()
+
 
 
         except Exception as e:
@@ -225,7 +228,10 @@ class Fn_Motor2D(Eventmanager):
                 self.FwdRunFB = False
                 level = logging.WARNING
 
+
+
             sta_con_plc.disconnect()
+            gc.collect()
 
 
 
@@ -237,11 +243,6 @@ class Fn_Motor2D(Eventmanager):
             print("Motor 2d error:",e.args)
 
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
 
     @property
     def FwdOnCmd(self):
@@ -319,5 +320,5 @@ class Fn_Motor2D(Eventmanager):
 
 
 
-
+gc.collect()
 

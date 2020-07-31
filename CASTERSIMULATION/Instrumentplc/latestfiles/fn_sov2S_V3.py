@@ -71,11 +71,11 @@ class Fn_Sov2S(Eventmanager):
                 if col == 11:
                     self.torquedelaytimetag = tag
 
-                # if col == 14:
-                #     self.openLS = str(tag)
-                #
-                # if col == 15:
-                #     self.closeLS = str(tag)
+                if col == 14:
+                    self.openLS = str(tag)
+
+                if col == 15:
+                    self.closeLS = str(tag)
 
 
 
@@ -114,14 +114,14 @@ class Fn_Sov2S(Eventmanager):
                 writegeneral.writesymbolvalue(self.closeFBtag, 0,'S7WLBit')
                 if len(self.torquecloseFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torquecloseFBtag, 0,'S7WLBit')
-                # if len(self.closeLS)>3:
-                #     writegeneral.writesymbolvalue(self.closeLS, 0, 'S7WLBit')
+                if len(self.closeLS)>3:
+                    writegeneral.writesymbolvalue(self.closeLS, 0, 'S7WLBit')
                 # sleep(self.delaytimetag)
                 writegeneral.writesymbolvalue(self.openFBtag, 1,'S7WLBit')
                 if len(self.torqueOpenFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torqueOpenFBtag, 1,'S7WLBit')
-                # if len(self.openLS)> 3:
-                #     writegeneral.writesymbolvalue(self.openLS, 1, 'S7WLBit')
+                if len(self.openLS)> 3:
+                    writegeneral.writesymbolvalue(self.openLS, 1, 'S7WLBit')
 
                 self.opnFB = True
                 self.clsFB = False
@@ -142,15 +142,15 @@ class Fn_Sov2S(Eventmanager):
                 writegeneral.writesymbolvalue(self.openFBtag, 0,'S7WLBit')
                 if len(self.torqueOpenFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torqueOpenFBtag, 0,'S7WLBit')
-                # if len(self.openLS)> 3:
-                #     writegeneral.writesymbolvalue(self.openLS, 0, 'S7WLBit')
+                if len(self.openLS)> 3:
+                    writegeneral.writesymbolvalue(self.openLS, 0, 'S7WLBit')
 
                 # sleep(self.delaytimetag)
                 writegeneral.writesymbolvalue(self.closeFBtag, 1,'S7WLBit')
                 if len(self.torquecloseFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torquecloseFBtag, 1,'S7WLBit')
-                # if len(self.closeLS)>3:
-                #     writegeneral.writesymbolvalue(self.closeLS, 1, 'S7WLBit')
+                if len(self.closeLS)>3:
+                    writegeneral.writesymbolvalue(self.closeLS, 1, 'S7WLBit')
                 level = logging.WARNING
                 messege = self.devicename + ":" + self.torquecloseFBtag + " is trigger by 1" \
                           + self.closeFBtag + " is trigger by 1" + self.openFBtag + " is trigger by 0 " \
@@ -158,9 +158,9 @@ class Fn_Sov2S(Eventmanager):
 
                 logger.log(level, messege)
 
-            if self.opncmdvalue == False and self.clscmdvalue == False:
-                writegeneral.writesymbolvalue(self.openFBtag, 0, 'S7WLBit')
-                writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
+            # if self.opncmdvalue == False and self.clscmdvalue == False:
+            #     writegeneral.writesymbolvalue(self.openFBtag, 0, 'S7WLBit')
+            #     writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
 
                 self.opnFB = False
                 self.clsFB = True

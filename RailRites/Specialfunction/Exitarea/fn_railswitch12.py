@@ -41,13 +41,8 @@ class Fn_RailSwitch12(Eventmanager):
             self.forwardendpoint2 = str(307.1)
             self.reverseendpoint2 = str(307.2)
             self.counter = str("db65.dbw40")
-            self.rdolcmd = str(211.1)
             self.allhigh = str(13.2)
-            self.pos1 = str(209.4)
-            self.pos2 = str(209.6)
-            self.pos3 = str(210.0)
-            self.pos4 = str(210.2)
-            self.pos5 = str(210.4)
+
 
 
 
@@ -59,16 +54,6 @@ class Fn_RailSwitch12(Eventmanager):
             log_exception(e)
 
     def initilizedigitalinput(self):
-        client = Communication()
-        sta_con_plc = client.opc_client_connect(self.filename)
-        readgeneral = ReadGeneral(sta_con_plc)
-        writegeneral = WriteGeneral(sta_con_plc)
-        writegeneral.writesymbolvalue(self.trackposition, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint, 0, 'S7WLBit')
-
-        sta_con_plc.disconnect()
-        print("intiliased")
         pass
 
     def process(self):
@@ -122,37 +107,20 @@ class Fn_RailSwitch12(Eventmanager):
                
 
             if self.count == 5:
-                sleep(2)
+
                 writegeneral.writesymbolvalue(self.forwardendpoint, 1, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.forwardendpoint1, 1, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.forwardendpoint2, 1, 'S7WLBit')
 
 
             if self.count == 1:
-                sleep(2)
+
                 writegeneral.writesymbolvalue(self.reverseendpoint, 1, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.reverseendpoint1, 1, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.reverseendpoint2, 1, 'S7WLBit')
 
-            self.rdolcmdvalue = readgeneral.readsymbolvalue(self.rdolcmd, 'S7WLBit', "PE")
-
-            if self.count == 2 and self.rdolcmdvalue == 1:
-                writegeneral.writesymbolvalue(self.pos1, 0, 'S7WLBit')
-
-            if self.count == 3 and self.rdolcmdvalue == 1:
-                writegeneral.writesymbolvalue(self.pos2, 0, 'S7WLBit')
-
-            if self.count == 4 and self.rdolcmdvalue == 1:
-                writegeneral.writesymbolvalue(self.pos3, 0, 'S7WLBit')
-
-            if self.count == 5 and self.rdolcmdvalue == 1:
-                writegeneral.writesymbolvalue(self.pos4, 0, 'S7WLBit')
-
-            if self.count == 6 and self.rdolcmdvalue == 1:
-                writegeneral.writesymbolvalue(self.pos5, 0, 'S7WLBit')
 
 
-            sleep(1)
 
             sta_con_plc.disconnect()
 

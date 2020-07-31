@@ -13,8 +13,8 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.controlword = args[1].readsymbolvalue(item.cw,'S7WLWord', 'PA')
-            item.speedsetpoint = args[1].readsymbolvalue(item.speedSP,'S7WLWord', 'PA')
+            item.controlword = args[1].readDBvalue(item.cw,'S7WLWord')
+            item.speedsetpoint = args[1].readDBvalue(item.speedSP,'S7WLWord')
 
             # if len(item.brakeopncmd) > 3:
             #     item.breakopencmd = args[1].readgeneral.readtagvalue(item.brakeopncmd)

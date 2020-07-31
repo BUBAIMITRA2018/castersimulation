@@ -86,13 +86,13 @@ class Fn_ControlValves(Eventmanager):
 
                     if self.manipulatedsp > self.currentvalue:
                         diff = self.manipulatedsp - self.currentvalue
-                        count = .01 * diff
+                        count = .1 * diff
                         self.currentvalue = self.currentvalue + count
                         writegeneral.writesymbolvalue(self.pv, 'analog', self.currentvalue)
 
                     if self.manipulatedsp < self.currentvalue:
                         diff = self.currentvalue - self.manipulatedsp
-                        count1 = .01 * diff
+                        count1 = .1 * diff
                         self.currentvalue = self.currentvalue - count1
                         writegeneral.writesymbolvalue(self.pv, 'analog', self.currentvalue)
 

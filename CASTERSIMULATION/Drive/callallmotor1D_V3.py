@@ -1,5 +1,5 @@
 from logger import *
-# from fn_motor1D_V3 import *
+import gc
 from  fn_motor1D_V4 import *
 import logging
 import threading
@@ -54,6 +54,8 @@ class Cal_AllMotor1D:
 
             # Declear empty list
             self.dictionary = dict(zip(keys,values))
+
+
 
 
 

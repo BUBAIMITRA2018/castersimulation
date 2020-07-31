@@ -1,6 +1,6 @@
 
 from event_V2 import *
-
+import gc
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
@@ -40,7 +40,6 @@ class Fn_ControlValves(Eventmanager):
 
 
         except Exception as e:
-
             log_exception(e)
 
     def initilizedigitalinput(self):
@@ -52,6 +51,8 @@ class Fn_ControlValves(Eventmanager):
         writegeneral.writesymbolvalue(self.pv, 0, 'S7WLWord')
 
         sta_con_plc.disconnect()
+        gc.collect()
+
 
     def controlvalveprocess(self):
 
@@ -122,11 +123,9 @@ class Fn_ControlValves(Eventmanager):
                         self.currentvalue = self.currentvalue - count1
                         writegeneral.writesymbolvalue(self.pv, self.currentvalue, 'S7WLWord')
 
-
-
-
-
             sta_con_plc.disconnect()
+
+            gc.collect()
 
 
         except Exception as e:

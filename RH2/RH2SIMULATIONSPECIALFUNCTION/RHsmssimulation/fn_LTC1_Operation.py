@@ -9,19 +9,43 @@ logger = logging.getLogger("main.log")
 __all__ = ['Fn_LTC1signal']
 
 
-class Fn_LTC1signal(Eventmanager):
+class Fn_LTC1signal():
 
     def __init__(self,filename ):
-
         self.filename = filename
         self.devicename = "LTC1"
         self.setup()
         self.initilizedigitalinput()
-        super().__init__(lambda: self.process())
+
 
     def setup(self):
 
         try:
+            self.MainPowerSupplyMccbFault = str(25800)
+            self.DrivePowerSupplyMccbOn= str(25801)
+            self.ControlSupplyMpcb415VAcFault = str(25802)
+            self.ControlSupplyForContactorsMpcb110VAcFault = str(25803)
+            self.UpsSupplyFault = str(25804)
+            self.InputContactorSwitchedOn = str(25805)
+            self.OutputContactorSwitchedOn = str(25806)
+            self.Motor1MpcbOn = str(25807)
+            self.Motor2MpcbOn = str(25808)
+            self.Motor1ContactorSwitchedOn = str(25809)
+            self.Motor2ContactorSwitchedOn = str(25810)
+            self.BrakeMbcbOn = str(25811)
+            self.BrakeContactorSwitchedOn = str(25812)
+            self.Motor1TemparatureAlarm = str(25813)
+            self.Motor1TemparatureFault = str(25814)
+            self.Motor2TemparatureAlarm = str(25815)
+            self.Motor2TemparatureFault = str(25816)
+            self.DriveZeroSpeed= str(25817)
+            self.Ltc1CrdRunFb = str(25600)
+            self.Ltc1CrdHlthyFb = str(25601)
+            self.Ltc1CrdCableSlackFb = str(25602)
+            self.Ltc1CrdCableOvrTensionFb = str(25603)
+            self.Ltc1CrdFwdRunningFb = str(25604)
+            self.Ltc1CrdRevRunningFb = str(25605)
+            self.Ltc1CrdPoxyRunningFb = str(25606)
 
 
 
@@ -39,6 +63,20 @@ class Fn_LTC1signal(Eventmanager):
             self.standbydrivespeedfb = str(25331)
             self.positivecount = 0
 
+            self.Ltc1InputCommand = str(26224)
+            self.Ltc1OutputCommand = str(26225)
+            self.Ltc1BreakOnCommand = str(26226)
+            self.Ltc1Motor1ContractorOnCommand = str(26227)
+            self.Ltc1Motor2ContractorOnCommand = str(26228)
+            self.Ltc1CrdFwdCommand = str(25663)
+            self.Ltc1CrdRevCommand = str(25664)
+
+
+
+
+
+
+
 
 
         except Exception as e:
@@ -54,33 +92,14 @@ class Fn_LTC1signal(Eventmanager):
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
             self.positivecount = 0
-            writegeneral.writesymbolvalue(self.Ltc1OvrtrPosFb, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Ltc1ParkPosFb, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Ltc1ParkSlowPosFb, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Ltc1VslExgPosFb, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Ltc1DekurPosFb, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Ltc1TreatPosFb, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Ltc1TreatSlowPosFb, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Ltc1WireFBPosFb, 'digital', 0)
-            writegeneral.writesymbolvalue(self.Ltc1WireOvrtrFBPosFb, 'digital', 0)
+            writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 1)
+            writegeneral.writesymbolvalue(self.Motor1MpcbOn, 'digital', 1)
+            writegeneral.writesymbolvalue(self.Motor2MpcbOn, 'digital', 1)
+            writegeneral.writesymbolvalue(self.BrakeMbcbOn, 'digital', 1)
+            writegeneral.writesymbolvalue(self.Ltc1CrdHlthyFb, 'digital', 1)
+            writegeneral.writesymbolvalue(self.Ltc1CrdCableSlackFb, 'digital', 1)
+            writegeneral.writesymbolvalue(self.Ltc1CrdCableOvrTensionFb, 'digital', 1)
 
-
-
-
-
-
-            # writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 0)
-            # writegeneral.writesymbolvalue(self.Motor1MpcbFault, 'digital', 0)
-            # writegeneral.writesymbolvalue(self.Motor2MpcbFault, 'digital', 0)
-            # writegeneral.writesymbolvalue(self.Mtr1MccbOn, 'digital', 1)
-            # writegeneral.writesymbolvalue(self.Mtr2MccbOn, 'digital', 1)
-            # writegeneral.writesymbolvalue(self.ControlSupplyForContactorsMpcb110VAcFault, 'digital', 0)
-            # writegeneral.writesymbolvalue(self.ControlSupplyMpcb415VAcFault, 'digital', 0)
-            # writegeneral.writesymbolvalue(self.UpsSupplyFault, 'digital', 0)
-            # writegeneral.writesymbolvalue(self.Motor1MpcbFault, 'digital', 0)
-            # writegeneral.writesymbolvalue(self.Motor2MpcbFault, 'digital', 0)
-            # writegeneral.writesymbolvalue(self.MCBPOWERSUPPLYON, 'digital', 1)
-            # writegeneral.writesymbolvalue(self.LTC1breakmpccbon, 'digital', 1)
 
             sta_con_plc.close()
 
@@ -98,23 +117,41 @@ class Fn_LTC1signal(Eventmanager):
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
 
+        InputContactorcmdvalue =readgeneral.readsymbolvalue(self.Ltc1InputCommand,"digital")
+        OutputContactorcmdvalue = readgeneral.readsymbolvalue(self.Ltc1OutputCommand, "digital")
+        BrakeControlcmdvalue = readgeneral.readsymbolvalue(self.Ltc1BreakOnCommand, "digital")
+        Motor1Contactorcmdvalue = readgeneral.readsymbolvalue(self.Ltc1Motor1ContractorOnCommand, "digital")
+        Motor2Contactorcmdvalue = readgeneral.readsymbolvalue(self.Ltc1Motor2ContractorOnCommand, "digital")
+        self.Ltc1CrdCableFwdCmdValue = readgeneral.readsymbolvalue(self.Ltc1CrdFwdCommand, "digital")
+        self.Ltc1CrdCableRevCmdValue = readgeneral.readsymbolvalue(self.Ltc1CrdRevCommand, "digital")
+
+
+        writegeneral.writesymbolvalue(self.InputContactorSwitchedOn, 'digital', InputContactorcmdvalue)
+        writegeneral.writesymbolvalue(self.OutputContactorSwitchedOn, 'digital', OutputContactorcmdvalue)
+        writegeneral.writesymbolvalue(self.BrakeContactorSwitchedOn, 'digital', BrakeControlcmdvalue)
+        writegeneral.writesymbolvalue(self.Motor1ContactorSwitchedOn, 'digital', Motor1Contactorcmdvalue)
+        writegeneral.writesymbolvalue(self.Motor2ContactorSwitchedOn, 'digital', Motor2Contactorcmdvalue)
+        writegeneral.writesymbolvalue(self.Ltc1CrdFwdRunningFb, 'digital', self.Ltc1CrdCableFwdCmdValue)
+        writegeneral.writesymbolvalue(self.Ltc1CrdRevRunningFb, 'digital', self.Ltc1CrdCableRevCmdValue)
+
+        self.Ltc1CrdRunFbvalue = readgeneral.readsymbolvalue(self.Ltc1CrdFwdRunningFb, "digital") or readgeneral.readsymbolvalue(self.Ltc1CrdRevRunningFb, "digital")
+
+        writegeneral.writesymbolvalue(self.Ltc1CrdRunFb, 'digital', self.Ltc1CrdRunFbvalue)
+        writegeneral.writesymbolvalue(self.Ltc1CrdPoxyRunningFb, 'digital', self.Ltc1CrdRunFbvalue)
+
         self.maindrivespeedfbvalue = readgeneral.readsymbolvalue(self.maindrivespeedfb,"analog")
         self.standbydrivespeedfbvalue = readgeneral.readsymbolvalue(self.standbydrivespeedfb,"analog")
-        # self.Ltc1OvrtrPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1OvrtrPosFb,"digital")
-        # self.Ltc1ParkPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1ParkPosFb, "digital")
-        # self.Ltc1ParkSlowPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1ParkSlowPosFb, "digital")
-        # self.Ltc1RhLoadPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1RhLoadPosFb, "digital")
-        # self.Ltc1VslExgPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1VslExgPosFb, "digital")
-        # self.Ltc1DekurPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1DekurPosFb, "digital")
-        # self.Ltc1DekurPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1DekurPosFb, "digital")
-        # self.Ltc1TreatPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1TreatPosFb, "digital")
-        # self.Ltc1TreatSlowPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1TreatSlowPosFb, "digital")
-        # self.Ltc1WireFBPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1WireFBPosFb, "digital")
-        # self.Ltc1WireOvrtrFBPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1WireOvrtrFBPosFb, "digital")
-        # self.Ltc1WireOvrtrFBPosFbvalue = readgeneral.readsymbolvalue(self.Ltc1WireOvrtrFBPosFb, "digital")
+
+
+        if self.maindrivespeedfbvalue != 0:
+            writegeneral.writesymbolvalue(self.DriveZeroSpeed, 'digital', 1)
+
+        else:
+            writegeneral.writesymbolvalue(self.DriveZeroSpeed, 'digital', 0)
+
+
 
         cond1 = self.maindrivespeedfbvalue > 0 or self.standbydrivespeedfbvalue > 0
-
 
         if cond1 > 0:
 

@@ -3,6 +3,7 @@ from event_V2 import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
+import gc
 
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_digitalsignal']
@@ -69,6 +70,8 @@ class Fn_digitalsignal(Eventmanager):
             messege = self.devicename + ":" + self.OutDigital + " is trigger by 0"
             logger.log(level, messege)
             sta_con_plc.disconnect()
+            gc.collect()
+
         except Exception as e:
             level = logging.ERROR
             messege = "Fn_Digitalsignal" + self.devicename + " Error messege(initilization)" + str(e.args)
@@ -120,6 +123,8 @@ class Fn_digitalsignal(Eventmanager):
                 logger.log(level, messege)
 
             sta_con_plc.disconnect()
+
+            gc.collect()
 
 
         except Exception as e:

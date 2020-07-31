@@ -1,4 +1,4 @@
-
+import gc
 from clientcomm_v1 import *
 from  writegeneral_v2 import *
 logger = logging.getLogger("main.log")
@@ -27,6 +27,8 @@ class Fn_outsignal():
                 if col == 5:
                     self.Value = int(tag)
 
+            gc.collect()
+
         except Exception as e:
             level = logging.ERROR
             messege = "FN_OUTSIGNAL" + self.devicename + " Error messege(setup)" + str(e.args)
@@ -43,6 +45,8 @@ class Fn_outsignal():
             messege = "FN_OUTSIGNAL" +self.devicename + ":" + self.OutDigital + str(self.Value)
             logger.log(level, messege)
             sta_con_plc.disconnect()
+
+            gc.collect()
 
         except Exception as e:
             level = logging.ERROR

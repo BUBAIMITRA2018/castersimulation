@@ -39,8 +39,8 @@ class Fn_RailSwitch1(Eventmanager):
             self.reverseendpoint1 = str(233.2)
             self.trackposition2 = str(233.5)
             self.forwardendpoint2 = str(233.6)
-            self.reverseendpoint2 = str(234.1)
-            self.trackposition3 = str(233.7)
+            self.reverseendpoint2 = str(233.7)
+            self.trackposition3 = str(234.2)
             self.forwardendpoint3 = str(234.3)
             self.reverseendpoint3 = str(234.4)
             self.counter = str("db65.dbw18")
@@ -54,24 +54,7 @@ class Fn_RailSwitch1(Eventmanager):
             log_exception(e)
 
     def initilizedigitalinput(self):
-        client = Communication()
-        sta_con_plc = client.opc_client_connect(self.filename)
-        readgeneral = ReadGeneral(sta_con_plc)
-        writegeneral = WriteGeneral(sta_con_plc)
-        writegeneral.writesymbolvalue(self.trackposition, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition3, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint3, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint3, 0, 'S7WLBit')
-
-        sta_con_plc.disconnect()
+        pass
 
     def process(self):
 

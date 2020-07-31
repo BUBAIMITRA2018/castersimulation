@@ -1,12 +1,11 @@
-from logger import *
+
 from event_V2 import *
-from time import sleep
-import logging
-import threading
+import gc
+
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
-import  general
+
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_Motor1D']
 
@@ -86,6 +85,8 @@ class Fn_Motor1D(Eventmanager):
 
             self._oncmdvalue = False
 
+            writegeneral.writesymbolvalue(self.runingFBtag, 0, 'S7WLBit')
+
             self._runFBvalue = readgeneral.readsymbolvalue(self.runingFBtag,'S7WLBit','PE')
 
             if len(self.healthyFBtag) > 3:
@@ -138,6 +139,7 @@ class Fn_Motor1D(Eventmanager):
                 pass
 
             sta_con_plc.disconnect()
+            gc.collect()
 
         except Exception as e:
             level = logging.ERROR
@@ -181,7 +183,11 @@ class Fn_Motor1D(Eventmanager):
                     writegeneral.writesymbolvalue(self.runingFBtag, 0, 'S7WLBit')
                     self.runFB = 0
 
+
+
             sta_con_plc.disconnect()
+
+            gc.collect()
 
 
 

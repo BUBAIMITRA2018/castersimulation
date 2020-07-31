@@ -1,7 +1,7 @@
 from logger import *
 from fn_motor2D_V3 import *
 import logging
-import threading
+import gc
 
 
 logger = logging.getLogger("main.log")
@@ -44,6 +44,8 @@ class Cal_AllMotor2D:
             values = self.devicelistperarea[1:]
             # Declear empty list
             self.dictionary = dict(zip(keys,values))
+
+
 
 
 

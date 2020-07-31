@@ -1,5 +1,6 @@
 
 from event_V2 import *
+import gc
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
@@ -46,6 +47,8 @@ class Fn_Sov1S(Eventmanager):
                 if col == 6:
                     self.closeFBtag = str(tag)
 
+            gc.collect()
+
 
 
 
@@ -68,6 +71,7 @@ class Fn_Sov1S(Eventmanager):
 
 
         sta_con_plc.disconnect()
+        gc.collect()
 
 
     def sov1sprocess(self):
@@ -91,15 +95,14 @@ class Fn_Sov1S(Eventmanager):
                 if len(self.closeFBtag) > 3:
                     writegeneral.writesymbolvalue(self.closeFBtag, 1, 'S7WLBit')
 
-
-
                 level1 = logging.INFO
                 level2 = logging.WARNING
                 messege2 = self.devicename + ":" + self.cmdtag + " value is 1"
                 messege1 = self.devicename + ":" + self.openFBtag + " is trigger by 1"
                 logger.log(level2, messege2)
                 logger.log(level1, messege1)
-                return
+
+            gc.collect()
 
 
 

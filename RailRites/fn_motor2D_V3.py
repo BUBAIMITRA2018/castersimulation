@@ -196,6 +196,8 @@ class Fn_Motor2D(Eventmanager):
             self.revcmdvalue =  readgeneral.readsymbolvalue(self.revcmdtag,'S7WLBit','PA')
 
             if self.fwdcmdvalue == True and self.revcmdvalue == False:
+
+
                 if len(self.revrunFBtag1) > 3:
                     writegeneral.writesymbolvalue(self.revrunFBtag1, 0, 'S7WLBit')
                 if len(self.revrunFBtag2) > 3:

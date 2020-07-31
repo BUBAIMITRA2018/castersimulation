@@ -207,17 +207,6 @@ class Fn_Ramp(Eventmanager):
 
 
 
-
-
-
-            #     print("t3 is executed")
-            #     t3 = threading.Thread(target=self.decreasefunction, args=(
-            #         self.currentpv, self.lowerlimit, self.negativerate))
-            #     t3.start()
-            #
-            # if self.currentpv <= self.lowerlimit:
-            #     self.negativepluse = False
-
             sta_con_plc.disconnect()
 
         except Exception as e:

@@ -274,7 +274,7 @@ class FormUi:
             self.analogobject = allanalogprocessing.analogprocess(self.alldevices,self.import_file_path)
             self.digitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
             self.abbobject = allabpdriveprocessing.abpdriveprocessing(self.alldevices,self.import_file_path)
-            self.rampobject = allrampprocessing.rampprocess(self.alldevices,self.import_file_path)
+            # self.rampobject = allrampprocessing.rampprocess(self.alldevices,self.import_file_path)
             self.proportionalvalveobject = allpropotionalvalvesprocessing.proportionalvalveprocess(self.alldevices,self.import_file_path)
 
 
@@ -483,8 +483,8 @@ class FormUi:
         self.encoderstartbutton = ttk.Button(self.win, text='encoderstart', command=self.encoderstart)
         self.encoderstartbutton.grid(column=1, row=0)
 
-        self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
-        self.analogstartbutton.grid(column=1, row=1)
+        # self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
+        # self.analogstartbutton.grid(column=1, row=1)
 
         self.drivestartbutton = ttk.Button(self.win, text='drivestart', command=self.abbdrivestart)
         self.drivestartbutton.grid(column=1, row=2)
@@ -492,8 +492,8 @@ class FormUi:
         self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
         self.controlvalvestartbutton.grid(column=1, row=3)
 
-        self.rampstartbutton = ttk.Button(self.win, text='rampstart', command=self.rampstart)
-        self.rampstartbutton.grid(column=1, row=4)
+        # self.rampstartbutton = ttk.Button(self.win, text='rampstart', command=self.rampstart)
+        # self.rampstartbutton.grid(column=1, row=4)
 
         self.proportionalstartbutton = ttk.Button(self.win, text='ProportionalStart', command=self.proportionalprocessstart)
         self.proportionalstartbutton.grid(column=0, row=5)

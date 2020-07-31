@@ -79,13 +79,13 @@ class Fn_ControlValves(Eventmanager):
 
                     if self.spvalue > self.currentvalue:
                         diff = self.spvalue - self.currentvalue
-                        count = .01 * diff
+                        count = .1 * diff
                         self.currentvalue = self.currentvalue + count
                         writegeneral.writesymbolvalue(self.pv, self.currentvalue, 'S7WLWord')
 
                     if self.spvalue < self.currentvalue:
                         diff = self.currentvalue - rawspvalue
-                        count1 = .01 * diff
+                        count1 = .1 * diff
                         self.currentvalue = self.currentvalue - count1
                         writegeneral.writesymbolvalue(self.pv, self.currentvalue, 'S7WLWord')
 

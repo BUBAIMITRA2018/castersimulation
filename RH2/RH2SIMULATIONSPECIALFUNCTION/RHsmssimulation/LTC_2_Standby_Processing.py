@@ -14,7 +14,7 @@ class LTC2StandbyProcess:
 
 
     def process(self):
-        self.alldevices.CallStandbyLTC2.ltc2standbyobject.process()
+        self.alldevices.Callltc2stanby.ltc2standbyobject.process()
 
 
 

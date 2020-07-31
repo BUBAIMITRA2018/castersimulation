@@ -2,6 +2,7 @@ from logger import *
 from fn_analogTx_V3 import *
 import logging
 import threading
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -48,6 +49,8 @@ class Cal_AllAnalogInputs:
             # Declear empty list
             self.dictionary = dict(zip(keys, values))
 
+            gc.collect()
+
 
 
 
@@ -57,15 +60,7 @@ class Cal_AllAnalogInputs:
             logger.log(level, messege)
             log_exception(e)
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
 
-    def __setstate__(self, state):
-        # Restore instance attributes.
-        self.__dict__.update(state)
 
 
     @property

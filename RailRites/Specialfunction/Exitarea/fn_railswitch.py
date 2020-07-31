@@ -21,8 +21,7 @@ class Fn_RailSwitch(Eventmanager):
         # self.count = 0
         self._fwdlimitswtvalue = False
         self._revlimitswtvalue = False
-        # self._fwdrunFBvalue = False
-        # self._revrunFBvalue = False
+
         self.setup()
         self.initilizedigitalinput()
         super().__init__(lambda: self.process())
@@ -52,6 +51,12 @@ class Fn_RailSwitch(Eventmanager):
                     self.pos3 = str(209.7)
                     self.pos4 = str(210.1)
                     self.pos5 = str(210.3)
+                    self.pos10 = str(209.4)
+                    self.pos20 = str(209.6)
+                    self.pos30 = str(210.0)
+                    self.pos40 = str(210.2)
+                    self.pos50 = str(210.4)
+                    self.reset = str(59.7)
 
         except Exception as e:
             level = logging.ERROR
@@ -62,24 +67,25 @@ class Fn_RailSwitch(Eventmanager):
 
 
     def initilizedigitalinput(self):
-        client = Communication()
-        sta_con_plc = client.opc_client_connect(self.filename)
-        readgeneral = ReadGeneral(sta_con_plc)
-        writegeneral = WriteGeneral(sta_con_plc)
-        writegeneral.writesymbolvalue(self.trackposition, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition3, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint3, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint3, 0, 'S7WLBit')
-
-        sta_con_plc.disconnect()
+        pass
+        # client = Communication()
+        # sta_con_plc = client.opc_client_connect(self.filename)
+        # readgeneral = ReadGeneral(sta_con_plc)
+        # writegeneral = WriteGeneral(sta_con_plc)
+        # writegeneral.writesymbolvalue(self.trackposition, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.trackposition1, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.trackposition2, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.trackposition3, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.reverseendpoint, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.reverseendpoint1, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.reverseendpoint2, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.reverseendpoint3, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.forwardendpoint, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.forwardendpoint1, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.forwardendpoint2, 0, 'S7WLBit')
+        # writegeneral.writesymbolvalue(self.forwardendpoint3, 0, 'S7WLBit')
+        #
+        # sta_con_plc.disconnect()
 
 
 
@@ -148,20 +154,39 @@ class Fn_RailSwitch(Eventmanager):
 
             self.rdolcmdvalue = readgeneral.readsymbolvalue(self.rdolcmd, 'S7WLBit', "PE")
 
+            if self.count == 1 and self.rdolcmdvalue == 1:
+                writegeneral.writesymbolvalue(self.pos1, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos10, 1, 'S7WLBit')
+
             if self.count == 2 and self.rdolcmdvalue == 1:
-                writegeneral.writesymbolvalue(self.pos1, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos2, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos20, 1, 'S7WLBit')
 
             if self.count == 3 and self.rdolcmdvalue == 1:
-                writegeneral.writesymbolvalue(self.pos2, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos3, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos30, 1, 'S7WLBit')
 
             if self.count == 4 and self.rdolcmdvalue == 1:
-                writegeneral.writesymbolvalue(self.pos3, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos4, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos40, 1, 'S7WLBit')
 
             if self.count == 5 and self.rdolcmdvalue == 1:
-                writegeneral.writesymbolvalue(self.pos4, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos5, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos50, 1, 'S7WLBit')
 
-            if self.count == 6 and self.rdolcmdvalue == 1:
+            self.resetval = readgeneral.readsymbolvalue(self.reset, 'S7WLBit', "PA")
+            if self.resetval == 1:
+                writegeneral.writesymbolvalue(self.pos1, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos2, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos3, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos4, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.pos5, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos10, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos20, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos30, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos40, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.pos50, 0, 'S7WLBit')
+
 
 
 

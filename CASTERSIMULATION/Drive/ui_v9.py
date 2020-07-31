@@ -17,6 +17,7 @@ import allanalogprocessing
 import alldigitalprocessing
 import allabpdriveprocessing
 import allrampprocessing
+import os
 
 
 
@@ -400,12 +401,12 @@ class FormUi:
         self.encodertread.start()
         self.motor1dstartbutton.configure(text="motor1dstarted")
 
-    def analogstart(self):
-        self.DEAD = False
-        self.analogtread = threading.Thread(target=self.callallanalogs, args=(self.comm_object, self.alldevices))
-        self.listofthread.append(self.analogtread)
-        self.analogtread.start()
-        self.analogstartbutton.configure(text="analogstarted")
+    # def analogstart(self):
+    #     self.DEAD = False
+    #     self.analogtread = threading.Thread(target=self.callallanalogs, args=(self.comm_object, self.alldevices))
+    #     self.listofthread.append(self.analogtread)
+    #     self.analogtread.start()
+    #     self.analogstartbutton.configure(text="analogstarted")
 
     def rampstart(self):
         self.DEAD = False
@@ -463,8 +464,8 @@ class FormUi:
         self.encoderstartbutton = ttk.Button(self.win, text='encoderstart', command=self.encoderstart)
         self.encoderstartbutton.grid(column=1, row=0)
 
-        self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
-        self.analogstartbutton.grid(column=1, row=1)
+        # self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
+        # self.analogstartbutton.grid(column=1, row=1)
 
         self.drivestartbutton = ttk.Button(self.win, text='drivestart', command=self.seimensdrivestart)
         self.drivestartbutton.grid(column=1, row=2)
@@ -472,8 +473,8 @@ class FormUi:
         self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
         self.controlvalvestartbutton.grid(column=1, row=3)
 
-        self.rampstartbutton = ttk.Button(self.win, text='rampstart', command=self.rampstart)
-        self.rampstartbutton.grid(column=1, row=4)
+        # self.rampstartbutton = ttk.Button(self.win, text='rampstart', command=self.rampstart)
+        # self.rampstartbutton.grid(column=1, row=4)
 
 
     def stopprocess(self):
@@ -485,10 +486,10 @@ class FormUi:
         self.sov2startbutton.configure(text = 'sov2start')
         self.encoderstartbutton.configure(text = 'encoderstart')
         self.controlvalvestartbutton.configure(text = 'controlvalstart')
-        self.analogstartbutton.configure(text = 'analogstart')
+        # self.analogstartbutton.configure(text = 'analogstart')
         self.drivestartbutton.configure(text = 'drivestart')
         self.digitalstartbutton.configure(text='digitalstart')
-        self.rampstartbutton.configure(text='rampstart')
+        # self.rampstartbutton.configure(text='rampstart')
 
 
 
@@ -618,6 +619,7 @@ class App:
 
     def quit(self, *args):
         self.clock.stop()
+        os.system("taskkill /f /im  Your_Process_Name.exe")
         self.root.destroy()
 
     def signal_handler(sig, frame):

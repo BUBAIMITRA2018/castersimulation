@@ -14,7 +14,7 @@ class LanceProcess:
 
 
     def process(self):
-        self.alldevices.CallLance.lanceobject.process()
+        self.alldevices.Calllance.lanceobject.process()
 
 
 

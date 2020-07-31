@@ -2,6 +2,7 @@ from logger import *
 from fn_sov2S_V3 import *
 import logging
 import threading
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -50,6 +51,8 @@ class Cal_AllSov2S:
 
 
 
+
+
         except Exception as e:
             log_exception(e)
             print("Error messege is:",e.args)
@@ -57,15 +60,7 @@ class Cal_AllSov2S:
             messege = 'Event:' + "callallsov2s" + str(e.args)
             logger.log(level, messege)
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
 
-    def __setstate__(self, state):
-        # Restore instance attributes.
-        self.__dict__.update(state)
 
     @property
     def listofallsov2s(self):

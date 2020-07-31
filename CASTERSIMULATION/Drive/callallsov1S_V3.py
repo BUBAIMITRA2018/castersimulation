@@ -2,6 +2,7 @@ from logger import *
 import threading
 from fn_sov1S_V3 import *
 import logging
+import gc
 
 
 
@@ -59,9 +60,12 @@ class Cal_AllSov1S:
 
 
 
+
+
+
+
         except Exception as e :
             log_exception(e)
-
             level = logging.ERROR
             messege = 'Event:' + "callallsov1s" + str(e.args)
             logger.log(level, messege)

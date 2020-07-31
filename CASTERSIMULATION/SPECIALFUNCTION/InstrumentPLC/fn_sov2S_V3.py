@@ -102,7 +102,7 @@ class Fn_Sov2S(Eventmanager):
     def sov2sprocess(self):
 
         try:
-            print('control valve is running')
+        
             client = Communication()
             sta_con_plc = client.opc_client_connect(self.filename)
             readgeneral = ReadGeneral(sta_con_plc)
@@ -113,10 +113,7 @@ class Fn_Sov2S(Eventmanager):
             if self.opncmdvalue == True and self.clscmdvalue == False:
                 writegeneral.writesymbolvalue(self.closeFBtag, 0,'S7WLBit')
                 if len(self.torquecloseFBtag) > 3:
-                    writegeneral.writesymbolvalue(self.torquecloseFBtag, 0,'S7WLBit')
-                # if len(self.closeLS)>3:
-                #     writegeneral.writesymbolvalue(self.closeLS, 0, 'S7WLBit')
-                # sleep(self.delaytimetag)
+                    writegeneral.writesymbolvalue(self.torquecloseFBtag, 0,'S7WLBit')          
                 writegeneral.writesymbolvalue(self.openFBtag, 1,'S7WLBit')
                 if len(self.torqueOpenFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torqueOpenFBtag, 1,'S7WLBit')

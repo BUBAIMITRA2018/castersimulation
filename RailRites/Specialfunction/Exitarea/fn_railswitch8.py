@@ -49,20 +49,7 @@ class Fn_RailSwitch8(Eventmanager):
 
 
     def initilizedigitalinput(self):
-        client = Communication()
-        sta_con_plc = client.opc_client_connect(self.filename)
-        readgeneral = ReadGeneral(sta_con_plc)
-        writegeneral = WriteGeneral(sta_con_plc)
-        writegeneral.writesymbolvalue(self.trackposition, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.trackposition1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.reverseendpoint1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.forwardendpoint1, 0, 'S7WLBit')
-
-
-
-        sta_con_plc.disconnect()
+        pass
 
 
 

@@ -12,10 +12,15 @@ class AreaObserver:
         observable.register_observer(self)
 
     def notify(self,  *args, **kwargs):
+        try:
+            for item in args[0]:
+                item.OpenCmd = args[1].readsymbolvalue(item.cmdtag, 'S7WLBit', 'PA')
 
-        for item in args[0]:
-            item.OpenCmd= args[1].readsymbolvalue(item.cmdtag,'S7WLBit','PA')
-
+        except Exception as e:
+            log_exception(e)
+            level = logging.INFO
+            messege = 'AreaObserver' + ":" + " Exception rasied(process): " + str(e.args) + str(e)
+            logger.log(level, messege)
 
 
 class sov1sprocess:

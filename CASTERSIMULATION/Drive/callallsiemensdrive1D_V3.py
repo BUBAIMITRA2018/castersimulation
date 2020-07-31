@@ -2,6 +2,7 @@ from logger import *
 from  fn_Siemens_drive_V3 import *
 import logging
 import threading
+import gc
 
 
 
@@ -58,21 +59,15 @@ class Cal_AllSiemensDrive1D:
 
 
 
+
+
         except Exception as e :
             log_exception(e)
             level = logging.ERROR
             messege = 'Event:' + "callallmotor1D" + str(e.args)
             logger.log(level, messege)
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
 
-    def __setstate__(self, state):
-        # Restore instance attributes.
-        self.__dict__.update(state)
 
 
     @property

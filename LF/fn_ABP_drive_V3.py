@@ -141,37 +141,44 @@ class Fn_ABP_Drive(Eventmanager):
             if len(self.stopcmdtag) > 3:
                 self.stopcmdvalue  = readgeneral.readsymbolvalue(self.stopcmdtag,'S7WLBit', 'PA')
 
-            self.cw_val = int(readgeneral.readsymbolvalue(self.cw, 'S7WLWord', 'PA'))
+            self.cw_val = int(readgeneral.readDBvalue(self.cw,'S7WLWord'))
+            self.speedSP_val = int((readgeneral.readDBvalue(self.speedSP, 'S7WLWord')))
+
+
+            print("control word value",self.cw_val)
+            print("speed setpoint value", self.speedSP_val)
+
 
             if self.cw_val == 0:
                 writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
                 writegeneral.writeDBvalue(self.current, 0, 'S7WLWord')
+                writegeneral.writeDBvalue(self.speedFB, 0, 'S7WLWord')
                 writegeneral.writeDBvalue(self.torque, 0, 'S7WLWord')
                 if len(self.dcvoltage) > 3:
                     writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
-            if self.cw_val == 1030:
+            if self.cw_val == 1139:
                 writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
                 writegeneral.writeDBvalue(self.current, 0, 'S7WLWord')
+                writegeneral.writeDBvalue(self.speedFB, 0, 'S7WLWord')
                 writegeneral.writeDBvalue(self.torque, 0, 'S7WLWord')
                 if len(self.dcvoltage) > 3:
                     writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
-            if self.cw_val == 1031:
-                speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'S7WLWord', 'PA'))
+            if self.cw_val == 1145:
+
                 writegeneral.writeDBvalue(self.sw, 14131, 'S7WLWord')
                 writegeneral.writeDBvalue(self.current, 17000, 'S7WLWord')
                 writegeneral.writeDBvalue(self.torque, 17000, 'S7WLWord')
-                writegeneral.writeDBvalue(self.speedFB, speedSP_val, 'S7WLWord')
+                writegeneral.writeDBvalue(self.speedFB, self.speedSP_val, 'S7WLWord')
                 if len(self.dcvoltage) > 3:
                     writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
             if self.cw_val != 0 and self.cw_val == 1151:
-                speedSP_val = int(readgeneral.readsymbolvalue(self.speedSP, 'S7WLWord', 'PA'))
                 writegeneral.writeDBvalue(self.sw, 13111, 'S7WLWord')
                 writegeneral.writeDBvalue(self.current, 17000, 'S7WLWord')
                 writegeneral.writeDBvalue(self.torque, 17000, 'S7WLWord')
-                writegeneral.writeDBvalue(self.speedFB, speedSP_val, 'S7WLWord')
+                writegeneral.writeDBvalue(self.speedFB, self.speedSP_val, 'S7WLWord')
                 if len(self.dcvoltage) > 3:
                     writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 

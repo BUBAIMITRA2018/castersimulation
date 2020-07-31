@@ -8,6 +8,10 @@ import PIL.ImageTk
 import AutocompleteCombox
 import LTC_1_Processing
 import LTC_2_Processing
+import LTC_1_Standby_Processing
+import LTC_2_Standby_Processing
+import Lance_Processing
+import Lance_Standby_Processing
 import general
 import time
 import alldevices_V3
@@ -243,6 +247,10 @@ class FormUi:
 
             self.LTC1object = LTC_1_Processing.LTC1Process(self.alldevices)
             self.LTC2object = LTC_2_Processing.LTC2Process(self.alldevices)
+            self.LTC1standbyobject = LTC_1_Standby_Processing.LTC1StandbyProcess(self.alldevices)
+            self.LTC2standbyobject = LTC_2_Standby_Processing.LTC2StandbyProcess(self.alldevices)
+            self.Lanceobject = Lance_Processing.LanceProcess(self.alldevices)
+            self.Lancestandbyobject = Lance_Standby_Processing.LanceStandbyProcess(self.alldevices)
 
 
 
@@ -275,13 +283,27 @@ class FormUi:
     def callLTC1(self):
         while not self.DEAD:
             self.LTC1object.process()
-            # time.sleep(2)
+
 
     def callLTC2(self):
         while not self.DEAD:
             self.LTC2object.process()
-            # time.sleep(2)
 
+    def callLTC1Standby(self):
+        while not self.DEAD:
+            self.LTC1standbyobject.process()
+
+    def callLTC2Standby(self):
+        while not self.DEAD:
+            self.LTC2standbyobject.process()
+
+    def callLance(self):
+        while not self.DEAD:
+            self.Lanceobject.process()
+
+    def callLancestandby(self):
+        while not self.DEAD:
+            self.Lancestandbyobject.process()
 
     def ltc1start(self):
         self.DEAD = False
@@ -295,22 +317,36 @@ class FormUi:
         self.ltc2thread.start()
         self.ltc2startbutton.configure(text="ltc2started")
 
+    def ltc1standbystart(self):
+        self.DEAD = False
+        self.ltc1standbythread = threading.Thread(target=self.callLTC1Standby)
+        self.ltc1standbythread.start()
+        self.ltc1standbystartbutton.configure(text="ltc1standbystarted")
 
 
+    def ltc2standbystart(self):
+        self.DEAD = False
+        self.ltc2standbythread = threading.Thread(target=self.callLTC2Standby)
+        self.ltc2standbythread.start()
+        self.ltc2standbystartbutton.configure(text="ltc2standbystarted")
 
 
+    def lancestart(self):
+        self.DEAD = False
+        self.lancethread = threading.Thread(target=self.callLance)
+        self.lancethread.start()
+        self.lancestartbutton.configure(text="lancestarted")
 
-
-
-
-
-
-
+    def lancestandbystart(self):
+        self.DEAD = False
+        self.lancestandbythread = threading.Thread(target=self.callLancestandby)
+        self.lancestandbythread.start()
+        self.lancestandbystartbutton.configure(text="lancestandbystarted")
 
     def startprocess(self):
 
         self.win = tk.Toplevel(self.frame)
-        self.win.geometry("250x200")
+        self.win.geometry("300x200")
 
 
         self.ltc1startbutton = ttk.Button(self.win, text='LTC1_START', command=self.ltc1start)
@@ -318,6 +354,18 @@ class FormUi:
 
         self.ltc2startbutton = ttk.Button(self.win, text='LTC2_START', command=self.ltc2start)
         self.ltc2startbutton.grid(column=0, row=1)
+
+        self.ltc1standbystartbutton = ttk.Button(self.win, text='LTC1_STANDBY_START', command=self.ltc1standbystart)
+        self.ltc1standbystartbutton.grid(column=0, row=2)
+
+        self.ltc2standbystartbutton = ttk.Button(self.win, text='LTC2_STANDBY_START', command=self.ltc2standbystart)
+        self.ltc2standbystartbutton.grid(column=1, row=0)
+
+        self.lancestartbutton = ttk.Button(self.win, text='LANCE_START', command=self.lancestart)
+        self.lancestartbutton.grid(column=1, row=1)
+
+        self.lancestandbystartbutton = ttk.Button(self.win, text='LANCE_STANDBY_START', command=self.lancestandbystart)
+        self.lancestandbystartbutton.grid(column=1, row=2)
 
 
     def stopprocess(self):
