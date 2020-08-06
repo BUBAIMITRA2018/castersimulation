@@ -1,4 +1,5 @@
 import datetime
+import os
 import queue
 import logging
 import signal
@@ -624,6 +625,8 @@ class App:
 
     def quit(self, *args):
         self.clock.stop()
+        os.system("taskkill /f /im  Exitmain.exe")
+
         self.root.destroy()
 
     def signal_handler(sig, frame):

@@ -3,6 +3,7 @@ from event_V2 import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -131,6 +132,8 @@ class Fn_VibroFeeder(Eventmanager):
                 logger.log(level, messege)
 
             sta_con_plc.close()
+
+            gc.collect()
 
 
 

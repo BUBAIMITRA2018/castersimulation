@@ -1,3 +1,5 @@
+import gc
+
 from logger import *
 from event_V2 import *
 from time import sleep
@@ -192,8 +194,9 @@ class Fn_RailSwitch(Eventmanager):
 
             sleep(1)
 
-            sta_con_plc.disconnect()
 
+            sta_con_plc.disconnect()
+            gc.collect()
         except Exception as e:
             log_exception(e)
             level = logging.INFO

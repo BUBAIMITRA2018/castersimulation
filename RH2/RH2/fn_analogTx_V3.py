@@ -3,6 +3,7 @@ from clientcomm_v1 import *
 import random
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -87,9 +88,26 @@ class Fn_AnalogTx(Eventmanager):
         writegeneral = WriteGeneral(sta_con_plc)
         readgeneral = ReadGeneral(sta_con_plc)
 
-        writegeneral.writesymbolvalue(self.outputtag, 'analog', 0)
+        if self.selval == 1 and self.val > self.lowerlimit and self.val < self.highlimit:
+            a = abs(self.val - 0.005)
+            b = abs(self.val + 0.005)
+            self.targetvalue = random.uniform(a, b)
+            self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
+            writegeneral.writesymbolvalue(self.outputtag, 'analog', self.outrawvalue)
+
+        if not self.selval and self.val > self.lowerlimit and self.val < self.highlimit and self.val != 0:
+            highband = self.highlimit - self.val
+            lowerband = self.val - self.lowerlimit
+            self.targetvalue = random.uniform(highband, lowerband)
+            self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
+            writegeneral.writesymbolvalue(self.outputtag, 'analog', self.outrawvalue)
+
+        if self.val == 0 and self.selval == 1:
+            writegeneral.writesymbolvalue(self.outputtag, 'analog', 0)
 
         sta_con_plc.close()
+        gc.collect()
+
 
 
 
@@ -109,20 +127,22 @@ class Fn_AnalogTx(Eventmanager):
                             a = abs(self.val - 0.005)
                             b = abs(self.val + 0.005)
                             self.targetvalue = random.uniform(a, b)
-                            self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
+                            self.outrawvalue = self.unscaling(self.targetvalue,10000,self.highlimit,self.lowerlimit,0)
                             writegeneral.writesymbolvalue(self.outputtag, 'analog', self.outrawvalue)
 
                         if not self.selval and self.val > self.lowerlimit and self.val < self.highlimit and self.val != 0:
                             highband = self.highlimit - self.val
                             lowerband = self.val - self.lowerlimit
                             self.targetvalue = random.uniform(highband, lowerband)
-                            self.outrawvalue = self.scaling(self.targetvalue, self.highlimit, self.lowerlimit)
+                            self.outrawvalue = self.unscaling(self.targetvalue, 10000, self.highlimit, self.lowerlimit,
+                                                              0)
                             writegeneral.writesymbolvalue(self.outputtag, 'analog', self.outrawvalue)
 
                         if self.val == 0 and self.selval == 1:
                             writegeneral.writesymbolvalue(self.outputtag, 'analog', 0)
 
                         sta_con_plc.close()
+
 
                     except Exception as e:
                         level = logging.ERROR
@@ -135,6 +155,11 @@ class Fn_AnalogTx(Eventmanager):
     def scaling(self, val, highlimit, lowlimit):
         rawvalue = int((val * 10000) / (highlimit - lowlimit))
         return rawvalue
+
+    def unscaling(self, val, engineeringvaluerange, highlimit, lowlimit, engineeringlowlimit):
+        processvaluerange = highlimit - lowlimit
+        enggunit = (engineeringvaluerange / processvaluerange) * (val - lowlimit) + engineeringlowlimit
+        return enggunit
 
     @property
     def areaname(self):

@@ -4,6 +4,7 @@ from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
 import time
+import gc
 from event_V2 import *
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_LTC1signal']
@@ -278,6 +279,7 @@ class Fn_LTC1signal():
                 self.positivecount = self.positivecount - 1
 
         sta_con_plc.close()
+        gc.collect()
 
 
 

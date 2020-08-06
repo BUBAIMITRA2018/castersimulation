@@ -1,6 +1,6 @@
 from logger import *
 from event_V2 import *
-
+import gc
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
@@ -98,12 +98,9 @@ class Fn_ControlValves(Eventmanager):
 
                 print(self.devicename + " controlvalve value is " + str (self.currentvalue))
 
-
-
-
-
-
             sta_con_plc.close()
+
+            gc.collect()
 
 
         except Exception as e:

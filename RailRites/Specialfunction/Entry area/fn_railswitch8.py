@@ -6,6 +6,7 @@ from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
 import  general
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -132,7 +133,7 @@ class Fn_RailSwitch8(Eventmanager):
             if self.drivecmdentry2value == 2063:
                 sleep(5)
                 writegeneral.writesymbolvalue(self.limitswitchentry2B, 0, 'S7WLBit')
-                writegeneral.writesymbolvalue(self.limitswitchentry1A, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.limitswitchentry1B, 1, 'S7WLBit')
                 sleep(5)
                 writegeneral.writesymbolvalue(self.limitswitchentry2A, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.limitswitchentry1A, 1, 'S7WLBit')
@@ -140,6 +141,7 @@ class Fn_RailSwitch8(Eventmanager):
 
 
             sta_con_plc.disconnect()
+            gc.collect()
 
             
 

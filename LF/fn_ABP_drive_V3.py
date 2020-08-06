@@ -2,6 +2,7 @@ from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 from event_V2 import *
+import gc
 
 import logging
 
@@ -183,6 +184,7 @@ class Fn_ABP_Drive(Eventmanager):
                     writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
             sta_con_plc.disconnect()
+            gc.collect()
 
 
 

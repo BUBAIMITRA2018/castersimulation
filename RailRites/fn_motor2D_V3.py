@@ -1,11 +1,11 @@
-from logger import *
+
 from event_V2 import *
-from time import sleep
+import gc
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
-import  general
+
 
 logger = logging.getLogger("main.log")
 
@@ -124,54 +124,12 @@ class Fn_Motor2D(Eventmanager):
                 writegeneral.writesymbolvalue(self.revrunFBtag4, 0, 'S7WLBit')
                 print(self.revrunFBtag4)
 
-
             if len(self.remFBtag) > 3:
                 writegeneral.writesymbolvalue(self.remFBtag, 1,'S7WLBit')
                 level = logging.INFO
                 messege = self.devicename + ":" + self.remFBtag + " is trigger by 1"
                 logger.log(level, messege)
 
-
-
-
-            # if len(self.healthyFBtag) > 3:
-            #
-            #     writegeneral.writesymbolvalue(self.healthyFBtag, 1,'S7WLBit')
-            #     level = logging.INFO
-            #     messege = self.devicename + ":" + self.healthyFBtag + " is trigger by 1"
-            #     logger.log(level, messege)
-            #
-            #
-            #
-            # if len(self.readyFBtag) > 3:
-            #     writegeneral.writesymbolvalue(self.readyFBtag, 1,'S7WLBit')
-            #     level = logging.INFO
-            #     messege = self.devicename + ":" + self.readyFBtag + " is trigger by 1"
-            #     logger.log(level, messege)
-            #
-            #
-            #
-            # if len(self.mccbonFeedBacktag) > 3:
-            #     writegeneral.writesymbolvalue(self.mccbonFeedBacktag, 1,'S7WLBit')
-            #     level = logging.INFO
-            #     messege = self.devicename + ":" + self.mccbonFeedBacktag + " is trigger by 1"
-            #     logger.log(level, messege)
-            #
-            #
-            #
-            # if len(self.overloadFeedBacktag) > 3:
-            #     writegeneral.writesymbolvalue(self.overloadFeedBacktag, 0,'S7WLBit')
-            #     level = logging.INFO
-            #     messege = self.devicename + ":" + self.overloadFeedBacktag + " is trigger by 0"
-            #     logger.log(level, messege)
-            #
-            #
-            #
-            # if len(self.faultFBtag) > 3:
-            #     writegeneral.writesymbolvalue(self.faultFBtag, 1,'S7WLBit')
-            #     level = logging.INFO
-            #     messege = self.devicename + ":" + self.faultFBtag + " is trigger by 1"
-            #     logger.log(level, messege)
 
             sta_con_plc.disconnect()
 
@@ -269,6 +227,8 @@ class Fn_Motor2D(Eventmanager):
 
             sta_con_plc.disconnect()
 
+            gc.collect()
+
 
 
         except Exception as e:
@@ -276,14 +236,10 @@ class Fn_Motor2D(Eventmanager):
             level = logging.INFO
             messege = self.devicename + ":" + " Exception rasied(process): " + str(e.args) + str(e)
             logger.log(level, messege)
-            print("Motor 2d error:",e.args)
 
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        # Remove the unpicklable entries.
-        del state['mylock']
-        return state
+
+
 
     @property
     def FwdOnCmd(self):

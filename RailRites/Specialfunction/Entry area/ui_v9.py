@@ -558,6 +558,7 @@ class App:
 
     def quit(self, *args):
         self.clock.stop()
+        os.system("taskkill /f /im  entryarea.exe")
         self.root.destroy()
 
     def signal_handler(sig, frame):

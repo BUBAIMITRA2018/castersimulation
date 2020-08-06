@@ -224,19 +224,19 @@ class Fn_Schneider_Drive(Eventmanager):
                         writegeneral.writeDBvalue(self.current, 0, 'S7WLWord')
 
 
-            if self.startcmdvalue :
-                if(len(self.RunningFBtag) > 3):
-                    writegeneral.writesymbolvalue(self.RunningFBtag, 1,'S7WLBit')
-
-                if (len(self.ONFBtag) > 3):
-                    writegeneral.writesymbolvalue(self.ONFBtag, 1,'S7WLBit')
-
-            if self.stopcmdvalue:
-                if (len(self.RunningFBtag) > 3):
-                    writegeneral.writesymbolvalue(self.RunningFBtag, 0,'S7WLBit')
-
-                if (len(self.ONFBtag) > 3):
-                    writegeneral.writesymbolvalue(self.ONFBtag, 0,'S7WLBit')
+            # if self.startcmdvalue :
+            #     if(len(self.RunningFBtag) > 3):
+            #         writegeneral.writesymbolvalue(self.RunningFBtag, 1,'S7WLBit')
+            #
+            #     if (len(self.ONFBtag) > 3):
+            #         writegeneral.writesymbolvalue(self.ONFBtag, 1,'S7WLBit')
+            #
+            # if self.stopcmdvalue:
+            #     if (len(self.RunningFBtag) > 3):
+            #         writegeneral.writesymbolvalue(self.RunningFBtag, 0,'S7WLBit')
+            #
+            #     if (len(self.ONFBtag) > 3):
+            #         writegeneral.writesymbolvalue(self.ONFBtag, 0,'S7WLBit')
 
             sta_con_plc.disconnect()
 

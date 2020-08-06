@@ -5,4 +5,4 @@ setup(
     name = "SMSSIMULATION",
     version = "3.7",
     description = "SIMULATION TOOLS USING OPCUA",
-    executables = [Executable("execution.py", base = "Win32GUI")])
+    executables = [Executable("LFMain.py", base = "Win32GUI")])

@@ -1,6 +1,7 @@
 import datetime
 import queue
 import logging
+import os
 import signal
 import multiprocessing
 import PIL.Image
@@ -508,10 +509,8 @@ class FormUi:
         self.sov2startbutton.configure(text = 'sov2start')
         self.encoderstartbutton.configure(text = 'encoderstart')
         self.controlvalvestartbutton.configure(text = 'controlvalstart')
-        self.analogstartbutton.configure(text = 'analogstart')
         self.drivestartbutton.configure(text = 'drivestart')
         self.digitalstartbutton.configure(text='digitalstart')
-        self.rampstartbutton.configure(text='rampstart')
         self.proportionalstartbutton.configure(text='ProportionalStart')
 
 
@@ -639,6 +638,7 @@ class App:
 
     def quit(self, *args):
         self.clock.stop()
+        os.system("taskkill /f /im  LFMain.exe")
         self.root.destroy()
 
     def signal_handler(sig, frame):

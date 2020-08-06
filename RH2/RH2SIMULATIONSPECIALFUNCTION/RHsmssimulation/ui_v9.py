@@ -2,6 +2,7 @@ import datetime
 import queue
 import logging
 import signal
+import os
 import multiprocessing
 import PIL.Image
 import PIL.ImageTk
@@ -341,7 +342,7 @@ class FormUi:
         self.DEAD = False
         self.lancestandbythread = threading.Thread(target=self.callLancestandby)
         self.lancestandbythread.start()
-        self.lancestandbystartbutton.configure(text="lancestandbystarted")
+        self.lancestandbystartbutton.configure(text="lancebypassstarted")
 
     def startprocess(self):
 
@@ -364,7 +365,7 @@ class FormUi:
         self.lancestartbutton = ttk.Button(self.win, text='LANCE_START', command=self.lancestart)
         self.lancestartbutton.grid(column=1, row=1)
 
-        self.lancestandbystartbutton = ttk.Button(self.win, text='LANCE_STANDBY_START', command=self.lancestandbystart)
+        self.lancestandbystartbutton = ttk.Button(self.win, text='LANCE_BYPASS_START', command=self.lancestandbystart)
         self.lancestandbystartbutton.grid(column=1, row=2)
 
 
@@ -373,6 +374,11 @@ class FormUi:
         self.DEAD = True
         self.ltc1startbutton.configure(text='LTC1_START')
         self.ltc2startbutton.configure(text='LTC2_START')
+        self.ltc1standbystartbutton.configure(text='LTC1_STANDBY_START')
+        self.ltc2standbystartbutton.configure(text='LTC2_STANDBY_START')
+        self.lancestartbutton.configure(text='LANCE_START')
+        self.lancestandbystartbutton.configure(text='LANCE_BYPASS_START')
+
 
 
 
@@ -501,6 +507,7 @@ class App:
 
     def quit(self, *args):
         self.clock.stop()
+        os.system("taskkill /f /im  RHLtcCar.exe")
         self.root.destroy()
 
     def signal_handler(sig, frame):

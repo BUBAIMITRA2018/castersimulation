@@ -1,6 +1,6 @@
 
 from event_V2 import *
-
+import gc
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
@@ -123,10 +123,9 @@ class Fn_ControlValves(Eventmanager):
                         writegeneral.writesymbolvalue(self.pv, self.currentvalue, 'S7WLWord')
 
 
-
-
-
             sta_con_plc.disconnect()
+            gc.collect()
+
 
 
         except Exception as e:

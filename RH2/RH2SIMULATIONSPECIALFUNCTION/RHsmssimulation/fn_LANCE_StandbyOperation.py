@@ -4,6 +4,7 @@ from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
 from event_V2 import *
+import gc
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_LanceStandbysignal']
 
@@ -100,6 +101,7 @@ class Fn_LanceStandbysignal():
 
 
         sta_con_plc.close()
+        gc.collect()
 
 
 

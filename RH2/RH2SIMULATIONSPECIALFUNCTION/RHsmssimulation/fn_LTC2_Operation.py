@@ -5,6 +5,7 @@ from  writegeneral_v2 import *
 import time
 import logging
 from event_V2 import *
+import gc
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_LTC2signal']
 
@@ -240,10 +241,8 @@ class Fn_LTC2signal(Eventmanager):
 
                 writegeneral.writesymbolvalue(self.Ltc2CarTreatmentoverPosFb, 'digital', 1)
 
-
-
-
         sta_con_plc.close()
+        gc.collect()
 
 
 

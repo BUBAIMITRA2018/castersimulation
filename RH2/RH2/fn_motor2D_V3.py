@@ -4,6 +4,7 @@ from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
+import gc
 
 
 
@@ -227,7 +228,8 @@ class Fn_Motor2D(Eventmanager):
                 self.FwdRunFB = False
                 level = logging.WARNING
 
-            sta_con_plc.disconnect()
+            sta_con_plc.close()
+            gc.collect()
 
 
 

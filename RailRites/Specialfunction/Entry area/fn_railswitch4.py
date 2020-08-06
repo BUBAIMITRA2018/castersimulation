@@ -6,6 +6,7 @@ from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
 import  general
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -20,9 +21,7 @@ class Fn_RailSwitch4(Eventmanager):
         self.filename = filename
         self.count = 0
         self._fwdlimitswtvalue = False
-        self._revlimitswtvalue = False
-        # self._fwdrunFBvalue = False
-        # self._revrunFBvalue = False
+        self._revlimitswtvalue = False  
         self.setup()
         self.initilizedigitalinput()
         super().__init__(lambda: self.process())
@@ -193,6 +192,7 @@ class Fn_RailSwitch4(Eventmanager):
                 writegeneral.writesymbolvalue(self.rollertable1, 1, 'S7WLBit')
 
             sta_con_plc.disconnect()
+            gc.collect()
 
 
         except Exception as e:

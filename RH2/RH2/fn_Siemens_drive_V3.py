@@ -3,6 +3,7 @@ from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 from event_V2 import *
+import gc
 
 import logging
 
@@ -198,6 +199,8 @@ class Fn_Siemens_Drive(Eventmanager):
 
 
 
+
+
             # if self.connectiontype == "HARDWARE":
             #
             #     if len(self.stopcmdtag) > 3:
@@ -256,6 +259,8 @@ class Fn_Siemens_Drive(Eventmanager):
             #         logger.log(level1, messege1)
 
                 sta_con_plc.close()
+
+            gc.collect()
 
 
 

@@ -5,6 +5,7 @@ from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
 import threading
+import  gc
 
 
 logger = logging.getLogger("main.log")
@@ -112,10 +113,8 @@ class Fn_Sov1S(Eventmanager):
                 messege1 = self.devicename + ":" + self.closeFBtag + " is trigger by 1"
                 logger.log(level2, messege2)
                 logger.log(level1, messege1)
-
-
-
             sta_con_plc.close()
+            gc.collect()
 
 
         except Exception as e:

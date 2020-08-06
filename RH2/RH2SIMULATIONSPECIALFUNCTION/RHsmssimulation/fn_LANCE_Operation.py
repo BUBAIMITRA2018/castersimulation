@@ -3,6 +3,7 @@ from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
+import gc
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_LANCEsignal']
 
@@ -167,10 +168,7 @@ class Fn_LANCEsignal():
             writegeneral.writesymbolvalue(self.DriveZeroSpeed, 'digital', 0)
 
 
-
-
-
-
         sta_con_plc.close()
+        gc.collect()
 
 

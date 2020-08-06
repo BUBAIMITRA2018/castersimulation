@@ -4,6 +4,7 @@ from time import sleep
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
+import  gc
 
 
 logger = logging.getLogger("main.log")
@@ -153,6 +154,7 @@ class Fn_Sov2S(Eventmanager):
                 self.torqueopnFB = False
 
                 sta_con_plc.close()
+                gc.collect()
 
 
 

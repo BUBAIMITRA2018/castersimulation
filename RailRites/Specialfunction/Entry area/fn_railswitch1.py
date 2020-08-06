@@ -6,6 +6,7 @@ from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
 import  general
+import  gc
 
 logger = logging.getLogger("main.log")
 
@@ -194,6 +195,7 @@ class Fn_RailSwitch1(Eventmanager):
                 writegeneral.writesymbolvalue(self.rollertable1, 1, 'S7WLBit')
 
             sta_con_plc.disconnect()
+            gc.collect()
 
 
         except Exception as e:

@@ -4,6 +4,7 @@ from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
 from event_V2 import *
+import gc
 logger = logging.getLogger("main.log")
 __all__ = ['Fn_LTC1Standysignal']
 
@@ -89,6 +90,7 @@ class Fn_LTC1Standysignal(Eventmanager):
             writegeneral.writesymbolvalue(self.DriveZeroSpeedFb, 'digital', 0)
 
         sta_con_plc.close()
+        gc.collect()
 
 
 

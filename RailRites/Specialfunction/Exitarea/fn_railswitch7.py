@@ -1,3 +1,5 @@
+import gc
+
 from logger import *
 from event_V2 import *
 from time import sleep
@@ -123,6 +125,7 @@ class Fn_RailSwitch7(Eventmanager):
             sleep(1)
 
             sta_con_plc.disconnect()
+            gc.collect()
 
             
 

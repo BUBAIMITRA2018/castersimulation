@@ -1,4 +1,4 @@
-
+import gc
 from event_V2 import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
@@ -147,6 +147,7 @@ class Fn_Sov2S(Eventmanager):
                 logger.log(level, messege)
 
             sta_con_plc.disconnect()
+            gc.collect()
 
 
 

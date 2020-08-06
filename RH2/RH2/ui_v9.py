@@ -13,6 +13,7 @@ import  allvibrofeedersprocessing
 import  allconveyorprocessing
 import alldigitalprocessing
 import allanalogprocessing
+import os
 import allcontrolvalvesprocessing
 import  allsiemensdriveprocessing
 import  allconveyor2dprocessing
@@ -263,7 +264,7 @@ class FormUi:
             self.motor2dprocessobject = allmotor2dprocessing.motor2dprocess(self.alldevices,self.import_file_path)
             self.allvibrofeederobject = allvibrofeedersprocessing.vibrofeederprocess(self.alldevices,self.import_file_path)
             self.allconveyorobject = allconveyorprocessing.allconveyorprocess(self.alldevices, self.import_file_path)
-            self.allanalogobject = allanalogprocessing.analogprocess(self.alldevices, self.import_file_path)
+            # self.allanalogobject = allanalogprocessing.analogprocess(self.alldevices, self.import_file_path)
             self.allcontrolvalveobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
             self.alldigitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
             self.allsiemendriveobject = allsiemensdriveprocessing.siemensdriveprocessing(self.alldevices,self.import_file_path)
@@ -329,9 +330,9 @@ class FormUi:
         while TRUE:
             self.allconveyorobject.process()
 
-    def callallanalog(self):
-        while TRUE:
-            self.allanalogobject.process()
+    # def callallanalog(self):
+    #     while TRUE:
+    #         self.allanalogobject.process()
 
 
     def callallramp(self):
@@ -413,12 +414,12 @@ class FormUi:
         self.conveyortread.start()
         self.conveyorstartbutton.configure(text="Conveyor1dStarted")
 
-    def analogstart(self):
-        self.DEAD = False
-        self.analogtread = threading.Thread(target=self.callallanalog)
-        self.listofthread.append(self.analogtread)
-        self.analogtread.start()
-        self.analogstartbutton.config(text = 'AnalogStarted')
+    # def analogstart(self):
+    #     self.DEAD = False
+    #     self.analogtread = threading.Thread(target=self.callallanalog)
+    #     self.listofthread.append(self.analogtread)
+    #     self.analogtread.start()
+    #     self.analogstartbutton.config(text = 'AnalogStarted')
 
 
     def contolvalvestart(self):
@@ -491,8 +492,8 @@ class FormUi:
         self.conveyorstartbutton = ttk.Button(self.win, text='Conveyor1d_Start', command=self.conveyorstart)
         self.conveyorstartbutton.grid(column=1, row=1)
 
-        self.analogstartbutton = ttk.Button(self.win, text='Analog_Start', command=self.analogstart)
-        self.analogstartbutton.grid(column=1, row=2)
+        # self.analogstartbutton = ttk.Button(self.win, text='Analog_Start', command=self.analogstart)
+        # self.analogstartbutton.grid(column=1, row=2)
 
         self.controlvalvestartbutton = ttk.Button(self.win, text='Controlvalve_Start', command=self.contolvalvestart)
         self.controlvalvestartbutton.grid(column=1, row=3)
@@ -525,7 +526,7 @@ class FormUi:
         self.sov1startbutton.configure(text='Sov1Start')
         self.sov2sstartbutton.configure(text='Sov2Start')
         self.controlvalvestartbutton.configure(text='ControlvalStart')
-        self.analogstartbutton.configure(text='AnalogStart')
+        # self.analogstartbutton.configure(text='AnalogStart')
         self.siemensdrivestartbutton.configure(text='SiemendriveStart')
         self.digitalstartbutton.configure(text='DigitalStart')
         self.conveyorstartbutton.config(text = 'Conveyor1dStart')
@@ -654,6 +655,7 @@ class App:
 
     def quit(self, *args):
         self.clock.stop()
+        os.system("taskkill /f /im  RHMain.exe")
         self.root.destroy()
 
     def signal_handler(sig, frame):
