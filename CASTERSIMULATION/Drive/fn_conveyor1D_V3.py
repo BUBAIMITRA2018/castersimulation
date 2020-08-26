@@ -132,6 +132,7 @@ class Fn_Conveyor1D(Eventmanager):
                 level = logging.INFO
                 messege = self.devicename + ":" + self.pullchordlefttag + " is trigger by 0"
                 logger.log(level, messege)
+            self.conveyorprocess()
 
 
         except Exception as e :

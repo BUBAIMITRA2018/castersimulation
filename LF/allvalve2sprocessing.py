@@ -2,6 +2,7 @@
 from observal import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
+from writegeneral_v2 import *
 
 logger = logging.getLogger("main.log")
 
@@ -11,9 +12,16 @@ class AreaObserver:
         observable.register_observer(self)
 
     def notify(self,  *args, **kwargs):
-        for item in args[0]:
-            item.opncomd = args[1].readsymbolvalue(item.opencmdtag,'S7WLBit','PA')
-            item.clscomd = args[1].readsymbolvalue(item.closecmdtag,'S7WLBit','PA')
+        try:
+            for item in args[0]:
+                item.opncomd = args[1].readsymbolvalue(item.opencmdtag, 'S7WLBit', 'PA')
+                item.clscomd = args[1].readsymbolvalue(item.closecmdtag, 'S7WLBit', 'PA')
+
+        except Exception as e:
+            level = logging.ERROR
+            messege = "AreaObserver" + " Error messege(sov2sprocess)" + str(e.args)
+            logger.log(level, messege)
+
 
 class sov2sprocess:
     def __init__(self,alldevices,filename):
@@ -29,10 +37,22 @@ class sov2sprocess:
         
         
     def process(self):
-     for area, devices in readkeyandvalues(self.alldevices):
-            areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
-            if areavalue == 1:
-                self.observer.notify(devices, self.readgeneral)
+     try:
+         client = Communication()
+         sta_con_plc = client.opc_client_connect(self.filename)
+         readgeneral = ReadGeneral(sta_con_plc)
+         writegeneral = WriteGeneral(sta_con_plc)
+
+         for area, devices in readkeyandvalues(self.alldevices):
+                areavalue = readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
+                if areavalue == 1:
+                    self.observer.notify(devices, readgeneral)
+
+     except Exception as e:
+         level = logging.ERROR
+         messege = "process" + " Error messege(sov2sprocess)" + str(e.args)
+         logger.log(level, messege)
+
                 
 
 def readkeyandvalues(alldevice):

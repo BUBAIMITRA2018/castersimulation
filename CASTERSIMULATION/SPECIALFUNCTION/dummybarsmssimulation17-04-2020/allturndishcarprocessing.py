@@ -13,9 +13,16 @@ class allturdishcarprocess:
 
 
     def process(self):
-        self.allturdishcar.turndishcar1.process()
-        self.allturdishcar.turndishcar2.process()
-        self.allturdishcar.cropbucket.process()
+        try:
+            self.allturdishcar.turndishcar1.process()
+            self.allturdishcar.turndishcar2.process()
+            self.allturdishcar.cropbucket.process()
+
+        except Exception as e:
+            level = logging.INFO
+            messege = "allturdishcarprocess" + ":" + " Exception rasied: " + str(e.args) + str(e)
+            logger.log(level, messege)
+
 
 
 

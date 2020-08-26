@@ -161,6 +161,7 @@ class Fn_Motor2D(Eventmanager):
                 logger.log(level, messege)
 
             sta_con_plc.disconnect()
+            self.motor2dprocess()
 
 
 
@@ -184,11 +185,13 @@ class Fn_Motor2D(Eventmanager):
 
             if self.fwdcmdvalue == True and self.revcmdvalue == False:
 
-                # writegeneral.writesymbolvalue(self.fwdrunFBtag, 1,'S7WLBit')
-                # writegeneral.writesymbolvalue(self.revrunFBtag, 0,'S7WLBit')
 
-                writegeneral.writesymbolvalue(self.openLStag, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.revrunFBtag, 0,'S7WLBit')
+                writegeneral.writesymbolvalue(self.fwdrunFBtag, 1, 'S7WLBit')
+                sleep(5)
                 writegeneral.writesymbolvalue(self.closeLStag, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.openLStag, 1, 'S7WLBit')
+
 
                 self.RevRunFB = False
                 self.FwdRunFB  = True
@@ -198,9 +201,9 @@ class Fn_Motor2D(Eventmanager):
 
             if self.fwdcmdvalue == False and self.revcmdvalue == True:
 
-                # writegeneral.writesymbolvalue(self.fwdrunFBtag, 0,'S7WLBit')
-                # writegeneral.writesymbolvalue(self.revrunFBtag, 1,'S7WLBit')
-
+                writegeneral.writesymbolvalue(self.fwdrunFBtag, 0,'S7WLBit')
+                writegeneral.writesymbolvalue(self.revrunFBtag, 1,'S7WLBit')
+                sleep(5)
                 writegeneral.writesymbolvalue(self.openLStag, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.closeLStag, 1, 'S7WLBit')
                 self.RevRunFB = True
@@ -209,21 +212,20 @@ class Fn_Motor2D(Eventmanager):
                 messege = self.devicename + ":" + self.closeLStag + "is triggered by 1"
                 logger.log(level, messege)
 
-            # if self.fwdcmdvalue == False and self.revcmdvalue == False:
-            #
-            #     writegeneral.writesymbolvalue(self.fwdrunFBtag, 0,'S7WLBit')
-            #     writegeneral.writesymbolvalue(self.revrunFBtag, 0,'S7WLBit')
-            #     self.RevRunFB = False
-            #     self.FwdRunFB = False
-            #     level = logging.WARNING
-            #
-            # if self.fwdcmdvalue == True and self.revcmdvalue == True:
-            #
-            #     writegeneral.writesymbolvalue(self.fwdrunFBtag, 0,'S7WLBit')
-            #     writegeneral.writesymbolvalue(self.revrunFBtag, 0,'S7WLBit')
-            #     self.RevRunFB = False
-            #     self.FwdRunFB = False
-            #     level = logging.WARNING
+            if self.fwdcmdvalue == False and self.revcmdvalue == False:
+
+                writegeneral.writesymbolvalue(self.fwdrunFBtag, 0,'S7WLBit')
+                writegeneral.writesymbolvalue(self.revrunFBtag, 0,'S7WLBit')
+                self.RevRunFB = False
+                self.FwdRunFB = False
+
+            if self.fwdcmdvalue == True and self.revcmdvalue == True:
+
+                writegeneral.writesymbolvalue(self.fwdrunFBtag, 0,'S7WLBit')
+                writegeneral.writesymbolvalue(self.revrunFBtag, 0,'S7WLBit')
+                self.RevRunFB = False
+                self.FwdRunFB = False
+                level = logging.WARNING
 
             sta_con_plc.disconnect()
 

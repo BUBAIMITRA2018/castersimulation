@@ -1,6 +1,7 @@
 import datetime
 import queue
 import logging
+import gc
 import signal
 import PIL.Image
 import PIL.ImageTk
@@ -17,7 +18,6 @@ import alldigitalprocessing
 import time
 from ListView2 import *
 import os
-
 
 from clientcomm_v1 import *
 import threading
@@ -409,7 +409,7 @@ class ThirdUi:
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('SMS JSW TCSmain')
+        root.title('SMS JSW CASTER DRIVE PLC SIMULATION')
 
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
@@ -445,6 +445,7 @@ class App:
     def quit(self, *args):
         self.clock.stop()
         os.system("taskkill /f /im  TCSmain.exe")
+
         self.root.destroy()
 
     def signal_handler(sig, frame):

@@ -3,6 +3,7 @@ from logger import *
 from observal import *
 from clientcomm_v1 import *
 from readgeneral_v2 import *
+from writegeneral_v2 import *
 import logging
 
 logger = logging.getLogger("main.log")
@@ -13,20 +14,14 @@ class AreaObserver:
 
     def notify(self,  *args, **kwargs):
         for item in args[0]:
-            item.controlword = args[1].readDBvalue(item.cw,'S7WLWord')
-            item.speedsetpoint = args[1].readDBvalue(item.speedSP,'S7WLWord')
+            item.driveprocess()
 
-            # if len(item.brakeopncmd) > 3:
-            #     item.breakopencmd = args[1].readgeneral.readtagvalue(item.brakeopncmd)
-            # if len(item.startcmdtag) > 3:
-            #     item.StartCmd = args[1].readgeneral.readtagvalue(item.startcmdtag)
-            # if len(item.stopcmdtag) > 3:
-            #     item.StopCmd = args[1].readgeneral.readtagvalue(item.stopcmdtag)
 
 class abpdriveprocessing :
 
     def __init__(self, alldevices, filename):
         self.subject = Observable()
+        self.filename = filename
         self.alldevices = alldevices
         self.observer = AreaObserver(self.subject)
         self.client = Communication()
@@ -35,11 +30,24 @@ class abpdriveprocessing :
         self.readgeneral = ReadGeneral(self.sta_con_plc)
 
     def process(self):
+        try:
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
 
-        for area, devices in readkeyandvalues(self.alldevices):
-            areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
-            if areavalue == 1:
-                self.observer.notify(devices, self.readgeneral)
+            for area, devices in readkeyandvalues(self.alldevices):
+                areavalue = readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
+                if areavalue == 1:
+                    self.observer.notify(devices, readgeneral)
+
+
+        except Exception as e:
+            level = logging.ERROR
+            messege = "process" +  " Error messege(abpdriveprocessing)" + str(e.args)
+            logger.log(level, messege)
+
+
 
 
 

@@ -2,9 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7dfa561-2f35-4caf-a22e-73ecb193bb95" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../Drive/.idea/Drive.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Drive/.idea/Drive.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Drive/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Drive/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Drive/allcontrolvalvesprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Drive/allcontrolvalvesprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Drive/alldigitalprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Drive/alldigitalprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Drive/allpropotionalvalvesprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Drive/allpropotionalvalvesprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Drive/allvalve1sprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Drive/allvalve1sprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Drive/allvalve2sprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Drive/allvalve2sprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Drive/allvibrofeedersprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Drive/allvibrofeedersprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dummybarsmssimulation17-04-2020.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dummybarsmssimulation17-04-2020.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/allturndishcarprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/allturndishcarprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fn_CropBucket.py" beforeDir="false" afterPath="$PROJECT_DIR$/fn_CropBucket.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fn_TundishCar1.py" beforeDir="false" afterPath="$PROJECT_DIR$/fn_TundishCar1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../RH2/RH2SIMULATIONSPECIALFUNCTION/RHsmssimulation/.idea/smssimulation.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fn_TundishCar2.py" beforeDir="false" afterPath="$PROJECT_DIR$/fn_TundishCar2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fn_dummybar_V3.py" beforeDir="false" afterPath="$PROJECT_DIR$/fn_dummybar_V3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../LF/allabpdriveprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../LF/allabpdriveprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../LF/calallABPdrives_V3.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../LF/calallABPdrives_V3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../LF/fn_ABP_drive_V3.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../LF/fn_ABP_drive_V3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../LF/specialfunction/Ramp/allrampprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../LF/specialfunction/Ramp/allrampprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RailRites/alldevices_V3.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RailRites/alldevices_V3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RailRites/allmotor2dprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RailRites/allmotor2dprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RailRites/fn_Schneider_drive_V3.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RailRites/fn_Schneider_drive_V3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RailRites/fn_motor2D_V3.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RailRites/fn_motor2D_V3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RailRites/ui_v9.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RailRites/ui_v9.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../RailRites/writegeneral_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../RailRites/writegeneral_v2.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,8 +42,14 @@
   </component>
   <component name="ProjectId" id="1eIsnDPC7sVllQIcjQ0bD5ivpbw" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Django/code/code" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">

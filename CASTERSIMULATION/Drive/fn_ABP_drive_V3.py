@@ -119,6 +119,12 @@ class Fn_ABP_Drive(Eventmanager):
             messege = self.devicename + ":" + self.FaultFBtag + " is trigger by 1"
             logger.log(level, messege)
 
+        self.driveprocess()
+
+
+
+
+
         sta_con_plc.disconnect()
 
 

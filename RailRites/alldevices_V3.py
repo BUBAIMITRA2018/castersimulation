@@ -19,7 +19,7 @@ class AllDevices:
 
         self.dfM2D = pd.read_excel(import_file_path, sheet_name='Motor2D')
 
-        self.dfoutsignal = pd.read_excel(import_file_path, sheet_name='OutputTx')
+        # self.dfoutsignal = pd.read_excel(import_file_path, sheet_name='OutputTx')
 
         self.dfscheider = pd.read_excel(import_file_path,sheet_name="SchneiderDrive")
 
@@ -27,7 +27,7 @@ class AllDevices:
 
         self.allmotor2dobjects = callallmotor2D_V3.Cal_AllMotor2D(self.dfM2D, comobject,import_file_path)
 
-        self.alloutsignalobjects = callalloutsignals_V3. Cal_AllOutsingnal(self.dfoutsignal, comobject,import_file_path)
+        # self.alloutsignalobjects = callalloutsignals_V3. Cal_AllOutsingnal(self.dfoutsignal, comobject,import_file_path)
 
         self.allscheiderobjects = calallSchneiderdrives_V3.Cal_SchneiderDrives(self.dfscheider,comobject,import_file_path)
 

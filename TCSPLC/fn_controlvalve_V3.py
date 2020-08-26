@@ -1,6 +1,6 @@
 
 from event_V2 import *
-
+import gc
 from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
@@ -46,9 +46,6 @@ class Fn_ControlValves(Eventmanager):
 
             self.postion2 = str(self.df.iloc[self._idxNo, 13])
             
-
-
-
 
         except Exception as e:
 
@@ -153,11 +150,11 @@ class Fn_ControlValves(Eventmanager):
                         pass
 
                     if len(self.postion2)>3:
-                        print("heheheheheheheheheheheheh")
+
                         if self.con1value == 1 and self.con2value == 0 and self.positionvalue2 >= 0 and self.positionvalue2 < 60000:
-                            print('ther postion is ',self.positionvalue2)
+
                             self.currentposvalue2 = self.positionvalue2 + 5000
-                            print('ther postion is ', self.currentposvalue2)
+
                             writegeneral.writesymbolvalue(self.postion2, self.currentposvalue2, 'S7WLDWord')
 
                         if self.con1value == 0 and self.con2value == 1 and self.positionvalue2> 0 and self.positionvalue2 <= 60000:
@@ -170,12 +167,10 @@ class Fn_ControlValves(Eventmanager):
                     else:
                         pass
 
-
-
-
-
-
             sta_con_plc.disconnect()
+
+            gc.collect()
+
 
 
         except Exception as e:

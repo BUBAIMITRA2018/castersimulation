@@ -19,19 +19,27 @@ class AreaObserver:
         observable.register_observer(self)
 
     def notify(self,  *args, **kwargs):
-        for item in args[0]:
+        try:
+            for item in args[0]:
+                if (len(item.cond1) > 3):
+                    item.Cond1Val = args[1].readsymbolvalue(item.cond1, 'S7WLBit', 'PE')
 
-            if (len(item.cond1) > 3):
-                item.Cond1Val = args[1].readsymbolvalue(item.cond1, 'S7WLBit', 'PE')
+                if (len(item.cond2) > 3):
+                    item.Cond2Val = args[1].readsymbolvalue(item.cond2, 'S7WLBit', 'PE')
 
-            if (len(item.cond2) > 3):
-                item.Cond2Val = args[1].readsymbolvalue(item.cond2, 'S7WLBit', 'PE')
+                if (len(item.cond3) > 3):
+                    item.Cond3Val = args[1].readsymbolvalue(item.cond3, 'S7WLBit', 'PE')
 
-            if (len(item.cond3) > 3):
-                item.Cond3Val = args[1].readsymbolvalue(item.cond3, 'S7WLBit', 'PE')
+                if (len(item.cond4) > 4):
+                    item.Cond4Val = args[1].readsymbolvalue(item.cond4, 'S7WLBit', 'PE')
 
-            if (len(item.cond4) > 4):
-                item.Cond4Val = args[1].readsymbolvalue(item.cond4, 'S7WLBit', 'PE')
+        except Exception as e:
+            log_exception(e)
+            level = logging.INFO
+            messege = 'AreaObserver' + ":" + " Exception rasied(process): " + str(e.args) + str(e)
+            logger.log(level, messege)
+            
+     
 
 
 
@@ -49,18 +57,17 @@ class digitalprocess:
         self.readgeneral = ReadGeneral(self.sta_con_plc)
 
     def process(self):
-        for area, devices in readkeyandvalues(self.alldevices):
-            areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
-            if areavalue == 1:
-                self.observer.notify(devices, self.readgeneral)
+        try:
+            for area, devices in readkeyandvalues(self.alldevices):
+                areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
+                if areavalue == 1:
+                    self.observer.notify(devices, self.readgeneral)
 
-
-
-
-
-
-
-
+        except Exception as e:
+            log_exception(e)
+            level = logging.INFO
+            messege = 'Digital' + ":" + " Exception rasied(process): " + str(e.args) + str(e)
+            logger.log(level, messege)
 
 
 def readkeyandvalues(alldevice):

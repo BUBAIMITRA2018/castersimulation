@@ -49,8 +49,10 @@ class Fn_ControlValves(Eventmanager):
         writegeneral = WriteGeneral(sta_con_plc)
 
         writegeneral.writesymbolvalue(self.pv, 0, 'S7WLWord')
+        
 
         sta_con_plc.disconnect()
+        self.controlvalveprocess()
         gc.collect()
 
 

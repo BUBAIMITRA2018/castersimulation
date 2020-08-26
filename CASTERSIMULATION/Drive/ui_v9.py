@@ -16,7 +16,7 @@ import allcontrolvalvesprocessing
 import allanalogprocessing
 import alldigitalprocessing
 import allabpdriveprocessing
-import allrampprocessing
+
 import os
 
 
@@ -274,7 +274,7 @@ class FormUi:
             self.analogobject = allanalogprocessing.analogprocess(self.alldevices,self.import_file_path)
             self.digitalobject = alldigitalprocessing.digitalprocess(self.alldevices,self.import_file_path)
             self.abbobject = allabpdriveprocessing.abpdriveprocessing(self.alldevices,self.import_file_path)
-            self.rampobject = allrampprocessing.rampprocess(self.alldevices,self.import_file_path)
+           
 
 
 
@@ -332,9 +332,7 @@ class FormUi:
             self.analogobject.process()
              # time.sleep(2)
 
-    def callallramps(self, com, devices):
-        while not self.DEAD:
-            self.rampobject.process()
+   
             # time.sleep(2)
 
 
@@ -408,12 +406,7 @@ class FormUi:
     #     self.analogtread.start()
     #     self.analogstartbutton.configure(text="analogstarted")
 
-    def rampstart(self):
-        self.DEAD = False
-        self.ramptread = threading.Thread(target=self.callallramps, args=(self.comm_object, self.alldevices))
-        self.listofthread.append(self.ramptread)
-        self.ramptread.start()
-        self.rampstartbutton.configure(text="rampstarted")
+    
 
 
 

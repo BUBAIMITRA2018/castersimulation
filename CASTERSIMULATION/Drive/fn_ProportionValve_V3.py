@@ -58,7 +58,7 @@ class FN_ProportionalValve(Eventmanager):
     def initilizedigitalinput(self):
 
         try:
-            pass
+            self.Proportionalprocess()
 
         except Exception as e:
             level = logging.ERROR

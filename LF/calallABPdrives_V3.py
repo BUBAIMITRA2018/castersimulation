@@ -30,8 +30,6 @@ class Cal_ABBDrives:
                 self.listofdrives.append(self.df.iloc[n,0])
                 n = n + 1
 
-
-
             # per area wise device list
             # Declear empty list
             for area in self.listofdrivearea:

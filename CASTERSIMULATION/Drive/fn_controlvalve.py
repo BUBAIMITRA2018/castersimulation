@@ -38,9 +38,9 @@ class Fn_ControlValves(Eventmanager):
             log_exception(e)
 
     def initilizedigitalinput(self):
+        self.process()
 
-        pass
-
+        
     def process(self):
 
         try:

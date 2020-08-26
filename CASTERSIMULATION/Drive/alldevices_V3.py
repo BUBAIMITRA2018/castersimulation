@@ -12,7 +12,7 @@ import  callallsiemensdrive1D_V3
 import  callalldigital_V3
 import calallcontrolvalves_V3
 import callallProportionalValve_V3
-import callallramp_V3
+
 
 import pandas as pd
 
@@ -85,9 +85,9 @@ class AllDevices:
     def allsov2s(self):
         return self.allsov2sobjects
     #
-    @property
-    def allvibrofeeders(self):
-        return self.allvfobjects
+    # @property
+    # def allvibrofeeders(self):
+    #     return self.allvfobjects
 
     @property
     def allconveyors(self):
@@ -100,9 +100,9 @@ class AllDevices:
     def allanalogs(self):
         return self.allanalogsignalobjects
 
-    @property
-    def allencoders(self):
-        return self.allencoderobjects
+    # @property
+    # def allencoders(self):
+    #     return self.allencoderobjects
 
     @property
     def allsiemensdrives(self):
@@ -120,9 +120,9 @@ class AllDevices:
     def allPropotionalValves(self):
         return self.allproptionalvalvesobjects
 
-    @property
-    def allrampobjects(self):
-        return self.rampobjects
+    # @property
+    # def allrampobjects(self):
+    #     return self.rampobjects
 
 
 

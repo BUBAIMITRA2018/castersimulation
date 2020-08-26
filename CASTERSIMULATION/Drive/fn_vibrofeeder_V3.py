@@ -110,6 +110,8 @@ class Fn_VibroFeeder(Eventmanager):
                 level = logging.INFO
                 messege = self.devicename + ":" + self.thyinoprtag + " is trigger by 1"
                 logger.log(level, messege)
+                
+            self.Viborfeederprocess()
 
 
 

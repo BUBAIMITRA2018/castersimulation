@@ -123,6 +123,7 @@ class Fn_Motor1D(Eventmanager):
                 logger.log(level, messege)
             else:
                 pass
+            self.motorprocess()
 
         except Exception as e:
             level = logging.ERROR

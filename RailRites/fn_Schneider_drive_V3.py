@@ -119,11 +119,14 @@ class Fn_Schneider_Drive(Eventmanager):
             messege = self.devicename + ":" + self.FaultFBtag + " is trigger by 1"
             logger.log(level, messege)
 
+        if self.cw_val != 0 and self.cw_val == 6:
+            writegeneral.writeDBvalue(self.sw, 11, 'S7WLWord')
+
         sta_con_plc.disconnect()
 
 
 
-    def driveprocess(self):
+    def schneiderdriveprocess(self):
 
         try:
 

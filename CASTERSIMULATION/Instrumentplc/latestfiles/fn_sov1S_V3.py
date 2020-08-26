@@ -67,6 +67,7 @@ class Fn_Sov1S(Eventmanager):
         writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
 
         sta_con_plc.disconnect()
+        self.sov1sprocess()
 
 
     def sov1sprocess(self):

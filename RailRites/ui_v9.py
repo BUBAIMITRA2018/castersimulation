@@ -291,16 +291,18 @@ class FormUi:
 
 
     def callallmotor2d(self,com,devices):
-        while not self.DEAD:
-            self.motor2dprocessobject.process()
+        self.motor2dprocessobject.process(self.import_file_path)
+        # while not self.DEAD:
+        #     self.motor2dprocessobject.process(self.import_file_path)
 
 
 
 
 
     def callSchneiderDrives(self, com, devices):
-        while not self.DEAD:
-            self.schneiderobject.process()
+        self.schneiderobject.process(self.import_file_path)
+        # while not self.DEAD:
+        #     self.schneiderobject.process(self.import_file_path)
 
 
 

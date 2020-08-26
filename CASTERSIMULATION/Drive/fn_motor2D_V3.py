@@ -160,8 +160,10 @@ class Fn_Motor2D(Eventmanager):
                 level = logging.INFO
                 messege = self.devicename + ":" + self.faultFBtag + " is trigger by 1"
                 logger.log(level, messege)
+                
 
             sta_con_plc.disconnect()
+            self.motor2dprocess()
 
             gc.collect()
 

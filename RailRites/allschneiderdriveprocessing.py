@@ -5,41 +5,78 @@ from readgeneral_v2 import *
 import logging
 
 logger = logging.getLogger("main.log")
+threadlist = []
 
 class AreaObserver:
     def __init__(self, observable):
         observable.register_observer(self)
 
-    def notify(self,  *args, **kwargs):
+    def notify(self, *args, **kwargs):
+
         for item in args[0]:
-            item.driveprocess()
-            # item.controlword = args[1].readDBvalue(item.cw,'S7WLWord')
-            # item.speedsetpoint = args[1].readDBvalue(item.speedSP,'S7WLWord')
-            #
-            # if len(item.brakeopncmd) > 3:
-            #     item.breakopencmd = args[1].readsymbolvalue(item.brakeopncmd,'S7WLBit','PA')
-            # if len(item.startcmdtag) > 3:
-            #     item.StartCmd = args[1].readsymbolvalue(item.startcmdtag,'S7WLBit','PA')
-            # if len(item.stopcmdtag) > 3:
-            #     item.StopCmd = args[1].readsymbolvalue(item.stopcmdtag,'S7WLBit','PA')
+            try:
 
-class schneiderdriveprocessing :
 
-    def __init__(self, alldevices, filename):
+                # threading = multiprocessing.Process(target=self.callmotor2dprocess,args=(item))
+
+                thread = threading.Thread(target=self.calschneiderdriveprocess, args=[item])
+                threadlist.append(thread)
+
+            except Exception as e:
+
+                level = logging.INFO
+
+                messege = "NOTIFY" + ":" + " Exception rasied(process): " + str(e.args) + str(e)
+
+                logger.log(level, messege)
+
+    def calschneiderdriveprocess(self, item):
+        while True:
+            print("i was here recently")
+
+
+            try:
+
+                item.schneiderdriveprocess()
+
+
+
+            except Exception as e:
+                level = logging.INFO
+
+                messege = "callschneiderdriveprocess" + ":" + " Exception rasied(process): " + str(e.args) + str(e)
+
+                logger.log(level, messege)
+
+
+class schneiderdriveprocessing:
+    def __init__(self,alldevices,filename):
         self.subject = Observable()
         self.alldevices = alldevices
-        self.observer = AreaObserver(self.subject)
+
         self.client = Communication()
         self.sta_con_plc = self.client.opc_client_connect(filename)
         self.observer = AreaObserver(self.subject)
         self.readgeneral = ReadGeneral(self.sta_con_plc)
 
-    def process(self):
+    def process(self,filename):
+        try:
+            for area, devices in readkeyandvalues(self.alldevices):
 
-        for area, devices in readkeyandvalues(self.alldevices):
-            areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
-            if areavalue == 1:
-                self.observer.notify(devices, self.readgeneral)
+                areavalue = self.readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
+                if areavalue == 1:
+                    self.observer.notify(devices, filename)
+
+            for j in threadlist:
+                j.start()
+
+
+
+        except Exception as e:
+            level = logging.INFO
+            messege =  "PROCCESS" + ":" + " Exception rasied(process): " + str(e.args) + str(e)
+            logger.log(level, messege)
+
 
 
 

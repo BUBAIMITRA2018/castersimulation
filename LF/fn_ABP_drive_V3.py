@@ -119,7 +119,7 @@ class Fn_ABP_Drive(Eventmanager):
         #     logger.log(level, messege)
 
 
-        writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
+        # writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
 
         sta_con_plc.disconnect()
 
@@ -150,38 +150,31 @@ class Fn_ABP_Drive(Eventmanager):
             print("speed setpoint value", self.speedSP_val)
 
 
-            if self.cw_val == 0:
-                writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
+            if self.cw_val == 1142:
+                writegeneral.writeDBvalue(self.sw, 4657, 'S7WLWord')
                 writegeneral.writeDBvalue(self.current, 0, 'S7WLWord')
                 writegeneral.writeDBvalue(self.speedFB, 0, 'S7WLWord')
                 writegeneral.writeDBvalue(self.torque, 0, 'S7WLWord')
                 if len(self.dcvoltage) > 3:
                     writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
-            if self.cw_val == 1139:
-                writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
+            if self.cw_val == 1143:
+                writegeneral.writeDBvalue(self.sw, 4659, 'S7WLWord')
                 writegeneral.writeDBvalue(self.current, 0, 'S7WLWord')
                 writegeneral.writeDBvalue(self.speedFB, 0, 'S7WLWord')
                 writegeneral.writeDBvalue(self.torque, 0, 'S7WLWord')
                 if len(self.dcvoltage) > 3:
                     writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
-            if self.cw_val == 1145:
+            if self.cw_val == 1151:
 
-                writegeneral.writeDBvalue(self.sw, 14131, 'S7WLWord')
-                writegeneral.writeDBvalue(self.current, 17000, 'S7WLWord')
-                writegeneral.writeDBvalue(self.torque, 17000, 'S7WLWord')
+                writegeneral.writeDBvalue(self.sw, 4919, 'S7WLWord')
+                writegeneral.writeDBvalue(self.current, 40, 'S7WLWord')
+                writegeneral.writeDBvalue(self.torque, 40, 'S7WLWord')
                 writegeneral.writeDBvalue(self.speedFB, self.speedSP_val, 'S7WLWord')
                 if len(self.dcvoltage) > 3:
                     writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
-            if self.cw_val != 0 and self.cw_val == 1151:
-                writegeneral.writeDBvalue(self.sw, 13111, 'S7WLWord')
-                writegeneral.writeDBvalue(self.current, 17000, 'S7WLWord')
-                writegeneral.writeDBvalue(self.torque, 17000, 'S7WLWord')
-                writegeneral.writeDBvalue(self.speedFB, self.speedSP_val, 'S7WLWord')
-                if len(self.dcvoltage) > 3:
-                    writegeneral.writeDBvalue(self.dcvoltage, 27648, 'S7WLWord')
 
             sta_con_plc.disconnect()
             gc.collect()

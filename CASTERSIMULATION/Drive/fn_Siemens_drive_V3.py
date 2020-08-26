@@ -170,6 +170,7 @@ class Fn_Siemens_Drive(Eventmanager):
                 pass
 
         sta_con_plc.disconnect()
+        self.driveprocess()
         gc.collect()
 
     def driveprocess(self):

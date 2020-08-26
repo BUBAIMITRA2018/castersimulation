@@ -1,6 +1,7 @@
 from snap7.snap7types import areas, S7WLBit
 from  clientcomm_v1 import *
 import pandas as pd
+import time
 
 
 __all__ = ['WriteGeneral']
@@ -33,6 +34,8 @@ class WriteGeneral():
             self.result = self.client.read_area(areas['PE'], 0, self.byte, S7WLBit)
             set_dword(self.result, 0, tagvalue)
         self.client.write_area(areas['PE'], 0, self.byte, self.result)
+        time.sleep(.100)
+
 
     def writeDBvalue(self, address, tagvalue, datatype):
         addressconverted = str(address)
@@ -57,6 +60,7 @@ class WriteGeneral():
             self.result = self.client.read_area(areas['DB'], self.dataarea, self.byte, S7WLBit)
             set_dword(self.result, 0, tagvalue)
         self.client.write_area(areas['DB'], self.dataarea, self.byte, self.result)
+        time.sleep(.500)
 
 
 

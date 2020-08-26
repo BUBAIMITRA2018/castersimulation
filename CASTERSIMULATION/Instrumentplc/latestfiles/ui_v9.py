@@ -1,4 +1,6 @@
 import datetime
+import json
+import os
 import queue
 import logging
 import signal
@@ -17,7 +19,8 @@ import allanalogprocessing
 import alldigitalprocessing
 import allrailswitchprocessing
 
-
+from readgeneral_v2 import *
+from  writegeneral_v2 import *
 
 
 import general
@@ -189,14 +192,46 @@ class FormUi:
         self.button6 = ttk.Button(self.frame, text='ControlPanel', command=self.creatcontrolpanel, state=NORMAL)
         self.button6.grid(column=1, row=7, sticky=W, padx=5, pady=5)
 
-        self.button7 = ttk.Button(self.frame, text='Encoder', command=self.encoderoperation, state=NORMAL)
-        self.button7.grid(column=1, row=8, sticky=W, padx=5, pady=5)
+        # self.button7 = ttk.Button(self.frame, text="LOG", command=self.snap, state=NORMAL)
+        # self.button7.grid(column=1, row=8, sticky=W, padx=5, pady=5)
+
+    def snap(self):
+
+        global format, data_type1
+        print(self.import_file_path)
+        data = pd.read_excel(self.import_file_path, sheet_name="IO List")
+        row, col = data.shape
+        data_type1 = ""
+        format = ""
+        dict = {}
+        p = 0
+        while p < row:
+            if (data.iloc[p, 4]) == "DI" or (data.iloc[p, 4]) == "DO" or (data.iloc[p, 4]) == "AI" or (
+            data.iloc[p, 4]) == "AO":
+                if (data.iloc[p, 4]) == "DI":
+                    format = "PE"
+                    data_type1 = 'S7WLBit'
+                elif (data.iloc[p, 4]) == "DO":
+                    format = "PA"
+                    data_type1 = 'S7WLBit'
+                elif (data.iloc[p, 4]) == "AO":
+                    format = "PA"
+                    data_type1 = 'S7WLWord'
+                elif (data.iloc[p, 4]) == "AI":
+                    format = "PE"
+                    data_type1 = 'S7WLWord'
+                tag_value = self.comm_object.readgeneral.readsymbolvalue(data.iloc[p, 5], data_type1, format)
+                keyvalue = {str((data.iloc[p, 4])) + str(data.iloc[p, 5]): tag_value}
+                dict.update(keyvalue)
+
+            else:
+                pass
+            p = p + 1
+        with open(r'C:\HEG_snap.txt', 'w') as json_file:
+            json.dump(dict, json_file)
 
 
-    def encoderoperation(self):
-        # df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='Encoder')
 
-        Encoder_Operation_V1.Encoder_Operation(self.frame,self.comm_object,self.alldevices )
 
     def conectionpopup(self):
         self.connect = tk.Toplevel(self.frame)
@@ -583,7 +618,7 @@ class ThirdUi:
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('SMS SIMULATION')
+        root.title('INSTRUMENT SIMULATION')
 
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
@@ -618,6 +653,7 @@ class App:
 
     def quit(self, *args):
         self.clock.stop()
+        os.system("taskkill /f /im  INSTRUMENT.exe")
         self.root.destroy()
 
     def signal_handler(sig, frame):

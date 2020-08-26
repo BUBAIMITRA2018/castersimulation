@@ -47,20 +47,29 @@ class Fn_CropBucket():
 
     def initilizedigitalinput(self):
 
-        client = Communication()
-        sta_con_plc = client.opc_client_connect(self.filename)
-        readgeneral = ReadGeneral(sta_con_plc)
-        writegeneral = WriteGeneral(sta_con_plc)
+        try:
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
 
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw4, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw5, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw6, 1, 'S7WLBit')
+            writegeneral.writesymbolvalue(self.TundishCar1_limitsw4, 0, 'S7WLBit')
+            writegeneral.writesymbolvalue(self.TundishCar1_limitsw5, 0, 'S7WLBit')
+            writegeneral.writesymbolvalue(self.TundishCar1_limitsw6, 1, 'S7WLBit')
 
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw3, 1, 'S7WLBit')
+            writegeneral.writesymbolvalue(self.TundishCar1_limitsw1, 0, 'S7WLBit')
+            writegeneral.writesymbolvalue(self.TundishCar1_limitsw2, 0, 'S7WLBit')
+            writegeneral.writesymbolvalue(self.TundishCar1_limitsw3, 1, 'S7WLBit')
 
-        sta_con_plc.disconnect()
+            sta_con_plc.disconnect()
+
+        except Exception as e:
+
+            level = logging.INFO
+            messege = "CropBucket" + ":" + " Exception rasied(initilization): " + str(e.args) + str(e)
+            logger.log(level, messege)
+
+
 
 
 

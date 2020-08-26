@@ -71,6 +71,7 @@ class Fn_Sov1S(Eventmanager):
 
 
         sta_con_plc.disconnect()
+        self.sov1sprocess()
         gc.collect()
 
 

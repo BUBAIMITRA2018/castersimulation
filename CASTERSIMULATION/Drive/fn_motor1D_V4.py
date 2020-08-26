@@ -137,8 +137,11 @@ class Fn_Motor1D(Eventmanager):
                 logger.log(level, messege)
             else:
                 pass
+            
 
             sta_con_plc.disconnect()
+            self.motorprocess()
+            
             gc.collect()
 
         except Exception as e:

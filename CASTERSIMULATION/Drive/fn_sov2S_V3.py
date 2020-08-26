@@ -93,7 +93,7 @@ class Fn_Sov2S(Eventmanager):
 
 
         try:
-            pass
+            self.sov2sprocess()
 
 
         except Exception as e:

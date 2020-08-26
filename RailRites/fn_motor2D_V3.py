@@ -5,6 +5,7 @@ from clientcomm_v1 import *
 from readgeneral_v2 import *
 from  writegeneral_v2 import *
 import logging
+import time
 
 
 logger = logging.getLogger("main.log")
@@ -97,6 +98,7 @@ class Fn_Motor2D(Eventmanager):
             writegeneral = WriteGeneral(sta_con_plc)
 
 
+
             self._fwdoncmdvalue = readgeneral.readsymbolvalue(self.fwdcmdtag,'S7WLBit','PA')
             self._revoncmdvalue = readgeneral.readsymbolvalue(self.revcmdtag,'S7WLBit','PA')
             if len(self.fwdrunFBtag1) > 3:
@@ -149,6 +151,8 @@ class Fn_Motor2D(Eventmanager):
             sta_con_plc = client.opc_client_connect(self.filename)
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
+
+
 
             self.fwdcmdvalue = readgeneral.readsymbolvalue(self.fwdcmdtag,'S7WLBit','PA')
             self.revcmdvalue =  readgeneral.readsymbolvalue(self.revcmdtag,'S7WLBit','PA')
@@ -249,6 +253,7 @@ class Fn_Motor2D(Eventmanager):
     def FwdOnCmd(self, value):
         if value != self._fwdoncmdvalue:
             super().fire()
+            print("thefuction is fire")
             self._fwdoncmdvalue = value
 
     @property
@@ -259,6 +264,7 @@ class Fn_Motor2D(Eventmanager):
     def RevOnCmd(self, value):
         if value != self._revoncmdvalue:
             super().fire()
+            print("thefuction is fire")
             self._revoncmdvalue = value
 
 

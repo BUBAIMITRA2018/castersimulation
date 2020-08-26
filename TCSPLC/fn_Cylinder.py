@@ -5,6 +5,7 @@ from  writegeneral_v2 import *
 from numpy import *
 import logging
 from time import sleep
+import gc
 
 logger = logging.getLogger("main.log")
 
@@ -229,6 +230,7 @@ class Fn_Cylinder(Eventmanager):
 
 
             sta_con_plc.disconnect()
+            gc.collect()
 
 
         except Exception as e:

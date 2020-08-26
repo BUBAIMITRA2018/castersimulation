@@ -52,6 +52,7 @@ class Fn_Encoder(Eventmanager):
     def initilizedigitalinput(self):
         try:
            self._encodervalue = 0
+           self.encoderprocess()
         except Exception as e :
             level = logging.ERROR
             messege = "FN_Encoder" + self.devicename + " Error messege(initilization)" + str(e.args)

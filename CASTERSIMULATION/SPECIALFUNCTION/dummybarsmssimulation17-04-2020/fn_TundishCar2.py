@@ -26,13 +26,18 @@ class Fn_TundishCar2():
     def setup(self):
         try:
 
-            self.TundishCar1_Pos = str('db1430.dbd176')
-            self.TundishCar1_limitsw1 = str(611.2)
-            self.TundishCar1_limitsw2 = str(611.1)
-            self.TundishCar1_limitsw3 = str(611.0)
-            self.TundishCar1_limitsw4 = str(611.3)
-            self.TundishCar1_limitsw5 = str(611.4)
-            self.TundishCar1_limitsw6 = str(611.5)
+            self.Actualposition = str('db3752.dbd50')
+
+
+            self.TundishCar2_heatovt_limitsw = str(611.0)
+
+            self.TundishCar2_heatstop_limitsw = str(611.1)
+            self.TundishCar2_heatslow_limitsw = str(611.2)
+
+            self.TundishCar2_castovt_limitsw = str(611.5)
+            self.TundishCar2_caststop_limitsw = str(611.4)
+            self.TundishCar2_castslow_limitsw = str(611.3)
+
 
 
 
@@ -46,21 +51,23 @@ class Fn_TundishCar2():
 
 
     def initilizedigitalinput(self):
+        try:
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+            writegeneral = WriteGeneral(sta_con_plc)
 
-        client = Communication()
-        sta_con_plc = client.opc_client_connect(self.filename)
-        readgeneral = ReadGeneral(sta_con_plc)
-        writegeneral = WriteGeneral(sta_con_plc)
+            writegeneral.writesymbolvalue(self.TundishCar2_heatovt_limitsw, 1, 'S7WLBit')
 
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw4, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw5, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw6, 1, 'S7WLBit')
+            writegeneral.writesymbolvalue(self.TundishCar2_castovt_limitsw, 1, 'S7WLBit')
 
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw1, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw2, 0, 'S7WLBit')
-        writegeneral.writesymbolvalue(self.TundishCar1_limitsw3, 1, 'S7WLBit')
+            sta_con_plc.disconnect()
 
-        sta_con_plc.disconnect()
+        except Exception as e:
+
+            level = logging.INFO
+            messege = "TundishCar2" + ":" + " Exception rasied(initilization): " + str(e.args) + str(e)
+            logger.log(level, messege)
 
 
 
@@ -75,33 +82,46 @@ class Fn_TundishCar2():
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
 
-            self.tundishCar1_Pos_value = readgeneral.readDBvalue(self.TundishCar1_Pos, 'S7WLReal')
+            self.actualpostion = readgeneral.readDBvalue(self.Actualposition, 'S7WLReal')
 
-            print("turdishcar2 position value ", self.tundishCar1_Pos_value)
+            # Heat position
 
-            if self.tundishCar1_Pos_value < 0:
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw4, 0, 'S7WLBit')
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw5, 0, 'S7WLBit')
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw6, 1, 'S7WLBit')
+            if self.actualpostion > 10075:
 
-                time.sleep(30)
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw1, 1, 'S7WLBit')
-                time.sleep(5)
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw2, 1, 'S7WLBit')
-                time.sleep(5)
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw3, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.TundishCar2_heatovt_limitsw, 0, 'S7WLBit')
 
-            if self.tundishCar1_Pos_value > 0:
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw1, 0, 'S7WLBit')
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw2, 0, 'S7WLBit')
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw3, 1, 'S7WLBit')
+            else:
+                writegeneral.writesymbolvalue(self.TundishCar2_heatovt_limitsw, 1, 'S7WLBit')
 
-                time.sleep(30)
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw4, 1, 'S7WLBit')
-                time.sleep(5)
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw5, 1, 'S7WLBit')
-                time.sleep(5)
-                writegeneral.writesymbolvalue(self.TundishCar1_limitsw6, 0, 'S7WLBit')
+            if self.actualpostion > 9905 and self.actualpostion < 10200:
+                writegeneral.writesymbolvalue(self.TundishCar2_heatstop_limitsw, 1, 'S7WLBit')
+
+            else:
+                writegeneral.writesymbolvalue(self.TundishCar2_heatstop_limitsw, 0, 'S7WLBit')
+
+            if self.actualpostion > 8500 and self.actualpostion < 10000:
+                writegeneral.writesymbolvalue(self.TundishCar2_heatslow_limitsw, 1, 'S7WLBit')
+
+            else:
+                writegeneral.writesymbolvalue(self.TundishCar2_heatslow_limitsw, 0, 'S7WLBit')
+
+                # Cast position
+
+            if self.actualpostion < -50:
+                writegeneral.writesymbolvalue(self.TundishCar2_castovt_limitsw, 0, 'S7WLBit')
+            else:
+                writegeneral.writesymbolvalue(self.TundishCar2_castovt_limitsw, 1, 'S7WLBit')
+
+            if self.actualpostion < 120 and self.actualpostion > -100:
+                writegeneral.writesymbolvalue(self.TundishCar2_caststop_limitsw, 1, 'S7WLBit')
+            else:
+                writegeneral.writesymbolvalue(self.TundishCar2_caststop_limitsw, 0, 'S7WLBit')
+
+            if self.actualpostion < 800 and self.actualpostion > 50:
+                writegeneral.writesymbolvalue(self.TundishCar2_castslow_limitsw, 1, 'S7WLBit')
+
+            else:
+                writegeneral.writesymbolvalue(self.TundishCar2_castslow_limitsw, 0, 'S7WLBit')
 
             sta_con_plc.disconnect()
 

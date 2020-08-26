@@ -496,8 +496,8 @@ class FormUi:
         # self.rampstartbutton = ttk.Button(self.win, text='rampstart', command=self.rampstart)
         # self.rampstartbutton.grid(column=1, row=4)
 
-        self.proportionalstartbutton = ttk.Button(self.win, text='ProportionalStart', command=self.proportionalprocessstart)
-        self.proportionalstartbutton.grid(column=0, row=5)
+        # self.proportionalstartbutton = ttk.Button(self.win, text='ProportionalStart', command=self.proportionalprocessstart)
+        # self.proportionalstartbutton.grid(column=0, row=5)
 
 
     def stopprocess(self):

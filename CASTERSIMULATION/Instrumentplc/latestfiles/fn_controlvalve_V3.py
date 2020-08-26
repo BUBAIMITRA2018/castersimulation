@@ -48,9 +48,7 @@ class Fn_ControlValves(Eventmanager):
         sta_con_plc = client.opc_client_connect(self.filename)
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
-
         writegeneral.writesymbolvalue(self.pv, 0, 'S7WLWord')
-
         sta_con_plc.disconnect()
 
     def controlvalveprocess(self):
@@ -79,13 +77,13 @@ class Fn_ControlValves(Eventmanager):
 
                     if self.spvalue > self.currentvalue:
                         diff = self.spvalue - self.currentvalue
-                        count = .1 * diff
+                        count = .01 * diff
                         self.currentvalue = self.currentvalue + count
                         writegeneral.writesymbolvalue(self.pv, self.currentvalue, 'S7WLWord')
 
                     if self.spvalue < self.currentvalue:
                         diff = self.currentvalue - rawspvalue
-                        count1 = .1 * diff
+                        count1 = .01 * diff
                         self.currentvalue = self.currentvalue - count1
                         writegeneral.writesymbolvalue(self.pv, self.currentvalue, 'S7WLWord')
 

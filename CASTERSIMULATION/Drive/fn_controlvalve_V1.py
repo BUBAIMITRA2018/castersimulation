@@ -31,7 +31,7 @@ class Fn_ControlValves:
             log_exception(e)
 
     def controlvalveinitilization(self):
-        pass
+        self.process()
 
     def process(self):
 

@@ -10,8 +10,18 @@ class AreaObserver:
         observable.register_observer(self)
 
     def notify(self,  *args, **kwargs):
-        for item in args[0]:
-            item.OnCmd = args[1].readgeneral.readtagvalue(item.cmdtag)
+        try:
+            for item in args[0]:
+                item.OnCmd = args[1].readgeneral.readtagvalue(item.cmdtag)
+
+        except Exception as e:
+            log_exception(e)
+            level = logging.ERROR
+            messege = "AreaObserver" + " Error messege(process)" + str(e.args)
+            logger.log(level, messege)
+            log_exception(e)
+
+
 
 
 subject = Observable()
@@ -29,7 +39,7 @@ def process(comobject,alldevices):
         except Exception as e:
             log_exception(e)
             level = logging.ERROR
-            messege = "allmotor1dprocessing" + " Error messege(process)" + str(e.args)
+            messege = "allvibrofeederprocessing" + " Error messege(process)" + str(e.args)
             logger.log(level, messege)
             log_exception(e)
 
