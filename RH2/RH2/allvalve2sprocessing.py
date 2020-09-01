@@ -36,16 +36,26 @@ class sov2sprocess:
 
     def process(self):
 
-        for area, devices in readkeyandvalues(self.alldevices):
-            areavalue = self.readgeneral.readsymbolvalue(area, "digital")
+        try:
 
-            print("hello")
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
 
-            if areavalue == 1:
-                self.observer.notify(devices, self.readgeneral)
+            for area, devices in readkeyandvalues(self.alldevices):
+                areavalue = readgeneral.readsymbolvalue(area, 'digital')
+                if areavalue == 1:
+                    self.observer.notify(devices, readgeneral)
+
+            sta_con_plc.close()
 
 
 
+
+        except Exception as e:
+            level = logging.ERROR
+            messege = "Valve2sprocessing" + " Error messege(Valve2sdProcess)" + str(e.args)
+            logger.log(level, messege)
 
 def readkeyandvalues(alldevice):
 

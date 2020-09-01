@@ -1,6 +1,8 @@
 from logger import *
 from event_V2 import *
-from time import sleep
+from clientcomm_v1 import *
+from readgeneral_v2 import *
+from  writegeneral_v2 import *
 import logging
 logger = logging.getLogger("main.log")
 
@@ -11,10 +13,12 @@ __all__ = ['Fn_VibroFeeder']
 
 class Fn_VibroFeeder(Eventmanager):
 
-    def __init__(self,com,df,idxNo):
+    def __init__(self,com,df,idxNo,filename):
         self._idxNo =idxNo
         self.gen = com
+        self.filename = filename
         self._speedpv = 0.0
+        self._oncmdvalue = False
         self.df = df
         self.devicename = df.iloc[self._idxNo, 0]
         self.setup()
@@ -44,26 +48,32 @@ class Fn_VibroFeeder(Eventmanager):
                 if col == 7:
                     self.emergencyFBtag = str(tag)
 
-
                 if col == 8:
-                    self.remoteFBtag = str(tag)
+                    self.LocFBtag = str(tag)
 
 
                 if col == 9:
-                    self.modulefaulttag = str(tag)
+                    self.remoteFBtag = str(tag)
 
 
                 if col == 10:
-                    self.feedertriptag = str(tag)
+                    self.modulefaulttag = str(tag)
 
 
                 if col == 11:
+                    self.feedertriptag = str(tag)
+
+
+                if col == 12:
                     self.pshealthytag =str(tag)
 
 
 
-                if col == 12:
+                if col == 13:
                     self.thyinoprtag =str(tag)
+
+                if col == 14:
+                    self.ContOntag = str(tag)
 
 
 
@@ -76,40 +86,41 @@ class Fn_VibroFeeder(Eventmanager):
     def initilizedigitalinput(self):
 
         try:
-            self._oncmdvalue = self.gen.readgeneral.readtagvalue(self.cmdtag)
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            writegeneral = WriteGeneral(sta_con_plc)
+            readgeneral = ReadGeneral(sta_con_plc)
+
             if len(self.remoteFBtag) > 3:
-                self.gen.writegeneral.writenodevalue(self.remoteFBtag, 1)
+                writegeneral.writesymbolvalue(self.remoteFBtag, 1,'S7WLBit')
                 level = logging.INFO
                 messege = self.devicename + ":" + self.remoteFBtag + " is trigger by 1"
                 logger.log(level, messege)
 
 
             if len(self.modulefaulttag) > 3:
-                self.gen.writegeneral.writenodevalue(self.modulefaulttag, 0)
+                writegeneral.writesymbolvalue(self.modulefaulttag, 0, 'S7WLBit')
                 level = logging.INFO
                 messege = self.devicename + ":" + self.modulefaulttag + " is trigger by 0"
                 logger.log(level, messege)
 
 
             if len(self.feedertriptag) > 3:
-                self.gen.writegeneral.writenodevalue(self.feedertriptag, 0)
+                writegeneral.writesymbolvalue(self.feedertriptag,0 , 'S7WLBit')
                 level = logging.INFO
                 messege = self.devicename + ":" + self.feedertriptag + " is trigger by 0"
                 logger.log(level, messege)
 
 
             if len(self.pshealthytag) > 3:
-                self.gen.writegeneral.writenodevalue(self.pshealthytag, 1)
+                writegeneral.writesymbolvalue(self.pshealthytag, 1, 'S7WLBit')
                 level = logging.INFO
                 messege = self.devicename + ":" + self.pshealthytag + " is trigger by 1"
                 logger.log(level, messege)
 
+            sta_con_plc.disconnect()
 
-            if len(self.thyinoprtag) > 3:
-                self.gen.writegeneral.writenodevalue(self.thyinoprtag, 1)
-                level = logging.INFO
-                messege = self.devicename + ":" + self.thyinoprtag + " is trigger by 1"
-                logger.log(level, messege)
+            self.Viborfeederprocess()
 
 
 
@@ -125,19 +136,44 @@ class Fn_VibroFeeder(Eventmanager):
     def Viborfeederprocess(self):
 
         try:
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            writegeneral = WriteGeneral(sta_con_plc)
+            readgeneral = ReadGeneral(sta_con_plc)
 
-            self.tagvalue = self.gen.readgeneral.readtagvalue(self.cmdtag)
 
-            if self.tagvalue == True:
-                setvalue = self.gen.readgeneral.readtagvalue(self.speedsetpointtag)
-                self.gen.writegeneral.writenodevalue(self.speedprocessvaluetag, setvalue)
+
+            self.tagvalue = readgeneral.readsymbolvalue(self.cmdtag,'S7WLBit','PA')
+
+
+
+            if self.tagvalue:
+                writegeneral.writesymbolvalue(self.thyinoprtag, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.ContOntag, 1, 'S7WLBit')
                 level = logging.WARNING
-                messege = self.devicename + ":" + self.speedprocessvaluetag + " value is" + str(setvalue)
+                messege = self.devicename + ":" + self.thyinoprtag + " value is" + "1"
                 logger.log(level, messege)
-                self.speedPV = setvalue
+
+
+                if len(self.speedprocessvaluetag) > 3:
+                    setvalue = readgeneral.readsymbolvalue(self.speedsetpointtag, 'S7WLWord', 'PA')
+                    writegeneral.writesymbolvalue(self.speedprocessvaluetag, setvalue, 'S7WLWord')
+                #
+                #
+                # level = logging.WARNING
+                # messege = self.devicename + ":" + self.speedprocessvaluetag + " value is" + str(setvalue)
+                # logger.log(level, messege)
+                # self.speedPV = setvalue
+
+
+
 
             else:
-                self.gen.writegeneral.writenodevalue(self.speedprocessvaluetag, 0)
+                writegeneral.writesymbolvalue(self.thyinoprtag, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.ContOntag, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.speedprocessvaluetag, 0, 'S7WLWord')
+
+
 
         except Exception as e:
             level = logging.ERROR
@@ -152,16 +188,12 @@ class Fn_VibroFeeder(Eventmanager):
     @OnCmd.setter
     def OnCmd(self, value):
         if value != self._oncmdvalue:
+            print(("fire1"))
+
             super().fire()
             self._oncmdvalue = value
 
-    @property
-    def speedPV(self):
-        return self._speedpv
 
-    @speedPV.setter
-    def speedPV(self,value):
-        self._speedpv = value
 
     @property
     def areaname(self):

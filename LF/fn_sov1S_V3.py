@@ -64,8 +64,9 @@ class Fn_Sov1S(Eventmanager):
         sta_con_plc = client.opc_client_connect(self.filename)
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
-        if len(self.closeFBtag) > 3:
-            writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
+
+        self.sov1sprocess()
+
 
 
         sta_con_plc.disconnect()
@@ -103,6 +104,8 @@ class Fn_Sov1S(Eventmanager):
 
             sta_con_plc.disconnect()
             gc.collect()
+
+
 
 
 

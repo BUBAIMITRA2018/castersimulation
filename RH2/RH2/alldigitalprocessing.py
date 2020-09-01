@@ -4,9 +4,9 @@ from observable import *
 import logging
 from clientcomm_v1 import *
 from readgeneral_v2 import *
-
-
 logger = logging.getLogger("main.log")
+
+
 
 class AreaObserver:
 
@@ -44,14 +44,24 @@ class digitalprocess:
 
     def process(self):
 
-        for area, devices in readkeyandvalues(self.alldevices):
-            areavalue = self.readgeneral.readsymbolvalue(area, "digital")
+        try:
 
-            if areavalue == 1:
-                self.observer.notify(devices, self.readgeneral)
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+
+            for area, devices in readkeyandvalues(self.alldevices):
+                areavalue = readgeneral.readsymbolvalue(area, 'digital')
+                if areavalue == 1:
+                    self.observer.notify(devices, readgeneral)
+
+            sta_con_plc.close()
 
 
-
+        except Exception as e:
+            level = logging.ERROR
+            messege = "Digital processing" + " Error messege(DigitalProcessing)" + str(e.args)
+            logger.log(level, messege)
 
 def readkeyandvalues(alldevice):
 

@@ -10,37 +10,48 @@ class AreaObserver:
         observable.register_observer(self)
 
     def notify(self,  *args, **kwargs):
-        for item in args[0]:
-            inverse_condition = False
-            propotional_condition = False
-
-            cond1 = (len(item.cmdtag5)> 3)
-            cond2 = (len(item.cmdtag1) > 3) and (args[1].readsymbolvalue(item.cmdtag1, 'digital'))
-
-            if cond1:
-                inverse_condition = (args[1].readsymbolvalue(item.cmdtag5, 'digital')) \
-                                    or (args[1].readsymbolvalue(item.cmdtag6, 'digital')) \
-                                    or (args[1].readsymbolvalue(item.cmdtag7, 'digital')) \
-                                    or ( args[1].readsymbolvalue(item.cmdtag8, 'digital'))
-
-            if cond2:
-                propotional_condition = (args[1].readsymbolvalue(item.cmdtag1, 'digital'))\
-                                        and (args[1].readsymbolvalue(item.cmdtag2, 'digital'))\
-                                        and (args[1].readsymbolvalue(item.cmdtag3, 'digital')) \
-                                        and (args[1].readsymbolvalue(item.cmdtag4, 'digital'))
+        try:
+            for item in args[0]:
+                inverse_condition = False
+                propotional_condition = False
 
 
 
-            if len(item.cmdtag1) > 3:
-                item.IncreaseCmd = propotional_condition and not inverse_condition
+                cond1 = (len(item.cmdtag5) > 3)
+                cond2 = (len(item.cmdtag1) > 3) and (args[1].readsymbolvalue(item.cmdtag1, 'digital' ))
+
+                print("increasing command executed")
+
+                if cond1:
+                    inverse_condition = (args[1].readsymbolvalue(item.cmdtag5, 'digital')) \
+                                        or (args[1].readsymbolvalue(item.cmdtag6, 'digital')) \
+                                        or (args[1].readsymbolvalue(item.cmdtag7, 'digital')) \
+                                        or (args[1].readsymbolvalue(item.cmdtag8, 'digital'))
+
+                if cond2:
+                    propotional_condition = (args[1].readsymbolvalue(item.cmdtag1, 'digital')) \
+                                            and (args[1].readsymbolvalue(item.cmdtag2, 'digital')) \
+                                            and (args[1].readsymbolvalue(item.cmdtag3, 'digital')) \
+                                            and (args[1].readsymbolvalue(item.cmdtag4, 'digital'))
 
 
-            if len(item.cmdtag5) > 3:
-                item.DecreaseCmd = inverse_condition and not propotional_condition
-            else:
-                item.DecreaseCmd = (not propotional_condition)
+
+                if len(item.cmdtag1) > 3:
+
+                    item.IncreaseCmd = propotional_condition and not inverse_condition
 
 
+                if len(item.cmdtag5) > 3:
+                    print("decreasing command executed")
+                    item.DecreaseCmd = inverse_condition and not propotional_condition
+
+                else:
+                    item.DecreaseCmd = (not propotional_condition)
+
+        except Exception as e:
+            level = logging.ERROR
+            messege = "Ramp" + " Error messege(Obsrver process)" + str(e.args)
+            logger.log(level, messege)
 
 
 class rampprocess:
@@ -60,27 +71,38 @@ class rampprocess:
         while True:
             try:
                 client = Communication()
-                sta_con_plc = self.client.opc_client_connect(filename)
-                readgeneral = ReadGeneral(self.sta_con_plc)
-                areavalue = self.readgeneral.readsymbolvalue(area, "digital")
+                sta_con_plc = client.opc_client_connect(filename)
+                readgeneral = ReadGeneral(sta_con_plc)
+                areavalue =   readgeneral.readsymbolvalue(area, 'digital')
                 if areavalue == 1:
-                    self.observer.notify(devices, self.readgeneral)
+                    self.observer.notify(devices, readgeneral)
 
                 sta_con_plc.close()
+
 
 
             except Exception as e:
                 level = logging.ERROR
                 messege = "Ramp" + " Error messege(Obsrver process)" + str(e.args)
-                logger.log(level, messege)
-
-
+                # logger.log(level, messege)
 
 
 
     def process(self):
-        for area, devices in readkeyandvalues(self.alldevices):
-            threading.Thread(target=self.callobserver, args= (area,devices,self.filename)).start()
+        try:
+            for area, devices in readkeyandvalues(self.alldevices):
+
+                threading.Thread(target=self.callobserver, args=(area, devices, self.filename)).start()
+
+        except Exception as e:
+            level = logging.ERROR
+            messege = "Ramp" + " Error messege(Obsrver process)" + str(e.args)
+            # logger.log(level, messege)
+
+
+
+
+
 
 def readkeyandvalues(alldevice):
     rampdictionary = alldevice.allrampobjects.dictionary
@@ -92,12 +114,4 @@ def readkeyandvalues(alldevice):
         devices = rampdictionary[area]
         yield area, devices
         n = n + 1
-
-
-
-
-
-
-
-
 

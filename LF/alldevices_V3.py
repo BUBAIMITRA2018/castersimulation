@@ -47,7 +47,7 @@ class AllDevices:
         self.allmotor2dobjects = callallmotor2D_V3.Cal_AllMotor2D(self.dfM2D, comobject,import_file_path)
         self.allsov1sobjects = callallsov1S_V3.Cal_AllSov1S(self.dfS1S,comobject,import_file_path)
         self.allsov2sobjects =  callallsov2S_V3.Cal_AllSov2S(self.dfS2S,comobject,import_file_path)
-        self.allvfobjects =   callallvibrofeeder_V3.Cal_AllVibroFeeder(self.dfVF,comobject)
+        self.allvfobjects =   callallvibrofeeder_V3.Cal_AllVibroFeeder(self.dfVF,comobject,import_file_path)
         self.allconveyorobjects = callallconveyor_V3.Cal_AllConveyor1D(self.dfCONV,comobject)
         self.alldriveobjects = calallABPdrives_V3.Cal_ABBDrives(self.dfdrive,comobject,import_file_path)
         self.allencoderobjects = callallEncoder_V3.Cal_AllEncoder(self.dfencoder,comobject)
@@ -57,7 +57,7 @@ class AllDevices:
         self.alldigitalsignalobjects = callalldigital_V3.Cal_AllDigital(self.dfdigitalsignal,comobject,import_file_path)
         self.allcontrolvalveobjects = calallcontrolvalves_V3.Cal_AllControlValves(self.dfcontrolvalve,comobject,import_file_path)
         self.allproptionalvalvesobjects = callallProportionalValve_V3.Cal_AllProportionalValves( self.dfPropotionalValves, comobject,import_file_path)
-        # self.rampobjects  = callallramp_V3.Cal_AllRampInputs(self.dframpsignal,comobject,import_file_path)
+        self.rampobjects  = callallramp_V3.Cal_AllRampInputs(self.dframpsignal,comobject,import_file_path)
 
 
 

@@ -52,6 +52,7 @@ class Fn_Ramp(Eventmanager):
                 if col == 3:
                     self.area = str(item)
 
+
                 if col == 4:
                     self.highlimit = float(item)
 
@@ -124,7 +125,21 @@ class Fn_Ramp(Eventmanager):
                     self.setholdingvalue = int(item)
 
                 if col == 18:
-                    self.samplingvaluerate = float(item)
+                    self.Maxoffset = float(item)
+                    print(self.Maxoffset)
+
+                if col == 19:
+                    self.Minoffset = float(item)
+                    print(self.Minoffset)
+
+                if col == 20:
+                    self.incresesamplerate = int(item)
+                    print(self.incresesamplerate)
+
+
+                if col == 21:
+                    self.decresesamplerate = int(item)
+
 
 
         except Exception as e:
@@ -141,6 +156,9 @@ class Fn_Ramp(Eventmanager):
         self.processrawvalue = self.unscaling(self.val,10000,self.highlimit,self.lowerlimit,0)
         self.lowerlimitrawvalue = self.unscaling(self.lowerlimit,10000,self.highlimit,self.lowerlimit,0)
         self.highlimitrawvalue = self.unscaling(self.highlimit, 10000, self.highlimit, self.lowerlimit, 0)
+        self.Maxoffsetrawvalue = self.unscaling(self.Maxoffset, 10000, self.highlimit, self.lowerlimit, 0)
+        self.Minoffsetrawvalue = self.unscaling(self.Minoffset, 10000, self.highlimit, self.lowerlimit, 0)
+
 
 
         sta_con_plc.close()
@@ -157,7 +175,7 @@ class Fn_Ramp(Eventmanager):
             currentrawvalue = readgeneral.readsymbolvalue(self.outputtag, 'analog')
 
             if  currentrawvalue < self.processrawvalue:
-                local_p1 = threading.Thread(target=self.increasingthread,args=(self.filename,currentrawvalue,self.processrawvalue,self.outputtag,self.samplingvaluerate))
+                local_p1 = threading.Thread(target=self.increasingthread,args=(self.filename,currentrawvalue,self.processrawvalue,self.outputtag,self.incresesamplerate))
                 local_p1.start()
             sta_con_plc.close()
 
@@ -176,9 +194,9 @@ class Fn_Ramp(Eventmanager):
             self.postivepluse = False
             currentrawvalue = readgeneral.readsymbolvalue(self.outputtag, 'analog')
 
-            if  currentrawvalue > self.lowerlimitrawvalue:
+            if  currentrawvalue > self.Minoffsetrawvalue:
                 local_p2 = threading.Thread(target=self.decreasingthread, args=(
-                self.filename, currentrawvalue, self.lowerlimitrawvalue, self.outputtag, self.samplingvaluerate))
+                self.filename, currentrawvalue, self.Minoffsetrawvalue, self.outputtag, self.decresesamplerate))
                 local_p2.start()
 
 

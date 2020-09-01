@@ -24,10 +24,13 @@ class ReadGeneral():
             return get_bool(self.result, 0, self.bit)
         elif datatype == 'S7WLByte' or datatype == 'S7WLWord':
             self.result = self.client.read_area(areas[self.daat], 0, self.byte, S7WLWord)
+
             return get_int(self.result, 0)
         elif datatype == S7WLReal:
             return get_real(self.result, 0)
-        elif datatype == S7WLDWord:
+        elif datatype == 'S7WLDWord':
+            self.result = self.client.read_area(areas[self.daat], 0, self.byte, S7WLDWord)
+            print(("the result is ", get_int(self.result, 0)))
             return get_dword(self.result, 0)
         else:
             return None

@@ -78,6 +78,8 @@ class Fn_Sov1S(Eventmanager):
             messege1 = self.devicename + ":" + self.openFBtag + " is trigger by 0"
             logger.log(level1, messege1)
 
+
+
         sta_con_plc.close()
 
 

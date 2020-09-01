@@ -1,4 +1,4 @@
-from snap7.snap7types import areas, S7WLBit
+from snap7.snap7types import areas, S7WLBit,S7WLDWord
 from  clientcomm_v1 import *
 import pandas as pd
 
@@ -18,6 +18,7 @@ class WriteGeneral():
 
     def writesymbolvalue(self, address, tagvalue, datatype):
         addressconverted = float(address)
+        print("the adress is ",addressconverted)
         self.byte = int(addressconverted)
         self.bit = round((addressconverted - self.byte)*10)
 
@@ -31,7 +32,9 @@ class WriteGeneral():
             self.result = self.client.read_area(areas['PE'], 0, self.byte, S7WLBit)
             set_real(self.result, 0, tagvalue)
         elif datatype == 'S7WLDWord':
-            self.result = self.client.read_area(areas['PE'], 0, self.byte, S7WLBit)
+            print("heheheheehehehehehehehehehehehehehe")
+            print(self.byte)
+            self.result = self.client.read_area(areas['PE'], 0, self.byte, S7WLDWord)
             set_dword(self.result, 0, tagvalue)
         self.client.write_area(areas['PE'], 0, self.byte, self.result)
 

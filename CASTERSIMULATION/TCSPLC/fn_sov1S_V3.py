@@ -13,9 +13,10 @@ __all__ = ['Fn_Sov1S']
 
 class Fn_Sov1S(Eventmanager):
 
-    def __init__(self,df,idxNo,filename):
+    def __init__(self,com,df,idxNo,filename):
         self._idxNo =idxNo
         self.filename = filename
+        # self.gen = com
         self.df = df
         self.devicename = df.iloc[self._idxNo, 0]
         self.setup()
@@ -62,11 +63,11 @@ class Fn_Sov1S(Eventmanager):
         sta_con_plc = client.opc_client_connect(self.filename)
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
-        if len(self.closeFBtag) > 3:
-            writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
 
+        writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
 
         sta_con_plc.disconnect()
+        self.sov1sprocess()
 
 
     def sov1sprocess(self):
@@ -78,18 +79,15 @@ class Fn_Sov1S(Eventmanager):
             writegeneral = WriteGeneral(sta_con_plc)
 
             self.cmdtagvalue = readgeneral.readsymbolvalue(self.cmdtag,'S7WLBit','PA')
-
             if self.cmdtagvalue:
-                if len(self.closeFBtag) > 3:
-                    writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.closeFBtag, 0, 'S7WLBit')
                 writegeneral.writesymbolvalue(self.openFBtag, 1, 'S7WLBit')
 
 
 
             if not self.cmdtagvalue:
                 writegeneral.writesymbolvalue(self.openFBtag, 0, 'S7WLBit')
-                if len(self.closeFBtag) > 3:
-                    writegeneral.writesymbolvalue(self.closeFBtag, 1, 'S7WLBit')
+                writegeneral.writesymbolvalue(self.closeFBtag, 1, 'S7WLBit')
 
 
 

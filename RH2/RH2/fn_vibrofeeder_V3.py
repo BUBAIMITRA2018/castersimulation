@@ -133,6 +133,8 @@ class Fn_VibroFeeder(Eventmanager):
 
             sta_con_plc.close()
 
+            self.Viborfeederprocess()
+
             gc.collect()
 
 

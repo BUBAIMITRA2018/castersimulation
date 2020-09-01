@@ -136,6 +136,8 @@ class Fn_Motor1D(Eventmanager):
 
             sta_con_plc.close()
 
+            self.motorprocess()
+
 
 
         except Exception as e:

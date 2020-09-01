@@ -37,11 +37,27 @@ class motor1dprocess:
 
     def process(self):
 
-        for area, devices in readkeyandvalues(self.alldevices):
-            areavalue = self.readgeneral.readsymbolvalue(area, "digital")
+        try:
 
-            if areavalue == 1:
-                self.observer.notify(devices, self.readgeneral)
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+
+            for area, devices in readkeyandvalues(self.alldevices):
+                areavalue = readgeneral.readsymbolvalue(area, 'digital')
+                if areavalue == 1:
+                    self.observer.notify(devices, readgeneral)
+
+            sta_con_plc.close()
+
+
+
+
+        except Exception as e:
+            level = logging.ERROR
+            messege = "Motor1processing" + " Error messege(Motor1Process)" + str(e.args)
+            logger.log(level, messege)
+
 
 
 

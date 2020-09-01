@@ -21,9 +21,7 @@ class AreaObserver:
         for item in args[0]:
             try:
 
-                # threading = multiprocessing.Process(target=self.callmotor2dprocess,args=(item))
-
-                thread = threading.Thread(target=self.callmotor2dprocess,args=[item])
+                thread = threading.Thread(target=self.callmotor2dprocess, args=[item])
                 threadlist.append(thread)
 
             except Exception as e:
@@ -55,7 +53,6 @@ class motor2dprocess:
     def __init__(self,alldevices,filename):
         self.subject = Observable()
         self.alldevices = alldevices
-
         self.client = Communication()
         self.sta_con_plc = self.client.opc_client_connect(filename)
         self.observer = AreaObserver(self.subject)

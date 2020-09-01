@@ -45,7 +45,8 @@ class Fn_ControlValves(Eventmanager):
             log_exception(e)
 
     def initilizedigitalinput(self):
-      pass
+        pass
+
 
     def controlvalveprocess(self):
         client = Communication()

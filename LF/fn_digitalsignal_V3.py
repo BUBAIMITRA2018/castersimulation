@@ -69,7 +69,10 @@ class Fn_digitalsignal(Eventmanager):
             level = logging.INFO
             messege = self.devicename + ":" + self.OutDigital + " is trigger by 0"
             logger.log(level, messege)
+
             sta_con_plc.disconnect()
+            self.digitalprocess()
+
         except Exception as e:
             level = logging.ERROR
             messege = "Fn_Digitalsignal" + self.devicename + " Error messege(initilization)" + str(e.args)

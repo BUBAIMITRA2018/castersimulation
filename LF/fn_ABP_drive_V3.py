@@ -105,21 +105,7 @@ class Fn_ABP_Drive(Eventmanager):
         readgeneral = ReadGeneral(sta_con_plc)
         writegeneral = WriteGeneral(sta_con_plc)
 
-        # if len(self.DriveRdytag) > 3:
-        #     writegeneral.writeDBvalue(self.DriveRdytag, 1, 'S7WLBit')
-        #     level = logging.INFO
-        #     messege = self.devicename + ":" + self.DriveRdytag + " is trigger by 1"
-        #     logger.log(level, messege)
-        #
-        #
-        # if len(self.FaultFBtag) > 3:
-        #     writegeneral.writeDBvalue(self.FaultFBtag, 1, 'S7WLBit')
-        #     level = logging.INFO
-        #     messege = self.devicename + ":" + self.FaultFBtag + " is trigger by 1"
-        #     logger.log(level, messege)
-
-
-        # writegeneral.writeDBvalue(self.sw, 14129, 'S7WLWord')
+        self.driveprocess()
 
         sta_con_plc.disconnect()
 

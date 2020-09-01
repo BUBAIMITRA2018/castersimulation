@@ -24,6 +24,7 @@ class Cal_AllRampInputs:
 
             # Make a lis of area
             self.listoframparea = list(set(self.df['Sub-Area']))
+            print(self.listoframparea)
 
             # Make a list of devices
             n= 0
@@ -47,6 +48,7 @@ class Cal_AllRampInputs:
             values = self.devicelistperarea[1:]
             # Declear empty list
             self.dictionary = dict(zip(keys, values))
+            print(self.dictionary)
 
 
 

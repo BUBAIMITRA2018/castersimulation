@@ -162,6 +162,8 @@ class Fn_Motor2D(Eventmanager):
 
             sta_con_plc.disconnect()
 
+            self.motor2dprocess()
+
 
 
         except Exception as e:

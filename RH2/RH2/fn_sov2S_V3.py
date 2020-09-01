@@ -117,6 +117,10 @@ class Fn_Sov2S(Eventmanager):
                 if len(self.torqueOpenFBtag) > 3:
                     writegeneral.writesymbolvalue(self.torqueOpenFBtag, "digital", 1)
 
+
+
+
+
                 level = logging.WARNING
                 messege = self.devicename + ":" + self.closeFBtag + " is trigger by 0" + self.openFBtag + "  is trigger by 1 "
                 logger.log(level, messege)
@@ -142,6 +146,7 @@ class Fn_Sov2S(Eventmanager):
                     writegeneral.writesymbolvalue(self.torquecloseFBtag,"digital", 1)
 
                 level = logging.WARNING
+
                 messege = self.devicename + ":" + self.closeFBtag + " is trigger by 1" + self.openFBtag + " " \
                                                                                                           "is trigger by 0 "
                 logger.log(level, messege)

@@ -137,6 +137,8 @@ class Fn_Motor1D(Eventmanager):
 
             sta_con_plc.disconnect()
 
+            self.motorprocess()
+
         except Exception as e:
             level = logging.ERROR
             messege = "FN_MOTOR1D" + self.devicename + " Error messege(initilization)" + str(e.args)

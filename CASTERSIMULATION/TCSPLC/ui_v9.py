@@ -1,12 +1,20 @@
 import datetime
+import os
 import queue
 import logging
 import signal
 import PIL.Image
 import PIL.ImageTk
-
+import alldevices_V3
 import general
-import  allencoderprocessing
+import allcylinderdprocessing_V1
+import allmotor1dprocessing_V1
+import allmotor2dprocessing
+import allvalve1sprocessing
+import allvalve2sprocessing
+import allcontrolvalvesprocessing
+import allanalogprocessing
+import alldigitalprocessing
 import time
 from ListView2 import *
 
@@ -180,14 +188,22 @@ class FormUi:
             self.progressbar['value'] = 20
             time.sleep(1)
             self.frame.update_idletasks()
+            self.alldevices = alldevices_V3.AllDevices(self.comm_object, self.import_file_path)
             self.progressbar['value'] = 30
+
             self.frame.update_idletasks()
             time.sleep(1)
 
 
 
-            self.allencoderprocessobject = allencoderprocessing.Allencoderprocess(self.import_file_path)
-
+            self.allcylinderprocessobject = allcylinderdprocessing_V1.cylinderprocess(self.alldevices,self.import_file_path)
+            self.allmotor1dprocessobject = allmotor1dprocessing_V1.motor1dprocess(self.alldevices,self.import_file_path)
+            self.motor2dprocessobject = allmotor2dprocessing.motor2dprocess(self.alldevices, self.import_file_path)
+            self.sov1sprocessobject = allvalve1sprocessing.sov1sprocess(self.alldevices, self.import_file_path)
+            self.sov2sprocessobject = allvalve2sprocessing.sov2sprocess(self.alldevices, self.import_file_path)
+            self.controlvalveprocessobject = allcontrolvalvesprocessing.controlvalveprocess(self.alldevices,self.import_file_path)
+            self.analogobject = allanalogprocessing.analogprocess(self.alldevices, self.import_file_path)
+            self.digitalobject = alldigitalprocessing.digitalprocess(self.alldevices, self.import_file_path)
 
             self.button2.config(text="Initialized")
             initial = "True"
@@ -210,169 +226,146 @@ class FormUi:
             self.progressbar.stop()
 
 
-    def callArm1Lift_Encoder(self):
+
+    def callcylinder(self,com,devices):
         while not self.DEAD:
-            self.allencoderprocessobject.arm1Lift_Encoder_process()
+            self.allcylinderprocessobject.process()
 
-    def callArm2Lift_Encoder(self):
+
+    def callallmotor1d(self,com,devices):
+
         while not self.DEAD:
-            self.allencoderprocessobject.arm2Lift_Encoder_process()
+            self.allmotor1dprocessobject.process()
 
-    def callBA01_BWL_Turret_Encoder(self):
+
+    def callallmotor2d(self,com,devices):
+
         while not self.DEAD:
-            self.allencoderprocessobject.bA01_BWL_Turret_Encoder()
+            self.motor2dprocessobject.process()
+            # allmotor2dprocessing.process(com, devices,self.import_file_path)
 
-    def CalldB_Encoder(self):
+
+    def callallsov1s(self,com,devices):
         while not self.DEAD:
-            self.allencoderprocessobject.dB_Encoder()
+            self.sov1sprocessobject.process()
 
-    def CallpR_Encoder(self):
+            # time.sleep(5)
+
+    def callallsov2s(self, com, devices):
         while not self.DEAD:
-            self.allencoderprocessobject.pR_Encoder()
-
-    def CalllevellingRollPos_Encoder(self):
+            self.sov2sprocessobject.process()
+            # time.sleep(2)
+    #
+    def callallanalogs(self,com, devices):
         while not self.DEAD:
-            self.allencoderprocessobject.lvellingRollPos_Encoder()
+            self.analogobject.process()
+            # time.sleep(2)
 
-    def callshear_Angel_Encoder(self):
+
+    def callcontrolvalves(self,com,devices):
         while not self.DEAD:
-            self.allencoderprocessobject.shear_Angel_Encoder()
+            self.controlvalveprocessobject.process()
+            # time.sleep(2)
 
-    def callwSD_Encoder(self):
+    def calldigitals(self,com,devices):
         while not self.DEAD:
-            self.allencoderprocessobject.wSD_Encoder()
-
-    def calltDCar1LiftLower_Encoder(self):
-        while not self.DEAD:
-            self.allencoderprocessobject.tDCar1LiftLower_Encoder()
-
-    def calltDCar2LiftLower_Encoder(self):
-        while not self.DEAD:
-            self.allencoderprocessobject.tDCar2LiftLower_Encoder()
+            self.digitalobject.process()
+            # time.sleep(2)
 
 
 
-
-
-
-
-
-    def Arm1Lift_Encoderstart(self):
+    def cylinderstart(self):
         self.DEAD = False
-        self.Arm1Lift_Encodertread = threading.Thread(target=self.callArm1Lift_Encoder)
-        self.listofthread.append(self.Arm1Lift_Encodertread)
-        self.Arm1Lift_Encodertread.start()
-        self.Arm1Lift_Encoderstartbutton.configure(text="Arm1Lift_Encoder_Started")
+        self.cylindertread = threading.Thread(target=self.callcylinder, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.cylindertread)
+        self.cylindertread.start()
+        self.Cylinderbutton.configure(text="Cylinderstarted")
 
-    def Arm2Lift_Encoderstart(self):
+
+    def motor1dstart(self):
         self.DEAD = False
-        self.Arm2Lift_Encodertread = threading.Thread(target=self.callArm2Lift_Encoder)
-        self.listofthread.append(self.Arm2Lift_Encodertread)
-        self.Arm2Lift_Encodertread.start()
-        self.Arm2Lift_Encoderstartbutton.configure(text="Arm2Lift_Encoder_Started")
 
-    def BA01_BWL_Turret_Encoderstart(self):
+        self.motor1dtread = threading.Thread(target=self.callallmotor1d, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.motor1dtread)
+        self.motor1dtread.start()
+        self.motor1dstartbutton.configure(text="motor1dstarted")
+
+    def motor2dstart(self):
         self.DEAD = False
-        self.BA01_BWL_Turret_Encodertread = threading.Thread(target=self.callBA01_BWL_Turret_Encoder)
-        self.listofthread.append(self.BA01_BWL_Turret_Encodertread)
-        self.BA01_BWL_Turret_Encodertread.start()
-        self.BA01_BWL_Turret_Encoderstartbutton.configure(text="BA01_BWL_Turret_Encoder_Started")
+        self.motor2dtread = threading.Thread(target=self.callallmotor2d, args=(self.comm_object, self.alldevices))
 
-    def dB_Encoderstart(self):
+        self.motor2dtread.start()
+        self.motor2dstartbutton.configure(text="motor2dstarted")
+
+    def sov1start(self):
         self.DEAD = False
-        self.dB_Encodertread = threading.Thread(target=self.CalldB_Encoder)
-        self.listofthread.append(self.dB_Encodertread)
-        self.dB_Encodertread.start()
-        self.dB_Encoderstartbutton.configure(text="DB_Encoder_Started")
+        self.sov1stread = threading.Thread(target=self.callallsov1s, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.sov1stread)
+        self.sov1stread.start()
+        self.sov1startbutton.configure(text="sov1started")
 
-    def pR_Encoderstart(self):
+    def sov2start(self):
         self.DEAD = False
-        self.pR_Encodertread = threading.Thread(target=self.CallpR_Encoder)
-        self.listofthread.append(self.pR_Encodertread)
-        self.pR_Encodertread.start()
-        self.pR_Encoderstartbutton.configure(text="PR_Encoder_Started")
+        self.sov2stread = threading.Thread(target=self.callallsov2s, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.sov2stread)
+        self.sov2stread.start()
+        self.sov2startbutton.configure(text="sov2started")
 
-    def shear_Angel_Encoderstart(self):
+    def analogstart(self):
         self.DEAD = False
-        self.shear_Angel_Encodertread = threading.Thread(target=self.callshear_Angel_Encoder)
-        self.listofthread.append(self.shear_Angel_Encodertread)
-        self.shear_Angel_Encodertread.start()
-        self.shear_Angel_Encoderstartbutton.configure(text="Shear_Angel_Encoder_Started")
+        self.analogtread = threading.Thread(target=self.callallanalogs, args=(self.comm_object, self.alldevices))
+        self.listofthread.append(self.analogtread)
+        self.analogtread.start()
+        self.analogstartbutton.configure(text="analogstarted")
 
 
-    def wSD_Encoderstart(self):
+    def controlvalvestart(self):
         self.DEAD = False
-        self.wSD_Encodertread = threading.Thread(target=self.callwSD_Encoder)
-        self.listofthread.append(self.wSD_Encodertread)
-        self.wSD_Encodertread.start()
-        self.wSD_Encoderstartbutton.configure(text="WSD_Encoder_Started")
+        self.controlvalvetread = threading.Thread(target=self.callcontrolvalves,args=(self.comm_object, self.alldevices))
+        self.controlvalvetread.start()
+        self.controlvalvestartbutton.configure(text="controlvalvestarted")
 
-    def tDCar1LiftLower_Encoderstart(self):
+    def digitalstart(self):
         self.DEAD = False
-        self.tDCar1LiftLower_Encodertread = threading.Thread(target=self.calltDCar1LiftLower_Encoder)
-        self.listofthread.append(self.tDCar1LiftLower_Encodertread)
-        self.tDCar1LiftLower_Encodertread.start()
-        self.tDCar1LiftLower_Encoderstartbutton.configure(text="TDCar1LiftLower_Encoder_Started")
-
-    def tDCar2LiftLower_Encoderstart(self):
-        self.DEAD = False
-        self.tDCar2LiftLower_Encodertread = threading.Thread(target=self.calltDCar2LiftLower_Encoder)
-        self.listofthread.append(self.tDCar2LiftLower_Encodertread)
-        self.tDCar2LiftLower_Encodertread.start()
-        self.tDCar2LiftLower_Encoderstartbutton.configure(text="TDCar2LiftLower_Encoder_Started")
-
-    def levellingRollPos_Encoderstart(self):
-        self.DEAD = False
-        self.levellingRollPos_Encodertread = threading.Thread(target=self.CalllevellingRollPos_Encoder)
-        self.listofthread.append(self.levellingRollPos_Encodertread)
-        self.levellingRollPos_Encodertread.start()
-        self.levellingRollPos_Encoderstartbutton.configure(text="LevellingRollPos_Encoder_Started")
-
-
+        self.digitaltread = threading.Thread(target=self.calldigitals,args=(self.comm_object, self.alldevices))
+        self.digitaltread.start()
+        self.digitalstartbutton.configure(text="digitalstarted")
 
     def startprocess(self):
 
         self.win = tk.Toplevel(self.frame)
         self.win.geometry("500x200")
 
-        self.Arm1Lift_Encoderstartbutton = ttk.Button(self.win, text='Arm1Lift_Encoder_Start', command=self.Arm1Lift_Encoderstart)
-        self.Arm1Lift_Encoderstartbutton.grid(column=0, row=0)
+        self.Cylinderbutton = ttk.Button(self.win, text='CylinderStart', command=self.cylinderstart)
+        self.Cylinderbutton.grid(column=0, row=0)
 
-        self.Arm2Lift_Encoderstartbutton = ttk.Button(self.win, text='Arm2Lift_Encoder_Start', command=self.Arm2Lift_Encoderstart)
-        self.Arm2Lift_Encoderstartbutton.grid(column=1, row=0)
+        self.motor1dstartbutton = ttk.Button(self.win, text='motor1dstart', command=self.motor1dstart)
+        self.motor1dstartbutton.grid(column=0, row=1)
 
-        self.BA01_BWL_Turret_Encoderstartbutton = ttk.Button(self.win, text='BA01_BWL_Turret_Encoder_Start',
-                                                      command=self.BA01_BWL_Turret_Encoderstart)
-        self.BA01_BWL_Turret_Encoderstartbutton.grid(column=0, row=1)
+        self.motor2dstartbutton = ttk.Button(self.win, text='motor2dstart', command=self.motor2dstart)
+        self.motor2dstartbutton.grid(column=0, row=2)
 
-        self.dB_Encoderstartbutton = ttk.Button(self.win, text='DB_Encoder_Start',
-                                                             command=self.dB_Encoderstart)
-        self.dB_Encoderstartbutton.grid(column=1, row=1)
+        self.sov1startbutton = ttk.Button(self.win, text='sov1start', command=self.sov1start)
+        self.sov1startbutton.grid(column=0, row=3)
 
-        self.pR_Encoderstartbutton = ttk.Button(self.win, text='PR_Encoder_Start',
-                                                command=self.pR_Encoderstart)
-        self.pR_Encoderstartbutton.grid(column=0, row=2)
-
-        self.shear_Angel_Encoderstartbutton = ttk.Button(self.win, text='Shear_Angel_Encoder_Start',
-                                                command=self.shear_Angel_Encoderstart)
-        self.shear_Angel_Encoderstartbutton.grid(column=1, row=2)
-
-        self.wSD_Encoderstartbutton = ttk.Button(self.win, text='wSD_Encoder_start',
-                                                         command=self.wSD_Encoderstart)
-        self.wSD_Encoderstartbutton.grid(column=0, row=3)
+        self.sov2startbutton = ttk.Button(self.win, text='sov2start', command=self.sov2start)
+        self.sov2startbutton.grid(column=0, row=4)
 
 
-        self.tDCar1LiftLower_Encoderstartbutton = ttk.Button(self.win, text='TDCar1LiftLower_Encoder_start',
-                                                 command=self.tDCar1LiftLower_Encoderstart)
-        self.tDCar1LiftLower_Encoderstartbutton.grid(column=1, row=3)
+        self.analogstartbutton = ttk.Button(self.win, text='analogstart', command=self.analogstart)
+        self.analogstartbutton.grid(column=1, row=1)
 
-        self.tDCar2LiftLower_Encoderstartbutton = ttk.Button(self.win, text='TDCar2LiftLower_Encoder_start',
-                                                             command=self.tDCar2LiftLower_Encoderstart)
-        self.tDCar2LiftLower_Encoderstartbutton.grid(column=0, row=4)
 
-        self.levellingRollPos_Encoderstartbutton = ttk.Button(self.win, text='LevellingRollPos_Encoder_start',
-                                                             command=self.levellingRollPos_Encoderstart)
-        self.levellingRollPos_Encoderstartbutton.grid(column=0, row=4)
+        self.controlvalvestartbutton = ttk.Button(self.win, text='controlvalstart', command=self.controlvalvestart)
+        self.controlvalvestartbutton.grid(column=1, row=2)
+
+        self.digitalstartbutton = ttk.Button(self.win, text='digitalvalstart', command=self.digitalstart)
+        self.digitalstartbutton.grid(column=1, row=3)
+
+
+
+
+
 
 
 
@@ -383,16 +376,14 @@ class FormUi:
     def stopprocess(self):
 
         self.DEAD = True
-        self.Arm1Lift_Encoderstartbutton.configure(text = 'Arm1Lift_Encoder_Start')
-        self.Arm2Lift_Encoderstartbutton.configure(text='Arm2Lift_Encoder_Start')
-        self.BA01_BWL_Turret_Encoderstartbutton.configure(text='BA01_BWL_Turret_Encoder_Start')
-        self.dB_Encoderstartbutton.configure(text='DB_Encoder_Start')
-        self.pR_Encoderstartbutton.configure(text='PR_Encoder_Start')
-        self.shear_Angel_Encoderstartbutton.configure(text='Shear_Angel_Encoder_Start')
-        self.wSD_Encoderstartbutton.configure(text='WSD_Encoder_start')
-        self.tDCar1LiftLower_Encoderstartbutton.configure(text='TDCar1LiftLower_Encoder_start')
-        self.tDCar2LiftLower_Encoderstartbutton.configure(text='TDCar2LiftLower_Encoder_start')
-        self.levellingRollPos_Encoderstartbutton.configure(text='LevellingRollPos_Encoder_start')
+        self.Cylinderbutton.configure(text = 'CylinderStart')
+        self.motor1dstartbutton.configure(text='motor1dstart')
+        self.motor2dstartbutton.configure(text='motor2dstart')
+        self.sov1startbutton.configure(text='sov1start')
+        self.sov2startbutton.configure(text='sov2start')
+        self.controlvalvestartbutton.configure(text='controlvalstart')
+        self.analogstartbutton.configure(text='analogstart')
+
 
 
 
@@ -452,6 +443,7 @@ class App:
 
     def quit(self, *args):
         self.clock.stop()
+        os.system("taskkill /f /im  TCS.exe")
         self.root.destroy()
 
     def signal_handler(sig, frame):

@@ -10,6 +10,11 @@ class AreaObserver:
         for item in args[0]:
             item.analogprocess()
 
+
+
+
+
+
 class analogprocess:
 
     def __init__(self,alldevices,filename):

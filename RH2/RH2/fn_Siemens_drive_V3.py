@@ -92,24 +92,6 @@ class Fn_Siemens_Drive(Eventmanager):
                 if col == 17:
                     self.breakopencmdtag = str(tag)
                 #
-                # if col == 18:
-                #     self.fastcount = int(tag)
-                #
-                # if col == 19:
-                #     self.encoderoutputtag = str(tag)
-                #
-                # if col == 20:
-                #     self.mtrnominalSpd = int(tag)
-
-                # if col == 21:
-                #     self.plcscancycle = float(tag)
-
-                # if col == 22:
-                #     self.driveEngg = int(tag)
-                #
-                # if col == 23:
-                #     self.kval = int(tag)
-
 
 
 
@@ -149,6 +131,8 @@ class Fn_Siemens_Drive(Eventmanager):
                 pass
 
             sta_con_plc.disconnect()
+
+        self.driveprocess()
 
     def driveprocess(self):
 

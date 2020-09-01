@@ -22,6 +22,8 @@ class AreaObserver:
 class motor2dprocess:
     def __init__(self,alldevices,filename):
         self.subject = Observable()
+        self.filename = filename
+
         self.alldevices = alldevices
         self.client = Communication()
         self.sta_con_plc = self.client.opc_client_connect(filename)
@@ -30,41 +32,28 @@ class motor2dprocess:
 
     def process(self):
 
-        for area, devices in readkeyandvalues(self.alldevices):
+        try:
 
-            areavalue = self.readgeneral.readsymbolvalue(area, "digital")
-            if areavalue == 1:
-                self.observer.notify(devices, self.readgeneral)
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+
+            for area, devices in readkeyandvalues(self.alldevices):
+                areavalue = readgeneral.readsymbolvalue(area, 'digital')
+                if areavalue == 1:
+                    self.observer.notify(devices, readgeneral)
+
+            sta_con_plc.close()
 
 
 
 
+        except Exception as e:
+            level = logging.ERROR
+            messege = "Motor2dprocessing" + " Error messege(Motor2dProcess)" + str(e.args)
+            logger.log(level, messege)
 
 
-
-
-
-# def process(comobject,alldevices,filename):
-#     readgeneral = ReadGeneral(comobject.sta_con_plc)
-#
-#     for area, devices in readkeyandvalues(alldevices):
-#         areavalue = readgeneral.readsymbolvalue(area, 'S7WLBit', 'PA')
-#         if areavalue == 1:
-#             observer.notify(devices, readgeneral)
-        # try:
-        #
-        #     areavalue = comobject.readgeneral.readsymbolvalue(area,'S7WLBit','PA')
-        #     print("areavalue for Motor2D",areavalue)
-        #
-        #     if areavalue == 1:
-        #         observer.notify(devices,comobject)
-        #
-        # except Exception as e:
-        #     log_exception(e)
-        #     level = logging.ERROR
-        #     messege = "allmotor2dprocessing" + " Error messege(process)" + str(e.args)
-        #     # logger.log(level, messege)
-        #     # log_exception(e)
 
 
 def readkeyandvalues(alldevice):

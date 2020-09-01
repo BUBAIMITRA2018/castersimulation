@@ -9,17 +9,21 @@ class ReadGeneral():
 
 
     def readsymbolvalue(self, address, datatype):
-        self.mylock.acquire()
+
         if datatype == "digital":
-                add = int(address)
-                self.state = self.client.read_coils(add, 1)
+            add = int(address)
+            state = self.client.read_coils(add, 1)
+            print(state[0])
+            return state[0]
+
         if datatype == "analog":
             add = int(address)
-            self.state = self.client.read_holding_registers(add, 1)
+            state = self.client.read_holding_registers(add, 1)
+            return state[0]
 
-        self.mylock.release()
 
-        return self.state[0]
+
+
 
 
 

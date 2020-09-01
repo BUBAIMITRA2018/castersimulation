@@ -46,6 +46,9 @@ class Fn_digitalsignal(Eventmanager):
                 if col == 8:
                     self.cond4 = str(tag)
 
+                if col == 9:
+                    self.type = str(tag)
+
 
         except Exception as e:
             level = logging.ERROR
@@ -60,6 +63,8 @@ class Fn_digitalsignal(Eventmanager):
             writegeneral = WriteGeneral(sta_con_plc)
             writegeneral.writesymbolvalue(self.OutDigital,"digital", 0 )
             sta_con_plc.close()
+
+
         except Exception as e:
             level = logging.ERROR
             messege = "Fn_Digitalsignal" + self.devicename + " Error messege(initilization)" + str(e.args)
@@ -73,16 +78,33 @@ class Fn_digitalsignal(Eventmanager):
         writegeneral = WriteGeneral(sta_con_plc)
 
 
-        cond1_val = readgeneral.readsymbolvalue(self.cond1,'digital')
-        cond2_val = self.gen.readgeneral.readsymbolvalue(self.cond2, 'digital')
-        cond3_val = self.gen.readgeneral.readsymbolvalue(self.cond3, 'digital')
-        cond4_val = self.gen.readgeneral.readsymbolvalue(self.cond4, 'digital')
+        if self.type == "AND":
 
-        if cond1_val and cond2_val and cond3_val and cond4_val:
-            writegeneral.writesymbolvalue(self.OutDigital, "digital", 1)
+            cond1_val = readgeneral.readsymbolvalue(self.cond1, 'digital')
+            cond2_val = self.gen.readgeneral.readsymbolvalue(self.cond2, 'digital')
+            cond3_val = self.gen.readgeneral.readsymbolvalue(self.cond3, 'digital')
+            cond4_val = self.gen.readgeneral.readsymbolvalue(self.cond4, 'digital')
 
-        else:
-            writegeneral.writesymbolvalue(self.OutDigital, "digital", 0)
+            if cond1_val and cond2_val and cond3_val and cond4_val:
+                writegeneral.writesymbolvalue(self.OutDigital, "digital", 1)
+
+            else:
+                writegeneral.writesymbolvalue(self.OutDigital, "digital", 0)
+
+
+        if self.type == "OR":
+
+            cond1_val = readgeneral.readsymbolvalue(self.cond1, 'digital')
+            cond2_val = self.gen.readgeneral.readsymbolvalue(self.cond2, 'digital')
+            cond3_val = self.gen.readgeneral.readsymbolvalue(self.cond3, 'digital')
+            cond4_val = self.gen.readgeneral.readsymbolvalue(self.cond4, 'digital')
+
+            if cond1_val or cond2_val or cond3_val or cond4_val:
+                writegeneral.writesymbolvalue(self.OutDigital, "digital", 1)
+
+            if not (cond1_val or  cond2_val or  cond3_val or cond4_val):
+                writegeneral.writesymbolvalue(self.OutDigital, "digital", 0)
+
 
 
         sta_con_plc.close()

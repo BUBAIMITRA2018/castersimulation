@@ -29,6 +29,7 @@ class siemensdriveprocessing :
     def __init__(self,alldevices,filename):
         self.subject = Observable()
         self.alldevices = alldevices
+        self.filename =  filename
         self.observer = AreaObserver(subject)
         self.client = Communication()
         self.sta_con_plc = self.client.opc_client_connect(filename)
@@ -36,18 +37,27 @@ class siemensdriveprocessing :
         self.readgeneral = ReadGeneral(self.sta_con_plc)
 
     def process(self):
+        try:
+
+            client = Communication()
+            sta_con_plc = client.opc_client_connect(self.filename)
+            readgeneral = ReadGeneral(sta_con_plc)
+
+            for area, devices in readkeyandvalues(self.alldevices):
+                areavalue = readgeneral.readsymbolvalue(area, 'digital')
+                if areavalue == 1:
+                    self.observer.notify(devices, readgeneral)
+
+            sta_con_plc.close()
 
 
 
 
-        for area, devices in readkeyandvalues(self.alldevices):
+        except Exception as e:
+            level = logging.ERROR
+            messege = "SiemensDrive" + " Error messege(SiemensDrive)" + str(e.args)
+            logger.log(level, messege)
 
-
-            areavalue = self.readgeneral.readsymbolvalue(area, 'digital')
-
-            if areavalue == 1:
-
-                self.observer.notify(devices, self.readgeneral)
 
 
 

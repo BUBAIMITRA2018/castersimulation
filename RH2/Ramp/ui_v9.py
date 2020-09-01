@@ -11,6 +11,7 @@ import Encoder_Operation_V1
 import time
 from ListView2 import *
 from logger import *
+import os
 import alldevices_V3
 from clientcomm_v1 import *
 import threading
@@ -442,6 +443,7 @@ class App:
 
     def quit(self, *args):
         self.clock.stop()
+        os.system("taskkill /f /im  Ramp.exe")
         self.root.destroy()
 
     def signal_handler(sig, frame):

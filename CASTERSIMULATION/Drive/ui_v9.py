@@ -5,6 +5,8 @@ import signal
 import multiprocessing
 import PIL.Image
 import PIL.ImageTk
+import json
+
 import AutocompleteCombox
 import allmotor1dprocessing_V1
 import allmotor2dprocessing
@@ -187,17 +189,53 @@ class FormUi:
         self.button5 = ttk.Button(self.frame, text='Force', command=self.force, state=NORMAL)
         self.button5.grid(column=1, row=6, sticky=W, padx=5, pady=5)
 
-        self.button6 = ttk.Button(self.frame, text='ControlPanel', command=self.creatcontrolpanel, state=NORMAL)
+        self.button6 = ttk.Button(self.frame, text='Snap', command=self.snap, state=NORMAL)
         self.button6.grid(column=1, row=7, sticky=W, padx=5, pady=5)
 
-        self.button7 = ttk.Button(self.frame, text='Encoder', command=self.encoderoperation, state=NORMAL)
+        self.button7 = ttk.Button(self.frame, text='SnapUpload', command=self.snapupload, state=NORMAL)
         self.button7.grid(column=1, row=8, sticky=W, padx=5, pady=5)
 
+    def snap(self):
+        self.directory = filedialog.askdirectory()
+        global format, data_type1
+        print(self.import_file_path)
+        data = pd.read_excel(self.import_file_path, sheet_name="AnalogTx")
+        row, col = data.shape
+        dict = {}
+        p = 0
+        while p < row:
+            tag_value = self.comm_object.readgeneral.readsymbolvalue(data.iloc[p, 8], 'S7WLWord', "PE")
+            keyvalue = {"AI" + str(data.iloc[p, 8]): tag_value}
+            dict.update(keyvalue)
+            p = p + 1
 
-    def encoderoperation(self):
-        # df = pd.read_excel(r'C:\OPCUA\Working_VF1_5.xls', sheet_name='Encoder')
+        data = pd.read_excel(self.import_file_path, sheet_name="OutputTx")
+        row, col = data.shape
+        p = 0
+        while p < row:
+            tag_value = self.comm_object.readgeneral.readsymbolvalue(data.iloc[p, 3], 'S7WLBit', "PE")
+            keyvalue = {"DI" + str(data.iloc[p, 3]): tag_value}
+            dict.update(keyvalue)
+            p = p + 1
+        with open(
+                self.directory + '\snap' + str(datetime.datetime.now()).replace(" ", "_").replace(".", "_").replace(":",
+                                                                                                                    "_") + '.txt',
+                'w') as json_file:
+            json.dump(dict, json_file)
 
-        Encoder_Operation_V1.Encoder_Operation(self.frame,self.comm_object,self.alldevices )
+    def snapupload(self):
+        self.import_file_path1 = filedialog.askopenfilename()
+        with open(self.import_file_path1) as json_file:
+            w = json.load(json_file)
+            for item in w:
+                if item[0:2] == "DI":
+                    format = "PE"
+                    data_type1 = 'S7WLBit'
+                elif item[0:2] == "AI":
+                    format = "PE"
+                    data_type1 = 'S7WLWord'
+
+                self.comm_object.writegeneral.writesymbolvalue(item[2::], w[item], data_type1)
 
     def conectionpopup(self):
         self.connect = tk.Toplevel(self.frame)

@@ -10,7 +10,7 @@ import callalloutsignals_V3
 import callallvibrofeeder_V3
 import callallsiemensdrive1D_V3
 import callalldigital_V3
-import callallramp_V3
+
 
 
 class AllDevices:
@@ -28,7 +28,7 @@ class AllDevices:
         self.dfvibrofeeder = pd.read_excel(import_file_path,sheet_name='VibroFeeder')
         self.dfsiemensdrive = pd.read_excel(import_file_path, sheet_name='SiemensDrive')
         self.dfdigitalsignal = pd.read_excel(import_file_path, sheet_name='DigitalTx')
-        self.dframpsignal  = pd.read_excel(import_file_path, sheet_name = 'Ramp')
+
 
         self.allsov1sobjects = callallsov1S_V3.Cal_AllSov1S(self.dfS1S,comobject,import_file_path)
         self.allmtor1dobjects = callallmotor1D_V3.Cal_AllMotor1D(self.dfM1D, comobject,import_file_path)
@@ -37,10 +37,10 @@ class AllDevices:
         self.allanalogobjects = calallanalog_V3.Cal_AllAnalogInputs(self.dfANA,comobject,import_file_path)
         self.allcontrolvalveobjects =  calallcontrolvalves_V3.Cal_AllControlValves(self.dfCON,comobject,import_file_path)
         self.alloutsignalobjects =  callalloutsignals_V3.Cal_AllOutsingnal(self.dfoutsignal,comobject,import_file_path)
-        self.allvibrofeederobjects = callallvibrofeeder_V3.Cal_AllVibroFeeder(self.dfvibrofeeder,comobject,import_file_path)
+        # self.allvibrofeederobjects = callallvibrofeeder_V3.Cal_AllVibroFeeder(self.dfvibrofeeder,comobject,import_file_path)
         self.allsiemensdrivesobjects = callallsiemensdrive1D_V3.Cal_AllSiemensDrive1D(self.dfsiemensdrive,comobject,import_file_path)
         self.alldigitalsignalobjects = callalldigital_V3.Cal_AllDigital(self.dfdigitalsignal, comobject, import_file_path)
-        self.allrampsignalobjects = callallramp_V3.Cal_AllRampInputs(self.dframpsignal, comobject,import_file_path)
+
 
 
 
