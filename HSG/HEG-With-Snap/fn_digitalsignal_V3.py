@@ -53,6 +53,10 @@ class Fn_digitalsignal(Eventmanager):
                 if col == 8:
                     self.cond4 = str(tag)
 
+                if col == 9:
+                    self.type = str(tag)
+
+
 
         except Exception as e:
             level = logging.ERROR
@@ -87,10 +91,23 @@ class Fn_digitalsignal(Eventmanager):
         cond3_val = readgeneral.readsymbolvalue(self.cond3, 'S7WLBit', 'PE')
         cond4_val = readgeneral.readsymbolvalue(self.cond4, 'S7WLBit', 'PE')
 
-        if cond1_val and cond2_val and cond3_val and cond4_val:
-            writegeneral.writesymbolvalue(self.OutDigital, 1, 'S7WLBit')
-        else:
-            pass
+        if self.type == "AND":
+            if cond1_val and cond2_val and cond3_val and cond4_val:
+                writegeneral.writesymbolvalue(self.OutDigital, 1, 'S7WLBit')
+
+            else:
+                writegeneral.writesymbolvalue(self.OutDigital, 0, 'S7WLBit')
+
+        if self.type == "OR":
+
+            if cond1_val or cond2_val or cond3_val or cond4_val:
+                writegeneral.writesymbolvalue(self.OutDigital, 1, 'S7WLBit')
+
+            if not (cond1_val or  cond2_val or  cond3_val or cond4_val):
+                writegeneral.writesymbolvalue(self.OutDigital, 0, 'S7WLBit')
+
+
+
 
     @property
     def Cond1Val (self):

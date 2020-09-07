@@ -93,7 +93,7 @@ class Fn_LTC1signal():
             readgeneral = ReadGeneral(sta_con_plc)
             writegeneral = WriteGeneral(sta_con_plc)
             self.positivecount = 0
-            writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 1)
+            writegeneral.writesymbolvalue(self.MainPowerSupplyMccbFault, 'digital', 0)
             writegeneral.writesymbolvalue(self.Motor1MpcbOn, 'digital', 1)
             writegeneral.writesymbolvalue(self.Motor2MpcbOn, 'digital', 1)
             writegeneral.writesymbolvalue(self.BrakeMbcbOn, 'digital', 1)
